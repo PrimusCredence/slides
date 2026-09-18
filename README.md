@@ -1,9 +1,9 @@
 # PrimusCredence — slide deck
 
-Nineteen slides drawn from `Solutions-Confidential.md`: *Provable Security
+Twenty-three slides drawn from `Solutions-Confidential.md`: *Provable Security
 Solutions to Cloud, AI and Crypto*.
 
-- `slides/01.svg` … `slides/19.svg` — one SVG per slide, each self-contained
+- `slides/01.svg` … `slides/23.svg` — one SVG per slide, each self-contained
   (it loads its own webfonts), sized A5 landscape (210 × 148.5 mm at 5 units
   per mm). Nothing on a slide is smaller than ~11 pt in print. Every slide is
   white, with soft tinted blooms behind frosted-glass panels.
@@ -24,23 +24,30 @@ particular slide.
 | # | Slide |
 |---|---|
 | 1 | Title |
-| 2 | About — Dr. Raghavendra Ramesh |
+| 2 | Dr. Raghavendra Ramesh |
 | 3 | Why Now: The Attacker Industrialised |
 | 4 | Automated Reasoning |
-| 5 | Nine Solutions, Three Families |
-| 6 | § Cybersecurity Solutions |
-| 7–11 | Solutions 1–5 |
-| 12 | § AI Security Solutions |
-| 13–14 | Solutions 6–7 |
-| 15 | § Crypto Security Solutions |
-| 16–17 | Solutions 8–9 |
-| 18 | Take Away |
-| 19 | Thank You |
+| 5 | We Add a Layer to Your Stack |
+| 6 | Nine Solutions, Three Families |
+| 7 | § Cybersecurity Solutions |
+| 8–12 | Solutions 1–5 |
+| 13 | § AI Security Solutions |
+| 14–15 | Solutions 6–7 |
+| 16 | § Crypto Security Solutions |
+| 17–18 | Solutions 8–9 |
+| 19 | Why Your Clients Will Ask |
+| 20 | What a Provider Can Resell |
+| 21 | One Result, Three Registers |
+| 22 | Take Away |
+| 23 | Thank You |
+
+Slides 5 and 19–21 address a security solutions provider reading the deck as
+a partner rather than as an end client.
 
 ## Rebuilding
 
 ```sh
-python3 build.py      # writes slides/01.svg … slides/19.svg
+python3 build.py      # writes slides/01.svg … slides/23.svg
 ```
 
 Text is wrapped against measured average glyph advances, and every block has
