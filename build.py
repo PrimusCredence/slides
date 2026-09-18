@@ -210,10 +210,17 @@ def glass(x, y, w, h, r=16, tint=None, tint_op=0.55, edge=LINE):
     return "".join(out)
 
 
-def solid(x, y, w, h, fill, r=16, sheen=True):
-    """A filled block with the same lit edge and gloss as the glass panels."""
-    out = [f'<g filter="url(#lift)">', rrect(x, y, w, h, fill, r),
-           rrect(x, y, w, h, "url(#gloss)", r, opacity=0.55), "</g>"]
+def solid(x, y, w, h, fill, r=16, sheen=True, gloss=0.55, edge=None):
+    """A filled block with a lit edge. `gloss` is the face sheen, which dark or
+    saturated blocks want low or off; `edge` adds a light inner border."""
+    out = [f'<g filter="url(#lift)">', rrect(x, y, w, h, fill, r)]
+    if gloss:
+        out.append(rrect(x, y, w, h, "url(#gloss)", r, opacity=gloss))
+    if edge:
+        out.append(f'<rect x="{x+1:.0f}" y="{y+1:.0f}" width="{w-2:.0f}" '
+                   f'height="{h-2:.0f}" rx="{r-1}" fill="none" stroke="#ffffff" '
+                   f'stroke-width="1.2" opacity="{edge}"/>')
+    out.append("</g>")
     if sheen:
         out.append(f'<rect x="{x+14:.0f}" y="{y+1:.0f}" width="{w-28:.0f}" height="1.4" '
                    f'rx="0.7" fill="#ffffff" opacity="0.3"/>')
@@ -349,7 +356,8 @@ def s03():
 
     y, hw = 404, CW / 2 - 12
     b.append(glass(M, y, hw, 188, 16))
-    b.append(solid(M + CW / 2 + 12, y, hw, 188, FAM["cyb"]["c"], 16))
+    b.append(solid(M + CW / 2 + 12, y, hw, 188, FAM["cyb"]["c"], 16,
+                   sheen=False, gloss=0.14, edge=0.22))
     b.append(eyebrow(M + 26, y + 44, "Traditional pen test", INK2, 20, 2.6))
     b.append(eyebrow(M + CW / 2 + 38, y + 44, "AI-driven adversary", "#cfe0f7", 20, 2.6))
     left = ["10²–10³ paths, human-selected", "2–4 week window, then closed",
@@ -483,10 +491,12 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
     # the question it settles
     b.append(glass(M, 152, CW, 86, 16, f["tint"], 0.55))
     b.append(f'<rect x="{M+2}" y="164" width="5" height="62" rx="2.5" fill="{f["c"]}"/>')
-    qlines = wrap(question, CW - 80, 28, W_SERIF)[:2]
-    y0 = 192 if len(qlines) == 2 else 204
-    for i, ln in enumerate(qlines):
-        b.append(t(M + 34, y0 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
+    one_line = fit(question, CW - 80, 28, 0.50, 20)
+    if one_line >= 24:
+        b.append(t(M + 34, 204, question, one_line, INK, SERIF, "600", style="italic"))
+    else:
+        for i, ln in enumerate(wrap(question, CW - 80, 28, W_SERIF)[:2]):
+            b.append(t(M + 34, 192 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
 
@@ -527,7 +537,7 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
 def s18(num=22):
     b = [water("gold"), heading("Take Away")]
 
-    b.append(solid(M, 174, CW, 106, INK, 18))
+    b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
     b.append(t(W / 2, 222, "Mathematical rigour to security —", 33, WHITE, SERIF,
                "600", anchor="middle"))
     b.append(t(W / 2, 264, "proof alongside testing, across cloud, AI and crypto.",
@@ -587,7 +597,7 @@ def s19():
 
 # ==================================================================== content
 SOLUTIONS = [
-    dict(num=12, fam="cyb", n=1,
+    dict(num=8, fam="cyb", n=1,
          title="Cloud Access-Policy & Entitlement Verification",
          question="Can any principal, in any request context, reach this resource from "
                   "outside the trust boundary?",
@@ -601,7 +611,7 @@ SOLUTIONS = [
          precedent="AWS Zelkova → IAM Access Analyzer",
          buyers="Regional CSPs · sovereign hosts"),
 
-    dict(num=8, fam="cyb", n=2,
+    dict(num=9, fam="cyb", n=2,
          title="Network Reachability & Segmentation Proofs",
          question="Does any path exist from an untrusted zone to this subnet — and does "
                   "east-west segmentation hold?",
@@ -616,7 +626,7 @@ SOLUTIONS = [
          buyers="Sovereign cloud · banks · OT · telcos",
          note="Static: no scanning window, no production traffic — it re-runs on every change."),
 
-    dict(num=9, fam="cyb", n=3,
+    dict(num=10, fam="cyb", n=3,
          title="API-Usage Conformance",
          question="Does our own code use the platform, credential and crypto SDKs the way "
                   "their contracts require?",
@@ -631,7 +641,7 @@ SOLUTIONS = [
          buyers="Platform and AppSec teams · ISVs",
          note="A correct policy invoked through a misused SDK still leaks. Bounded by the library."),
 
-    dict(num=10, fam="cyb", n=4,
+    dict(num=11, fam="cyb", n=4,
          title="Hypervisor, Firmware & CVE Reachability",
          question="Can tenant isolation break below the guest — and is this week's hypervisor "
                   "CVE reachable on our build?",
@@ -646,7 +656,7 @@ SOLUTIONS = [
          buyers="Sovereign cloud · chip vendors · defence",
          note="Three of four CVEs unreachable turns a fleet emergency into one scheduled patch."),
 
-    dict(num=11, fam="cyb", n=5,
+    dict(num=12, fam="cyb", n=5,
          title="Post-Quantum Cryptography Migration",
          question="Where is every cryptographic asset, in what order does it move, and does "
                   "security hold at each stage?",
@@ -662,7 +672,7 @@ SOLUTIONS = [
          buyers="CSPs · sovereign AI · banks · utilities",
          note="A programme over quarters with verification as its assurance layer."),
 
-    dict(num=15, fam="ai", n=6,
+    dict(num=14, fam="ai", n=6,
          title="AI and LLM Guardrail Verification",
          question="Not “how often does the agent fail?” but “can it do this at all?”",
          problem="An agent is a non-human identity with delegated privilege and an instruction "
@@ -677,7 +687,7 @@ SOLUTIONS = [
          buyers="Banks · sovereign AI · OT · healthcare",
          note="Provable: no rows outside the caller's ACL. Not provable: no PII ever reaches the user."),
 
-    dict(num=14, fam="ai", n=7,
+    dict(num=15, fam="ai", n=7,
          title="Neurosymbolic Assurance",
          question="Does this answer follow from the policy we operate under — and if not, what "
                   "assumption was silently supplied?",
@@ -693,7 +703,7 @@ SOLUTIONS = [
          buyers="Banks and insurers · government",
          note="LLM autoformalization drafts the theory; the domain expert ratifies it."),
 
-    dict(num=18, fam="cry", n=8,
+    dict(num=17, fam="cry", n=8,
          title="Formal Verification of Smart Contracts",
          question="Does this contract admit a reachable state that breaks its invariants, "
                   "access control or solvency?",
@@ -708,7 +718,7 @@ SOLUTIONS = [
          buyers="VASPs · DeFi protocols · custody",
          note="“Formally verified” means three different things. The tier decides your risk."),
 
-    dict(num=17, fam="cry", n=9,
+    dict(num=18, fam="cry", n=9,
          title="Formal Verification of Distributed Protocols",
          question="Does this protocol admit an execution that breaks safety under Byzantine "
                   "faults, asynchrony or partition?",
@@ -799,16 +809,33 @@ def chips(x, y, items, maxw, size=21, gap=12, h=40, fill="#ffffff",
     return "".join(out), cy + h
 
 
+def chip_rows(cx, y, rows, size=21, gap=12, h=40, lead=52, fill="#ffffff",
+              textfill=INK2, edge=LINE):
+    """Rows of pills, each row centred on cx."""
+    out = []
+    for ri, row in enumerate(rows):
+        widths = [len(it) * size * W_SANS + 36 for it in row]
+        total = sum(widths) + gap * (len(row) - 1)
+        x, ry = cx - total / 2, y + ri * lead
+        for it, w in zip(row, widths):
+            out.append(f'<g filter="url(#liftsm)">{rrect(x, ry, w, h, fill, h / 2)}'
+                       f'{rrect(x, ry, w, h, "url(#gloss)", h / 2, opacity=0.8)}'
+                       f'{rrect(x, ry, w, h, "none", h / 2, edge, 1)}</g>')
+            out.append(t(x + 18, ry + h / 2 + 7, it, size, textfill))
+            x += w + gap
+    return "".join(out), y + len(rows) * lead
+
+
 def s_stack(num=5):
     """Where this sits in a provider's existing stack."""
     b = [water("gold"),
-         heading("We Add a Layer to Your Stack — We Do Not Replace It")]
+         heading("We Add a Layer to Your Stack, NOT Replace It")]
 
     b.append(glass(M, 176, CW, 194, 18))
     b.append(eyebrow(M + 30, 214, "What your stack answers today", INK2, 20, 2.6))
-    ch, _ = chips(M + 30, 234, ["Pen test & red team", "CSPM / CIEM", "ASPM / SAST",
-                                "Vulnerability management", "SOC · EDR · SIEM"],
-                  CW - 60)
+    ch, _ = chip_rows(W / 2, 234,
+                      [["Pen test & red team", "CSPM / CIEM", "ASPM / SAST"],
+                       ["Vulnerability management", "SOC · EDR · SIEM"]])
     b.append(ch)
     b.append(t(M + 30, 352,
                "“We looked, and within the time available we did not find a way in.”",
@@ -924,8 +951,6 @@ def s_resell(num=20):
 def s_registers(num=21):
     """One analysis, three deliverables — the evidence multiplier."""
     b = [water("gold"), heading("One Result, Three Registers")]
-    b.append(t(M, 184, "One analysis. Three deliverables. No second engagement.",
-               30, INK, SERIF, "600", style="italic"))
 
     cols = [("First line", "Engineering and security operations",
              "The property, its model and assumptions, and either the proof or a "
@@ -939,21 +964,21 @@ def s_registers(num=21):
     cw = (CW - 2 * 20) / 3
     for i, (head, sub, body) in enumerate(cols):
         x = M + i * (cw + 20)
-        b.append(glass(x, 216, cw, 324, 18))
-        b.append(f'<rect x="{x+26}" y="248" width="46" height="4" rx="2" fill="{GOLD}"/>')
-        b.append(t(x + 26, 294, head, 29, INK, SERIF, "600"))
-        blk, _ = block(x + 26, 326, sub, cw - 52, 20, 25, GOLDINK, 2)
+        b.append(glass(x, 186, cw, 324, 18))
+        b.append(f'<rect x="{x+26}" y="218" width="46" height="4" rx="2" fill="{GOLD}"/>')
+        b.append(t(x + 26, 264, head, 29, INK, SERIF, "600"))
+        blk, _ = block(x + 26, 296, sub, cw - 52, 20, 25, GOLDINK, 2)
         b.append(blk)
-        blk, _ = block(x + 26, 390, body, cw - 52, 22, 28, INK2, 5)
+        blk, _ = block(x + 26, 360, body, cw - 52, 22, 28, INK2, 5)
         b.append(blk)
 
-    b.append(glass(M, 560, CW, 82, 16, FAM["gold"]["tint"], 0.5))
-    b.append(f'<path d="M{M+34},602 l9,9 15,-19" stroke="{GOLD}" stroke-width="2.8" '
+    b.append(glass(M, 546, CW, 88, 16, FAM["gold"]["tint"], 0.5))
+    b.append(f'<path d="M{M+34},590 l9,9 15,-19" stroke="{GOLD}" stroke-width="2.8" '
              f'fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
-    b.append(t(M + 74, 610, "Design → operating effectiveness · attaches to your "
+    b.append(t(M + 74, 598, "Design → operating effectiveness · attaches to your "
                             "GRC records · assessors probe less", 21, INK2))
 
-    b.append(t(M, 682, "The first register is the product. The second and third make it "
+    b.append(t(M, 674, "The first register is the product. The second and third make it "
                        "worth more than it cost.", 22, MUTED, SANS, "400", style="italic"))
     b.append(chrome(num))
     return page("".join(b))
