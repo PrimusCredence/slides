@@ -13,13 +13,13 @@
     --ink:#14181f; --ink-2:#4a5260; --muted:#767e8c;
     --gold:#c8940a; --gold-ink:#a87c00;
     --paper:#faf8f3; --panel:#f2efe6; --line:#ddd7c9;
-    --backdrop:#0e1116; --chrome:#181d26; --chrome-line:#2a3140;
+    --backdrop:#eef1f6; --chrome:#ffffff; --chrome-line:#e0e4eb;
     --slide-w: 1050; --slide-h: 742;   /* A5 landscape, 5 units / mm */
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html,body{height:100%;}
   body{
-    background:var(--backdrop); color:#e7eaef;
+    background:var(--backdrop); color:var(--ink);
     font-family:'IBM Plex Sans',system-ui,sans-serif;
     display:flex; flex-direction:column; overflow:hidden;
   }
@@ -31,15 +31,16 @@
     border-bottom:1px solid var(--chrome-line); flex:none;
   }
   .brand{font-family:'Source Serif 4',Georgia,serif; font-weight:600; font-size:17px; white-space:nowrap;}
+  .brand{color:#0b0d12;}
   .brand span{color:var(--gold-ink);}
   .tagline{font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   header .spacer{flex:1;}
   .btn{
-    font-family:'IBM Plex Mono',monospace; font-size:13px; color:#cfd5de;
-    background:#232a35; border:1px solid var(--chrome-line); border-radius:7px;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-2);
+    background:#f4f6f9; border:1px solid var(--chrome-line); border-radius:7px;
     padding:6px 11px; cursor:pointer; line-height:1; white-space:nowrap;
   }
-  .btn:hover{background:#2c3543; color:#fff;}
+  .btn:hover{background:#e8ecf2; color:var(--ink);}
   .counter{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); min-width:64px; text-align:center;}
 
   /* ---------------------------------------------------------- stage */
@@ -48,9 +49,9 @@
     position:relative;
     width:min(100%, calc((100vh - 150px) * (var(--slide-w) / var(--slide-h))));
     aspect-ratio: var(--slide-w) / var(--slide-h);
-    background:var(--paper);
+    background:#ffffff;
     border-radius:8px; overflow:hidden;
-    box-shadow:0 18px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
+    box-shadow:0 14px 44px rgba(15,25,45,.16), 0 0 0 1px rgba(15,25,45,.06);
   }
   .stage object, .stage img{position:absolute; inset:0; width:100%; height:100%; pointer-events:none;}
 
@@ -61,14 +62,14 @@
   .nav{
     position:absolute; top:50%; transform:translateY(-50%);
     width:42px; height:42px; border-radius:50%;
-    background:#1b212c; border:1px solid var(--chrome-line); color:#cfd5de;
+    background:#ffffff; border:1px solid var(--chrome-line); color:var(--ink-2);
     display:grid; place-items:center; cursor:pointer; font-size:19px; user-select:none;
   }
-  .nav:hover{background:#252d3a; color:#fff;}
+  .nav:hover{background:#f4f6f9; color:var(--ink);}
   .nav.left{left:12px;} .nav.right{right:12px;}
 
   /* progress */
-  .progress{flex:none; height:3px; background:#1b212c;}
+  .progress{flex:none; height:3px; background:#dfe4ec;}
   .progress i{display:block; height:100%; background:var(--gold); transition:width .18s ease;}
 
   footer{
@@ -79,28 +80,28 @@
   footer a:hover{text-decoration:underline;}
   footer .spacer{flex:1;}
   kbd{
-    font-family:'IBM Plex Mono',monospace; font-size:11px; background:#232a35;
-    border:1px solid var(--chrome-line); border-radius:4px; padding:1px 5px; color:#aab3c0;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; background:#f4f6f9;
+    border:1px solid var(--chrome-line); border-radius:4px; padding:1px 5px; color:var(--muted);
   }
 
   /* ---------------------------------------------------------- overview */
   .grid{
-    position:fixed; inset:0; background:rgba(8,10,14,.97); z-index:40;
+    position:fixed; inset:0; background:rgba(238,241,246,.98); z-index:40;
     overflow:auto; padding:28px; display:none;
     grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:18px; align-content:start;
   }
   .grid.open{display:grid;}
-  .thumb{cursor:pointer; border-radius:6px; overflow:hidden; background:var(--paper);
-         box-shadow:0 0 0 1px rgba(255,255,255,.08); position:relative;}
+  .thumb{cursor:pointer; border-radius:6px; overflow:hidden; background:#ffffff;
+         box-shadow:0 2px 10px rgba(15,25,45,.10), 0 0 0 1px rgba(15,25,45,.07); position:relative;}
   .thumb img{display:block; width:100%; aspect-ratio:var(--slide-w)/var(--slide-h);}
   .thumb b{
     position:absolute; left:0; bottom:0; font-family:'IBM Plex Mono',monospace;
-    font-size:11px; font-weight:500; color:#fff; background:rgba(20,24,31,.86);
+    font-size:11px; font-weight:500; color:#fff; background:rgba(20,24,31,.72);
     padding:3px 7px; border-radius:0 6px 0 0;
   }
   .thumb:hover{box-shadow:0 0 0 2px var(--gold);}
   .grid h2{grid-column:1/-1; font-family:'Source Serif 4',serif; font-weight:600;
-           font-size:20px; color:#e7eaef; margin-bottom:2px;}
+           font-size:20px; color:var(--ink); margin-bottom:2px;}
 
   @media (max-width:760px){
     main{padding:14px 12px;}
@@ -146,7 +147,7 @@
   <button class="btn" id="overviewBtn" title="Overview (o)">Overview</button>
   <button class="btn" id="printBtn" title="Print / PDF (A5 landscape)">Print</button>
   <button class="btn" id="fsBtn" title="Fullscreen (f)">Fullscreen</button>
-  <div class="counter" id="counter">01 / 19</div>
+  <div class="counter" id="counter">1 / 19</div>
 </header>
 
 <main>
@@ -177,24 +178,24 @@
 <script>
 const TITLES = [
   "PrimusCredence — Provable security solutions",
-  "About — Dr. Raghavendra Ramesh",
-  "Why now: the attacker industrialised",
-  "The method: automated reasoning",
-  "Nine solutions, three families",
-  "Section — Cybersecurity Solutions",
-  "Solution 1 — Cloud access-policy & entitlement verification",
-  "Solution 2 — Network reachability & segmentation proofs",
-  "Solution 3 — API-usage conformance",
-  "Solution 4 — Hypervisor, firmware & CVE-reachability assurance",
-  "Solution 5 — Post-quantum cryptography migration",
-  "Section — AI Security Solutions",
-  "Solution 6 — AI and LLM guardrail verification",
-  "Solution 7 — Neurosymbolic assurance",
-  "Section — Crypto Security Solutions",
-  "Solution 8 — Formal verification of smart contracts",
-  "Solution 9 — Formal verification of distributed protocols",
-  "What to take away",
-  "Thank you"
+  "Dr. Raghavendra Ramesh",
+  "Why Now: The Attacker Industrialised",
+  "Automated Reasoning",
+  "Nine Solutions, Three Families",
+  "Cybersecurity Solutions",
+  "1. Cloud Access-Policy & Entitlement Verification",
+  "2. Network Reachability & Segmentation Proofs",
+  "3. API-Usage Conformance",
+  "4. Hypervisor, Firmware & CVE Reachability",
+  "5. Post-Quantum Cryptography Migration",
+  "AI Security Solutions",
+  "6. AI and LLM Guardrail Verification",
+  "7. Neurosymbolic Assurance",
+  "Crypto Security Solutions",
+  "8. Formal Verification of Smart Contracts",
+  "9. Formal Verification of Distributed Protocols",
+  "Take Away",
+  "Thank You"
 ];
 const N = TITLES.length;
 const pad = n => String(n).padStart(2, "0");
@@ -210,7 +211,7 @@ const grid = document.getElementById("grid");
 function show(n, push = true){
   i = Math.min(N, Math.max(1, n));
   frame.setAttribute("data", src(i));
-  counter.textContent = `${pad(i)} / ${N}`;
+  counter.textContent = `${i} / ${N}`;
   bar.style.width = (i / N * 100) + "%";
   slideTitle.textContent = TITLES[i - 1];
   if (push) history.replaceState(null, "", "#" + i);
@@ -271,7 +272,7 @@ document.getElementById("stage").addEventListener("touchend", e => {
   for (let n = 1; n <= N; n++){
     const d = document.createElement("div");
     d.className = "thumb";
-    d.innerHTML = `<img loading="lazy" src="${src(n)}" alt="${TITLES[n-1]}"><b>${pad(n)}</b>`;
+    d.innerHTML = `<img loading="lazy" src="${src(n)}" alt="${TITLES[n-1]}"><b>${n}</b>`;
     d.onclick = () => { show(n); toggleGrid(false); };
     grid.appendChild(d);
 

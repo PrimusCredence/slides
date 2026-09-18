@@ -5,10 +5,11 @@ One .svg per slide in slides/, stitched together by index.html.
 
 Geometry is A5 landscape (210 x 148.5 mm) at 5 units per mm, so one unit is
 0.2 mm and a 24-unit font prints at ~13.6 pt. Nothing in the deck is smaller
-than 20 units (~11.3 pt) and body copy sits at 24-26.
+than 19 units (~10.8 pt) and body copy sits at 23-26.
 
+Every slide is white, with soft tinted blooms behind frosted-glass panels.
 Text is wrapped against measured average glyph advances (see W_SANS etc.),
-and every block has a stated line budget, so the layout does not overflow.
+and every block has a line budget, so the layout does not overflow.
 """
 
 import os
@@ -21,14 +22,13 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "slides")
 
 # --- PrimusCredence Gold palette (carried from the report and the card) ------
 INK      = "#14181f"
+BLACK    = "#0b0d12"
 INK2     = "#4a5260"
 MUTED    = "#767e8c"
-PAPER    = "#faf8f3"
-PANEL    = "#f2efe6"
-LINE     = "#ddd7c9"
+WHITE    = "#ffffff"
+LINE     = "#e3e6ec"
 GOLD     = "#c8940a"
 GOLDINK  = "#a87c00"
-WHITE    = "#ffffff"
 GREEN    = "#2f7d4f"
 AMBER    = "#b06a00"
 
@@ -36,7 +36,7 @@ FAM = {
     "cyb":  dict(c="#1d5fa8", tint="#e9eff9", name="Cybersecurity Solutions"),
     "ai":   dict(c="#0f766e", tint="#e3f1ef", name="AI Security Solutions"),
     "cry":  dict(c="#b81f63", tint="#fbe8f0", name="Crypto Security Solutions"),
-    "gold": dict(c=GOLDINK, tint=PANEL, name=""),
+    "gold": dict(c=GOLDINK, tint="#f6efdd", name=""),
 }
 
 SERIF = "'Source Serif 4','Iowan Old Style',Georgia,serif"
@@ -52,6 +52,28 @@ FONTS = ("@import url('https://fonts.googleapis.com/css2?"
          "family=IBM+Plex+Sans:wght@300;400;500;600&amp;"
          "family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;"
          "1,8..60,400;1,8..60,600&amp;display=swap');")
+
+DEFS = f'''<defs>
+<filter id="lift" x="-30%" y="-30%" width="160%" height="170%">
+  <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0d1b2e" flood-opacity="0.10"/>
+</filter>
+<filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
+  <feGaussianBlur stdDeviation="70"/>
+</filter>
+<linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ffffff" stop-opacity="0.96"/>
+  <stop offset="1" stop-color="#ffffff" stop-opacity="0.70"/>
+</linearGradient>
+<linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+  <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
+</linearGradient>
+<linearGradient id="goldbar" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="{GOLD}"/>
+  <stop offset="0.55" stop-color="#e0b64a"/>
+  <stop offset="1" stop-color="{GOLD}"/>
+</linearGradient>
+</defs>'''
 
 
 def esc(s):
@@ -97,12 +119,12 @@ def t(x, y, s, size=26, fill=INK, family=SANS, weight="400", anchor="start",
 
 
 def block(x, y, text, width, size=26, lead=33, fill=INK2, maxlines=None,
-          family=SANS, adv=W_SANS, style="normal", weight="400"):
+          family=SANS, adv=W_SANS, style="normal", weight="400", anchor="start"):
     lines = wrap(text, width, size, adv)
     if maxlines:
         lines = lines[:maxlines]
     return ("".join(t(x, y + i * lead, ln, size, fill, family, weight,
-                      style=style) for i, ln in enumerate(lines)),
+                      anchor=anchor, style=style) for i, ln in enumerate(lines)),
             y + len(lines) * lead)
 
 
@@ -111,6 +133,14 @@ def eyebrow(x, y, s, fill=GOLDINK, size=21, ls=3.2, maxw=None, anchor="start"):
     if maxw:
         size = fit(s, maxw, size, W_MONO, 14, ls)
     return t(x, y, s, size, fill, MONO, "500", anchor=anchor, ls=str(ls))
+
+
+def wordmark(x, y, size, anchor="start"):
+    """Primus in black, Credence in gold, set solid."""
+    a = f' text-anchor="{anchor}"' if anchor != "start" else ""
+    return (f'<text x="{x:.0f}" y="{y:.0f}" font-family="{SERIF}" font-size="{size}" '
+            f'font-weight="600"{a}><tspan fill="{BLACK}">Primus</tspan>'
+            f'<tspan fill="{GOLDINK}">Credence</tspan></text>')
 
 
 def bullets(x, y, items, width, size=24, lead=30, gap=14, fill=INK2,
@@ -125,12 +155,42 @@ def bullets(x, y, items, width, size=24, lead=30, gap=14, fill=INK2,
     return "".join(out), cy
 
 
-def rrect(x, y, w, h, fill, r=12, stroke=None, sw=1):
+def rrect(x, y, w, h, fill, r=14, stroke=None, sw=1, opacity=None):
     s = (f'<rect x="{x:.0f}" y="{y:.0f}" width="{w:.0f}" height="{h:.0f}" '
          f'rx="{r}" fill="{fill}"')
     if stroke:
         s += f' stroke="{stroke}" stroke-width="{sw}"'
+    if opacity:
+        s += f' opacity="{opacity}"'
     return s + "/>"
+
+
+def glass(x, y, w, h, r=16, tint=None, tint_op=0.55, edge=LINE):
+    """A frosted panel: tint wash, glass gradient, hairline edge, top sheen."""
+    out = ['<g filter="url(#lift)">']
+    if tint:
+        out.append(rrect(x, y, w, h, tint, r, opacity=tint_op))
+        out.append(rrect(x, y, w, h, "url(#glass)", r, opacity=0.45))
+    else:
+        out.append(rrect(x, y, w, h, "url(#glass)", r))
+    out.append(rrect(x, y, w, h, "none", r, edge, 1))
+    out.append("</g>")
+    out.append(f'<rect x="{x+14:.0f}" y="{y+1:.0f}" width="{w-28:.0f}" height="1.4" '
+               f'rx="0.7" fill="url(#sheen)"/>')
+    return "".join(out)
+
+
+def bloom(cx, cy, r, color, op=0.16):
+    return (f'<circle cx="{cx:.0f}" cy="{cy:.0f}" r="{r}" fill="{color}" '
+            f'opacity="{op}" filter="url(#bloom)"/>')
+
+
+def water(fam="gold"):
+    """The background wash: soft blooms in brand gold and the family hue."""
+    f = FAM[fam]
+    return (bloom(880, 110, 210, f["c"], 0.16) +
+            bloom(130, 665, 230, GOLD, 0.13) +
+            bloom(560, 380, 260, f["c"], 0.05))
 
 
 def hline(x, y, w, color=LINE, sw=1):
@@ -138,10 +198,10 @@ def hline(x, y, w, color=LINE, sw=1):
             f'stroke="{color}" stroke-width="{sw}"/>')
 
 
-SYMBOLS = [("∀", 120, 210, 190, .07), ("∃", 880, 150, 150, .06),
-           ("⊨", 250, 600, 170, .05), ("∧", 640, 250, 130, .05),
-           ("◇", 930, 560, 150, .06), ("⊤", 470, 690, 120, .04),
-           ("¬", 40, 470, 120, .04), ("⟹", 700, 660, 130, .04)]
+SYMBOLS = [("∀", 120, 216, 190, .05), ("∃", 878, 156, 150, .045),
+           ("⊨", 250, 600, 170, .04), ("∧", 640, 250, 130, .035),
+           ("◇", 928, 560, 150, .045), ("⊤", 470, 690, 120, .03),
+           ("¬", 40, 470, 120, .03), ("⟹", 700, 660, 130, .03)]
 
 
 def symbol_field(color=GOLD):
@@ -151,139 +211,119 @@ def symbol_field(color=GOLD):
         for ch, x, y, size, op in SYMBOLS)
 
 
-def chrome(num, centre="", fam="gold", dark=False, left="PrimusCredence"):
-    f = FAM[fam]
-    ink = "#8d97a6" if dark else MUTED
-    out = [f'<rect x="0" y="0" width="{W}" height="6" fill="{GOLD}"/>']
-    if fam != "gold":
-        out.append(f'<rect x="0" y="0" width="{W*0.42:.0f}" height="6" fill="{f["c"]}"/>')
-    out.append(hline(M, 706, CW, "#2a3140" if dark else LINE))
-    if left:
-        out.append(t(M, 730, left, fit(left, 640, 20, W_MONO, 16, 1.4), ink, MONO,
-                     "400", ls="1.4"))
-    if centre:
-        size = fit(centre, 600, 20, W_MONO, 16, 1.4)
-        out.append(t(W / 2, 730, centre, size, GOLD if dark else ink, MONO, "400",
-                     anchor="middle", ls="1.4"))
-    out.append(t(W - M, 730, f"{num:02d}", 20, ink, MONO, "500", anchor="end", ls="1.4"))
-    return "".join(out)
+def chrome(num):
+    """Footer: the wordmark left, the slide number right. Nothing else."""
+    return (hline(M, 700, CW) + wordmark(M, 728, 21) +
+            t(W - M, 728, str(num), 21, MUTED, MONO, "500", anchor="end", ls="1.4"))
 
 
-def page(body, bg=PAPER):
+def page(body):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
             f'width="{W}" height="{H}" role="img">'
-            f'<style>{FONTS}</style>'
-            f'<rect width="{W}" height="{H}" fill="{bg}"/>{body}</svg>')
+            f'<style>{FONTS}</style>{DEFS}'
+            f'<rect width="{W}" height="{H}" fill="{WHITE}"/>{body}</svg>')
 
 
-def heading(title, kicker="", fam="gold", right=""):
+def heading(title, fam="gold", y=112):
     f = FAM[fam]
-    out = []
-    if kicker:
-        out.append(eyebrow(M, 84, kicker, f["c"], maxw=560))
-    if right:
-        out.append(eyebrow(W - M, 84, right, MUTED, 20, 2.2, maxw=600, anchor="end"))
-    out.append(t(M, 132, title, fit(title, CW, 46, W_SERIF, 32), INK, SERIF, "600"))
-    out.append(hline(M, 154, 110, f["c"], 3))
-    return "".join(out)
+    return (t(M, y, title, fit(title, CW, 46, W_SERIF, 30), INK, SERIF, "600") +
+            f'<rect x="{M}" y="{y+16:.0f}" width="112" height="4" rx="2" fill="{f["c"]}"/>')
 
 
 # ============================================================ 1 · title
 def s01():
-    b = [f'<rect width="{W}" height="{H}" fill="{INK}"/>', symbol_field(GOLD),
-         f'<rect x="0" y="0" width="{W}" height="6" fill="{GOLD}"/>']
-    b.append(t(M, 208, "PrimusCredence", 84, WHITE, SERIF, "600"))
-    b.append(hline(M, 250, 300, GOLD, 3))
-    b.append(t(M, 330, "Provable Security Solutions", 46, GOLD, SERIF, "600"))
-    b.append(t(M, 384, "to Cloud, AI & Crypto", 46, GOLD, SERIF, "600"))
-    b.append(t(M, 448, "Mathematical rigour to security — proof alongside testing.",
-               26, "#b8c0cc", SANS, "300", style="italic"))
+    b = [water("gold"), symbol_field(GOLD),
+         f'<rect x="0" y="0" width="{W}" height="7" fill="url(#goldbar)"/>']
+    b.append(wordmark(M, 236, 88))
+    b.append(f'<rect x="{M}" y="272" width="300" height="4" rx="2" fill="{GOLD}"/>')
+    b.append(t(M, 356, "Provable Security Solutions", 46, GOLDINK, SERIF, "600"))
+    b.append(t(M, 410, "to Cloud, AI & Crypto", 46, GOLDINK, SERIF, "600"))
 
-    b.append(hline(M, 528, CW, "#2a3140"))
-    b.append(t(M, 578, "Dr. Raghavendra Ramesh", 33, WHITE, SERIF, "600"))
-    b.append(t(M, 612, "PhD, IISc Bangalore", 24, "#98a2b1", SANS))
-    b.append(t(M, 644, "Founder & CEO", 24, "#98a2b1", SANS))
-    b.append(t(W - M, 578, "primuscredence.com", 27, GOLD, MONO, "500", anchor="end"))
-    b.append(t(W - M, 612, "raghavendra@primuscredence.com", 24, "#98a2b1", MONO, anchor="end"))
-    b.append(t(W - M, 644, "Dubai, UAE", 24, "#98a2b1", MONO, anchor="end"))
-    return page("".join(b), INK)
+    b.append(hline(M, 528, CW))
+    b.append(t(M, 578, "Dr. Raghavendra Ramesh", 33, INK, SERIF, "600"))
+    b.append(t(M, 612, "Founder & CEO", 24, INK2, SANS))
+    b.append(t(M, 644, "PhD, IISc Bangalore", 24, INK2, SANS))
+    b.append(t(W - M, 578, "primuscredence.com", 27, GOLDINK, MONO, "500", anchor="end"))
+    b.append(t(W - M, 612, "raghavendra@primuscredence.com", 24, INK2, MONO, anchor="end"))
+    b.append(t(W - M, 644, "UAE", 24, INK2, MONO, anchor="end"))
+    return page("".join(b))
 
 
 # ============================================================ 2 · about
 def s02():
-    b = [heading("Dr. Raghavendra Ramesh", "About")]
-    b.append(t(M, 196, "Founder & CEO, PrimusCredence  ·  VP of R&D, Supra  ·  Dubai",
-               26, GOLDINK, SANS, "500"))
+    b = [water("gold"), heading("Dr. Raghavendra Ramesh")]
+    b.append(t(M, 176, "Founder & CEO, PrimusCredence", 26, GOLDINK, SANS, "500"))
+    b.append(eyebrow(M, 232, "22+ years of experience in provable security",
+                     INK2, 20, 2.4, maxw=510))
 
-    b.append(eyebrow(M, 262, "Twenty years on the same problem", INK2, 20, 2.6))
     steps = [("PhD, IISc Bangalore", "Model checking for information-flow security"),
-             ("Oracle Labs · 2014–2019", "Java vulnerability detection; static analysis"),
-             ("ConsenSys R&D · 2019–2021", "Cross-chain atomic protocols; Besu prototype"),
-             ("Supra · VP of R&D", "BFT consensus and protocol design, Dubai")]
-    cy = 316
+             ("Oracle Labs · 2014–2019", "Java vulnerability detection"),
+             ("ConsenSys R&D · 2019–2021", "Cross-chain protocols, consensus verification"),
+             ("Supra · VP of R&D · 2021–ongoing", "BFT design & FV, bridges, DeFi")]
+    cy = 292
     for head, sub in steps:
-        b.append(f'<rect x="{M}" y="{cy-25}" width="4" height="54" fill="{GOLD}"/>')
-        b.append(t(M + 20, cy, head, 26, INK, SANS, "600"))
-        b.append(t(M + 20, cy + 30, sub, 23, INK2))
-        cy += 80
+        b.append(f'<rect x="{M}" y="{cy-25}" width="4" height="54" rx="2" fill="{GOLD}"/>')
+        b.append(t(M + 20, cy, head, fit(head, 490, 26, W_SANS, 21), INK, SANS, "600"))
+        b.append(t(M + 20, cy + 30, sub, fit(sub, 490, 23, W_SANS, 19), INK2))
+        cy += 82
 
     x2, w2 = M + 574, CW - 574
-    b.append(rrect(x2, 282, w2, 330, PANEL, 14, LINE))
-    b.append(eyebrow(x2 + 30, 330, "Track record", GOLDINK, 20, 2.6))
-    bl, _ = bullets(x2 + 30, 372, [
-        "Moonshot safety proved in IVy, FMBC 2024",
-        "DSN 2024 · VLDB 2025 · FMBC 2024",
-        "Formal methods · program analysis",
-    ], w2 - 60, 23, 28, 16)
-    b.append(bl)
-    b.append(hline(x2 + 30, 566, w2 - 60))
-    b.append(t(x2 + 30, 596, "raghavendra80.github.io", 22, GOLDINK, MONO, "500"))
+    b.append(glass(x2, 264, w2, 292, 18, FAM["gold"]["tint"], 0.5))
+    b.append(eyebrow(x2 + 30, 308, "Techniques", GOLDINK, 20, 2.6))
+    blk, _ = block(x2 + 30, 346, "Static analysis, theorem proving, model checking",
+                   w2 - 60, 23, 29, INK2, 3)
+    b.append(blk)
+    b.append(hline(x2 + 30, 432, w2 - 60))
+    b.append(eyebrow(x2 + 30, 470, "Tools", GOLDINK, 20, 2.6))
+    blk, _ = block(x2 + 30, 508, "Dafny, TLA+, IVy, Lean, Isabelle", w2 - 60, 23, 29, INK2, 2)
+    b.append(blk)
 
-    b.append(chrome(2, "About"))
+    b.append(chrome(2))
     return page("".join(b))
 
 
 # ============================================================ 3 · why now
 def s03():
-    b = [heading("Why now: the attacker industrialised", "Chapter 2")]
-    b.append(t(M, 198, "A sampling defence cannot answer an enumerating attack.",
+    b = [water("gold"), heading("Why Now: The Attacker Industrialised")]
+    b.append(t(M, 184, "A sampling defence cannot answer an enumerating attack.",
                30, INK, SERIF, "600", style="italic"))
 
-    stats = [("4.5×", "revenue of AI-assisted scam operations vs. non-AI"),
-             ("USD 3.52", "compute cost per LLM-agent exploit attempt"),
-             ("87%", "of a 15-CVE sample exploited from the description")]
+    stats = [("4.5×", "revenue of AI-assisted scam operations versus non-AI equivalents"),
+             ("$3.52", "average compute cost per LLM-agent exploit attempt on a real CVE"),
+             ("87%", "of a 15-CVE sample exploited from the public description alone")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(stats):
         x = M + i * (tw + 20)
-        b.append(rrect(x, 234, tw, 134, PANEL, 12, LINE))
-        b.append(t(x + 24, 298, big, 50, GOLDINK, SERIF, "600"))
-        blk, _ = block(x + 24, 328, sub, tw - 48, 21, 25, INK2, 2)
+        b.append(glass(x, 216, tw, 158, 16, FAM["gold"]["tint"], 0.45))
+        b.append(t(x + 24, 280, big, 48, GOLDINK, SERIF, "600"))
+        blk, _ = block(x + 24, 312, sub, tw - 48, 20, 25, INK2, 3)
         b.append(blk)
 
-    y, hw = 408, CW / 2 - 12
-    b.append(rrect(M, y, hw, 186, WHITE, 12, LINE))
-    b.append(rrect(M + CW / 2 + 12, y, hw, 186, FAM["cyb"]["c"], 12))
-    b.append(eyebrow(M + 24, y + 42, "Traditional pen test", INK2, 20, 2.6))
-    b.append(eyebrow(M + CW / 2 + 36, y + 42, "AI-driven adversary", "#cfe0f7", 20, 2.6))
+    y, hw = 404, CW / 2 - 12
+    b.append(glass(M, y, hw, 188, 16))
+    b.append(f'<g filter="url(#lift)">'
+             f'{rrect(M + CW / 2 + 12, y, hw, 188, FAM["cyb"]["c"], 16)}</g>')
+    b.append(eyebrow(M + 26, y + 44, "Traditional pen test", INK2, 20, 2.6))
+    b.append(eyebrow(M + CW / 2 + 38, y + 44, "AI-driven adversary", "#cfe0f7", 20, 2.6))
     left = ["10²–10³ paths, human-selected", "2–4 week window, then closed",
             "High marginal cost per path", "“We found no way in”"]
     right = ["10⁵–10⁷ paths, machine-enumerated", "Continuous, no window",
              "Near-zero marginal cost", "Approaching exhaustive"]
     for i, (l, r) in enumerate(zip(left, right)):
-        b.append(t(M + 24, y + 86 + i * 30, l, 23, INK2))
-        b.append(t(M + CW / 2 + 36, y + 86 + i * 30, r, 23, WHITE))
+        b.append(t(M + 26, y + 88 + i * 30, l, 23, INK2))
+        b.append(t(M + CW / 2 + 38, y + 88 + i * 30, r, 23, WHITE))
 
     b.append(t(M, 654, "Proof is the one capability that answers exhaustive search in kind.",
                26, GOLDINK, SANS, "500"))
-    b.append(chrome(3, "Why now"))
+    b.append(chrome(3))
     return page("".join(b))
 
 
 # ============================================================ 4 · the method
 def s04():
-    b = [heading("The method: automated reasoning", "Chapter 3")]
-    b.append(t(M, 198, "Testing shows what your system does. Proof shows what it cannot do.",
-               29, INK, SERIF, "600", style="italic"))
+    b = [water("gold"), heading("Automated Reasoning")]
+    b.append(t(M, 184, "Proof establishes that bad things cannot happen.",
+               30, INK, SERIF, "600", style="italic"))
 
     steps = [("1", "Formalise", "Your existing artefact becomes a logical model"),
              ("2", "State", "The security property becomes a formula"),
@@ -292,198 +332,213 @@ def s04():
     tw = (CW - 3 * 18) / 4
     for i, (n, head, body) in enumerate(steps):
         x = M + i * (tw + 18)
-        b.append(rrect(x, 236, tw, 190, WHITE, 12, LINE))
-        b.append(f'<circle cx="{x+42:.0f}" cy="274" r="19" fill="{GOLD}"/>')
-        b.append(t(x + 42, 283, n, 23, WHITE, MONO, "500", anchor="middle"))
-        b.append(t(x + 72, 283, head, 27, INK, SERIF, "600"))
-        blk, _ = block(x + 24, 334, body, tw - 48, 22, 28, INK2, 4)
+        cx = x + tw / 2
+        b.append(glass(x, 208, tw, 192, 16))
+        b.append(f'<circle cx="{cx:.0f}" cy="248" r="19" fill="{GOLD}"/>')
+        b.append(t(cx, 257, n, 23, WHITE, MONO, "500", anchor="middle"))
+        b.append(t(cx, 296, head, 27, INK, SERIF, "600", anchor="middle"))
+        blk, _ = block(cx, 330, body, tw - 40, 21, 27, INK2, 3, anchor="middle")
         b.append(blk)
-        if i < 3:
-            b.append(f'<path d="M{x+tw+3:.0f},330 l11,0 M{x+tw+9:.0f},325 l5,5 -5,5" '
-                     f'stroke="{GOLD}" stroke-width="2" fill="none"/>')
+        b.append(f'<line x1="{cx:.0f}" y1="400" x2="{cx:.0f}" y2="408" '
+                 f'stroke="{GOLD}" stroke-width="2" opacity="0.5"/>')
+
+    # every step above is AI-assisted
+    b.append(f'<g filter="url(#lift)">{rrect(M, 408, CW, 46, "url(#goldbar)", 23)}</g>')
+    b.append(t(W / 2, 439, "✦  AI-POWERED  ✦", 22, WHITE, MONO, "500",
+               anchor="middle", ls="4"))
 
     hw = CW / 2 - 12
-    b.append(rrect(M, 456, hw, 156, "#eaf4ee", 12, "#bcd8c7"))
-    b.append(rrect(M + CW / 2 + 12, 456, hw, 156, "#fbeee6", 12, "#e8cdb6"))
-    b.append(t(M + 24, 502, "UNSAT", 30, GREEN, MONO, "500"))
-    blk, _ = block(M + 24, 542, "No violating state exists — over the entire space, "
-                                "under a stated model.", hw - 48, 23, 29, INK2, 2)
+    b.append(glass(M, 476, hw, 146, 16, "#e6f2ea", 0.7))
+    b.append(glass(M + CW / 2 + 12, 476, hw, 146, 16, "#fbeee6", 0.7))
+    b.append(t(M + 26, 520, "UNSAT", 29, GREEN, MONO, "500"))
+    blk, _ = block(M + 26, 558, "No violating state exists — over the entire space, "
+                                "under a stated model.", hw - 52, 22, 28, INK2, 2)
     b.append(blk)
-    b.append(t(M + 24, 600, "Not “none was found”.", 23, GREEN, SANS, "500"))
-    b.append(t(M + CW / 2 + 36, 502, "SAT + witness", 30, AMBER, MONO, "500"))
-    blk, _ = block(M + CW / 2 + 36, 542, "The exact request, path or call ordering that "
+    b.append(t(M + 26, 614, "Not “none was found”.", 22, GREEN, SANS, "500"))
+    b.append(t(M + CW / 2 + 38, 520, "SAT + witness", 29, AMBER, MONO, "500"))
+    blk, _ = block(M + CW / 2 + 38, 558, "The exact request, path or call ordering that "
                                          "breaks it — reproducible on your estate.",
-                   hw - 48, 23, 29, INK2, 3)
+                   hw - 52, 22, 28, INK2, 3)
     b.append(blk)
 
     b.append(t(M, 664, "Industrial practice: AWS (Zelkova, Tiros, Nitro) · Microsoft (Z3) · "
-                       "Meta (Infer) · Airbus (Astrée)", 22, MUTED, SANS))
-    b.append(chrome(4, "The method"))
+                       "Meta (Infer) · Airbus (Astrée)", 21, MUTED, SANS))
+    b.append(chrome(4))
     return page("".join(b))
 
 
 # ============================================================ 5 · the map
 def s05():
-    b = [heading("Nine solutions, three families", "Solutions")]
-    b.append(t(M, 198, "One method, one evidence layer — three buyers, three regulatory hooks.",
-               26, INK2, SANS))
+    b = [water("gold"), heading("Nine Solutions, Three Families")]
 
     bands = [
-        ("cyb", "Cybersecurity", "CISO · cloud security · AppSec", 228, 172,
+        ("cyb", "Cybersecurity", "CISO · cloud security · AppSec", 196, 176,
          [(1, "Cloud entitlement proofs"), (2, "Network segmentation proofs"),
           (3, "API-usage conformance"), (4, "Firmware & CVE reachability"),
           (5, "Post-quantum migration")]),
-        ("ai", "AI Security", "Head of AI · model risk", 416, 122,
+        ("ai", "AI Security", "Head of AI · model risk", 392, 124,
          [(6, "LLM guardrail verification"), (7, "Neurosymbolic assurance")]),
-        ("cry", "Crypto Security", "Protocol lead · CTO · VARA", 554, 122,
+        ("cry", "Crypto Security", "Protocol lead · CTO · VARA", 536, 124,
          [(8, "Smart-contract verification"), (9, "Protocol & consensus proofs")]),
     ]
     for fam, name, buyer, y, h, items in bands:
         f = FAM[fam]
-        b.append(rrect(M, y, CW, h, WHITE, 12, LINE))
-        b.append(f'<path d="M{M},{y+12} a12,12 0 0 1 12,-12 l224,0 l0,{h} l-224,0 '
-                 f'a12,12 0 0 1 -12,-12 z" fill="{f["c"]}"/>')
-        b.append(t(M + 26, y + 52, name, fit(name, 196, 29, W_SERIF, 22), WHITE, SERIF, "600"))
-        blk, _ = block(M + 26, y + 84, buyer, 200, 19, 24, "#e4ecf6", 2)
+        b.append(glass(M, y, CW, h, 18, f["tint"], 0.38))
+        b.append(f'<path d="M{M},{y+16} a16,16 0 0 1 16,-16 l220,0 l0,{h} l-220,0 '
+                 f'a16,16 0 0 1 -16,-16 z" fill="{f["c"]}"/>')
+        b.append(f'<rect x="{M+14}" y="{y+1}" width="208" height="1.4" rx="0.7" '
+                 f'fill="#ffffff" opacity="0.3"/>')
+        b.append(t(M + 26, y + 54, name, fit(name, 196, 29, W_SERIF, 22), WHITE, SERIF, "600"))
+        blk, _ = block(M + 26, y + 86, buyer, 200, 19, 24, "#eaf1f8", 2)
         b.append(blk)
 
         colx = [M + 256, M + 596]
         colmax = [596 - 256 - 48, CW - 596 - 30]
         cols = [items[:3], items[3:]] if len(items) > 3 else [items[:1], items[1:]]
-        top = y + 52 if len(items) > 3 else y + 72
+        top = y + 54 if len(items) > 3 else y + 74
         for ci, col in enumerate(cols):
             for ri, (n, label) in enumerate(col):
                 cy = top + ri * 40
-                b.append(t(colx[ci], cy, f"{n}", 24, f["c"], MONO, "500"))
+                b.append(t(colx[ci], cy, str(n), 24, f["c"], MONO, "500"))
                 b.append(t(colx[ci] + 32, cy, label,
                            fit(label, colmax[ci], 24, W_SANS, 19), INK2))
 
-    b.append(chrome(5, "Solutions"))
+    b.append(chrome(5))
     return page("".join(b))
 
 
 # ====================================================== section divider slides
-def section(num, fam, title, kicker, items):
+def section(num, fam, title, items):
     f = FAM[fam]
-    b = [f'<rect width="{W}" height="{H}" fill="{INK}"/>', symbol_field(f["c"]),
-         f'<rect x="0" y="0" width="{W}" height="6" fill="{f["c"]}"/>']
-    b.append(eyebrow(M, 202, kicker, f["c"], 22, 3.2))
-    b.append(t(M, 292, title, fit(title, CW, 66, W_SERIF, 46), WHITE, SERIF, "600"))
-    b.append(hline(M, 328, 160, f["c"], 3))
-    cy = 404
+    b = [water(fam), symbol_field(f["c"]),
+         f'<rect x="0" y="0" width="{W}" height="7" fill="{f["c"]}"/>']
+    b.append(t(M, 258, title, fit(title, CW, 66, W_SERIF, 46), INK, SERIF, "600"))
+    b.append(f'<rect x="{M}" y="286" width="160" height="4" rx="2" fill="{f["c"]}"/>')
+    cy = 376
     for n, name in items:
-        b.append(t(M, cy, f"{n:02d}", 27, f["c"], MONO, "500"))
-        b.append(t(M + 62, cy, name, fit(name, CW - 70, 29, W_SANS, 22), "#e7eaef", SANS))
-        cy += 46
-    b.append(chrome(num, f["name"], fam, dark=True))
-    return page("".join(b), INK)
+        b.append(f'<circle cx="{M+13}" cy="{cy-9}" r="14" fill="{f["c"]}" opacity="0.13"/>')
+        b.append(t(M + 13, cy, str(n), 23, f["c"], MONO, "500", anchor="middle"))
+        b.append(t(M + 50, cy, name, fit(name, CW - 62, 29, W_SANS, 22), INK2))
+        cy += 48
+    b.append(chrome(num))
+    return page("".join(b))
 
 
 # ========================================================== solution template
 def solution(num, fam, n, title, question, problem, build, output, precedent,
-             buyers, note):
+             buyers, note=None):
     f = FAM[fam]
-    b = [heading(title, f"Solution {n}  ·  {f['name']}", fam)]
+    b = [water(fam), heading(f"{n}. {title}", fam, y=110)]
 
     # the question it settles
-    b.append(rrect(M, 172, CW, 84, f["tint"], 12))
-    b.append(f'<rect x="{M}" y="172" width="5" height="84" rx="2.5" fill="{f["c"]}"/>')
-    qlines = wrap(question, CW - 76, 28, W_SERIF)[:2]
-    y0 = 212 if len(qlines) == 2 else 224
+    b.append(glass(M, 152, CW, 86, 16, f["tint"], 0.55))
+    b.append(f'<rect x="{M+2}" y="164" width="5" height="62" rx="2.5" fill="{f["c"]}"/>')
+    qlines = wrap(question, CW - 80, 28, W_SERIF)[:2]
+    y0 = 192 if len(qlines) == 2 else 204
     for i, ln in enumerate(qlines):
-        b.append(t(M + 32, y0 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
+        b.append(t(M + 34, y0 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
 
-    # left — the problem, the line worth repeating, the precedent
-    b.append(eyebrow(M, 308, "The problem", f["c"], maxw=lw))
-    blk, _ = block(M, 346, problem, lw, 25, 32, INK2, 5)
+    # left — the problem, the line worth repeating, then precedent and buyers
+    b.append(eyebrow(M, 292, "The problem", f["c"], maxw=lw))
+    blk, _ = block(M, 330, problem, lw, 25, 32, INK2, 5)
     b.append(blk)
-    b.append(hline(M, 492, lw))
-    blk, _ = block(M, 524, note, lw, 24, 30, GOLDINK, 2, style="italic")
-    b.append(blk)
-    b.append(t(M, 592, "PRECEDENT", 19, MUTED, MONO, "500", ls="2.4"))
-    b.append(t(M + 140, 592, precedent, fit(precedent, lw - 140, 21, W_SANS, 16), INK2))
+    if note:
+        b.append(hline(M, 476, lw))
+        blk, _ = block(M, 508, note, lw, 24, 30, GOLDINK, 2, style="italic")
+        b.append(blk)
+        ly = 578
+    else:
+        b.append(hline(M, 492, lw))
+        ly = 528
+    b.append(t(M, ly, "PRECEDENT", 19, MUTED, MONO, "500", ls="2.4"))
+    b.append(t(M + 140, ly, precedent, fit(precedent, lw - 140, 21, W_SANS, 16), INK2))
+    b.append(t(M, ly + 34, "BUYERS", 19, MUTED, MONO, "500", ls="2.4"))
+    b.append(t(M + 140, ly + 34, buyers, fit(buyers, lw - 140, 21, W_SANS, 16), INK2))
 
     # right — what we build
-    b.append(rrect(rx, 282, rw, 304, WHITE, 12, LINE))
-    b.append(eyebrow(rx + 26, 322, "What we build", f["c"], maxw=rw - 52))
-    bl, _ = bullets(rx + 26, 366, build, rw - 52, 24, 30, 18, INK2, f["c"])
+    b.append(glass(rx, 262, rw, 314, 18))
+    b.append(eyebrow(rx + 26, 304, "What we build", f["c"], maxw=rw - 52))
+    bl, _ = bullets(rx + 26, 348, build, rw - 52, 24, 30, 18, INK2, f["c"])
     b.append(bl)
 
     # bottom — the output
-    b.append(rrect(M, 606, CW, 88, f["tint"], 12))
-    b.append(f'<rect x="{M}" y="606" width="5" height="88" rx="2.5" fill="{f["c"]}"/>')
-    b.append(eyebrow(M + 32, 640, "Output", f["c"], 20, 2.6))
-    blk, _ = block(M + 168, 640, output, CW - 200, 23, 29, INK2, 2)
+    b.append(glass(M, 612, CW, 74, 16, f["tint"], 0.55))
+    b.append(t(M + 32, 658, "OUTPUT", 20, f["c"], MONO, "500", ls="2.6"))
+    blk, _ = block(M + 168, 644, output, CW - 200, 22, 28, INK2, 2)
     b.append(blk)
 
-    b.append(chrome(num, "", fam, left=f"Buyers: {buyers}"))
+    b.append(chrome(num))
     return page("".join(b))
 
 
 # ============================================================ 18 · take away
 def s18():
-    b = [heading("What to take away", "Take away")]
+    b = [water("gold"), heading("Take Away")]
 
-    b.append(rrect(M, 182, CW, 106, INK, 14))
-    b.append(t(W / 2, 230, "Mathematical rigour to security —", 33, WHITE, SERIF,
+    b.append(f'<g filter="url(#lift)">{rrect(M, 174, CW, 106, INK, 18)}</g>')
+    b.append(t(W / 2, 222, "Mathematical rigour to security —", 33, WHITE, SERIF,
                "600", anchor="middle"))
-    b.append(t(W / 2, 272, "proof alongside testing, across cloud, AI and crypto.",
+    b.append(t(W / 2, 264, "proof alongside testing, across cloud, AI and crypto.",
                33, GOLD, SERIF, "600", anchor="middle"))
 
     cols = [("The shift", "Attack path discovery is automated, parallel and cheap. "
                           "A defence that only samples cannot answer one that enumerates."),
             ("The addition", "We do not replace testing, monitoring or the SOC. "
-                             "We make one class of control statement decidable, not sampled."),
+                             "We make one class of controls machine checkable."),
             ("The honesty", "A proof is relative to a model and a specification — both stated. "
                             "We produce the evidence; we do not certify.")]
     cw = (CW - 2 * 24) / 3
     for i, (head, body) in enumerate(cols):
         x = M + i * (cw + 24)
-        b.append(hline(x, 330, cw - 10, GOLD, 2))
-        b.append(t(x, 372, head, 29, INK, SERIF, "600"))
-        blk, _ = block(x, 412, body, cw - 10, 23, 29, INK2, 6)
+        b.append(f'<rect x="{x:.0f}" y="320" width="{cw-10:.0f}" height="3" rx="1.5" '
+                 f'fill="{GOLD}"/>')
+        b.append(t(x, 364, head, 29, INK, SERIF, "600"))
+        blk, _ = block(x, 404, body, cw - 10, 23, 29, INK2, 6)
         b.append(blk)
 
-    b.append(rrect(M, 578, CW, 112, PANEL, 14, LINE))
-    b.append(f'<rect x="{M}" y="578" width="5" height="112" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(M + 30, 614, "Start here — Milestone 1: the Micro-Proof Assessment",
-                     GOLDINK, 20, 2.4, maxw=CW - 70))
-    b.append(t(M + 30, 650, "One narrow, high-risk slice. Read-only access, no agent deployed,",
+    b.append(glass(M, 566, CW, 112, 18, FAM["gold"]["tint"], 0.5))
+    b.append(f'<rect x="{M+2}" y="580" width="5" height="84" rx="2.5" fill="{GOLD}"/>')
+    b.append(eyebrow(M + 34, 606, "Start here — Micro Assessment of Solution 1",
+                     GOLDINK, 20, 2.4, maxw=CW - 80))
+    b.append(t(M + 34, 640, "One narrow, high-risk slice. Read-only access, no agent deployed,",
                23, INK2))
-    b.append(t(M + 30, 678, "weeks not months — and a counter-example on your own systems, or a proof.",
+    b.append(t(M + 34, 668,
+               "weeks not months — and a counter-example on your own systems, or a proof.",
                23, INK2))
 
-    b.append(chrome(18, "Take away"))
+    b.append(chrome(18))
     return page("".join(b))
 
 
 # ============================================================ 19 · thank you
 def s19():
-    b = [f'<rect width="{W}" height="{H}" fill="{INK}"/>', symbol_field(GOLD),
-         f'<rect x="0" y="0" width="{W}" height="6" fill="{GOLD}"/>']
-    b.append(t(M, 264, "Thank you", 84, WHITE, SERIF, "600"))
-    b.append(hline(M, 306, 200, GOLD, 3))
-    b.append(t(M, 378, "Let us prove one property on your estate —", 31, "#b8c0cc",
+    b = [water("gold"), symbol_field(GOLD),
+         f'<rect x="0" y="0" width="{W}" height="7" fill="url(#goldbar)"/>']
+    b.append(t(M, 268, "Thank You", 84, INK, SERIF, "600"))
+    b.append(f'<rect x="{M}" y="300" width="200" height="4" rx="2" fill="{GOLD}"/>')
+    b.append(t(M, 378, "Let us prove one property on your estate —", 31, INK2,
                SERIF, "400", style="italic"))
-    b.append(t(M, 420, "then judge the method on the result.", 31, "#b8c0cc",
+    b.append(t(M, 420, "then judge the method on the result.", 31, INK2,
                SERIF, "400", style="italic"))
 
-    b.append(hline(M, 500, CW, "#2a3140"))
-    b.append(t(M, 552, "Dr. Raghavendra Ramesh", 33, WHITE, SERIF, "600"))
-    b.append(t(M, 588, "Founder & CEO, PrimusCredence · PhD, IISc", 24, "#98a2b1", SANS))
-    b.append(t(W - M, 552, "raghavendra@primuscredence.com", 27, GOLD, MONO, "500", anchor="end"))
-    b.append(t(W - M, 590, "primuscredence.com", 27, GOLD, MONO, "500", anchor="end"))
-    b.append(t(W - M, 628, "+971 58 189 2803 · Dubai, UAE", 23, "#98a2b1", MONO, anchor="end"))
-    b.append(t(M, 672, "Cloud  |  AI  |  Crypto", 23, GOLDINK, MONO, "500", ls="3.2"))
-    return page("".join(b), INK)
+    b.append(hline(M, 500, CW))
+    b.append(t(M, 552, "Dr. Raghavendra Ramesh", 33, INK, SERIF, "600"))
+    b.append(t(M, 588, "Founder & CEO, PrimusCredence", 24, INK2, SANS))
+    b.append(t(M, 620, "PhD, IISc Bangalore", 24, INK2, SANS))
+    b.append(t(W - M, 552, "raghavendra@primuscredence.com", 27, GOLDINK, MONO,
+               "500", anchor="end"))
+    b.append(t(W - M, 590, "+971 58 189 2803", 24, INK2, MONO, anchor="end"))
+    b.append(t(W - M, 622, "UAE", 24, INK2, MONO, anchor="end"))
+    b.append(t(M, 676, "Cloud  |  AI  |  Crypto", 23, GOLDINK, MONO, "500", ls="3.2"))
+    return page("".join(b))
 
 
 # ==================================================================== content
 SOLUTIONS = [
     dict(num=7, fam="cyb", n=1,
-         title="Cloud access-policy & entitlement verification",
+         title="Cloud Access-Policy & Entitlement Verification",
          question="Can any principal, in any request context, reach this resource from "
                   "outside the trust boundary?",
          problem="IAM is combinatorial: the effective permission composes policies, "
@@ -494,12 +549,10 @@ SOLUTIONS = [
          output="Proof of safety over all requests — or the violating request, the escalation "
                 "path it opens, and its blast radius.",
          precedent="AWS Zelkova → IAM Access Analyzer",
-         buyers="Regional CSPs · sovereign hosts · enterprises",
-         note="Principal \"*\" with a NotIpAddress condition permits the whole internet "
-              "except one /24."),
+         buyers="Regional CSPs · sovereign hosts"),
 
     dict(num=8, fam="cyb", n=2,
-         title="Network reachability & segmentation proofs",
+         title="Network Reachability & Segmentation Proofs",
          question="Does any path exist from an untrusted zone to this subnet — and does "
                   "east-west segmentation hold?",
          problem="Probing tests the paths you thought of, at the moment you ran it. "
@@ -514,7 +567,7 @@ SOLUTIONS = [
          note="Static: no scanning window, no production traffic — it re-runs on every change."),
 
     dict(num=9, fam="cyb", n=3,
-         title="API-usage conformance",
+         title="API-Usage Conformance",
          question="Does our own code use the platform, credential and crypto SDKs the way "
                   "their contracts require?",
          problem="Cloud APIs are protocols, not function calls. Undrained pagination, a logged "
@@ -525,11 +578,11 @@ SOLUTIONS = [
          output="The call site, the taint trace, the pattern violated and the corrected call "
                 "sequence — plus which patterns were checked.",
          precedent="AWS RAPID → CodeGuru · 76% accepted",
-         buyers="Platform and AppSec teams · ISVs · banks",
+         buyers="Platform and AppSec teams · ISVs",
          note="A correct policy invoked through a misused SDK still leaks. Bounded by the library."),
 
     dict(num=10, fam="cyb", n=4,
-         title="Hypervisor, firmware & CVE reachability",
+         title="Hypervisor, Firmware & CVE Reachability",
          question="Can tenant isolation break below the guest — and is this week's hypervisor "
                   "CVE reachable on our build?",
          problem="Below the application, security is a memory-safety question, and a flaw "
@@ -544,7 +597,7 @@ SOLUTIONS = [
          note="Three of four CVEs unreachable turns a fleet emergency into one scheduled patch."),
 
     dict(num=11, fam="cyb", n=5,
-         title="Post-quantum cryptography migration",
+         title="Post-Quantum Cryptography Migration",
          question="Where is every cryptographic asset, in what order does it move, and does "
                   "security hold at each stage?",
          problem="Harvest-now-decrypt-later opened the window years ago, so detection "
@@ -560,7 +613,7 @@ SOLUTIONS = [
          note="A programme over quarters with verification as its assurance layer."),
 
     dict(num=13, fam="ai", n=6,
-         title="AI and LLM guardrail verification",
+         title="AI and LLM Guardrail Verification",
          question="Not “how often does the agent fail?” but “can it do this at all?”",
          problem="An agent is a non-human identity with delegated privilege and an instruction "
                  "channel the adversary can write to. A guard model judging a model is "
@@ -570,12 +623,12 @@ SOLUTIONS = [
                 "Composition safety across call sequences"],
          output="A result about the mediation layer, not the model: nothing permitted escapes "
                 "the envelope, and no path bypasses it.",
-         precedent="Bedrock Automated Reasoning · detect mode",
+         precedent="Bedrock Automated Reasoning",
          buyers="Banks · sovereign AI · OT · healthcare",
          note="Provable: no rows outside the caller's ACL. Not provable: no PII ever reaches the user."),
 
     dict(num=14, fam="ai", n=7,
-         title="Neurosymbolic assurance",
+         title="Neurosymbolic Assurance",
          question="Does this answer follow from the policy we operate under — and if not, what "
                   "assumption was silently supplied?",
          problem="Solution 6 bounds what an agent may do; nothing bounds what it may say. "
@@ -587,11 +640,11 @@ SOLUTIONS = [
          output="Per answer: the verdict, the derivation or the contradicting rule, and the "
                 "missing assumption named — an audit trail.",
          precedent="Bedrock Automated Reasoning checks",
-         buyers="Banks and insurers · government · ISO 42001",
+         buyers="Banks and insurers · government",
          note="LLM autoformalization drafts the theory; the domain expert ratifies it."),
 
     dict(num=16, fam="cry", n=8,
-         title="Formal verification of smart contracts",
+         title="Formal Verification of Smart Contracts",
          question="Does this contract admit a reachable state that breaks its invariants, "
                   "access control or solvency?",
          problem="The code is public, the surface permissionless, exploitation atomic and "
@@ -606,41 +659,40 @@ SOLUTIONS = [
          note="“Formally verified” means three different things. The tier decides your risk."),
 
     dict(num=17, fam="cry", n=9,
-         title="Formal verification of distributed protocols",
+         title="Formal Verification of Distributed Protocols",
          question="Does this protocol admit an execution that breaks safety under Byzantine "
                   "faults, asynchrony or partition?",
          problem="These are design defects: no CVE, no patch, no signature, present from the "
                  "first commit. One AWS TLA+ finding needed a 35-step sequence.",
          build=["IVy in decidable EPR: proof or counterexample",
                 "Dafny and IronFleet; TLA+ with TLC and TLAPS",
-                "Cross-chain bridges — a genuine white space"],
+                "Coq/Rocq for consensus and replication safety"],
          output="Machine-checked inductive invariants with the fault, adversary and network "
                 "assumptions stated — or the breaking execution.",
          precedent="Pipelined Moonshot in IVy · FMBC 2024",
-         buyers="L1/L2 teams · bridges · settlement",
-         note="Bridges: USD 2.8bn lost, ~40% of all Web3 losses — and verification is thin."),
+         buyers="L1/L2 teams · settlement infrastructure"),
 ]
 
 TITLES = [
     "PrimusCredence — Provable security solutions",
-    "About — Dr. Raghavendra Ramesh",
-    "Why now: the attacker industrialised",
-    "The method: automated reasoning",
-    "Nine solutions, three families",
-    "Section — Cybersecurity Solutions",
-    "Solution 1 — Cloud access-policy & entitlement verification",
-    "Solution 2 — Network reachability & segmentation proofs",
-    "Solution 3 — API-usage conformance",
-    "Solution 4 — Hypervisor, firmware & CVE reachability",
-    "Solution 5 — Post-quantum cryptography migration",
-    "Section — AI Security Solutions",
-    "Solution 6 — AI and LLM guardrail verification",
-    "Solution 7 — Neurosymbolic assurance",
-    "Section — Crypto Security Solutions",
-    "Solution 8 — Formal verification of smart contracts",
-    "Solution 9 — Formal verification of distributed protocols",
-    "What to take away",
-    "Thank you",
+    "Dr. Raghavendra Ramesh",
+    "Why Now: The Attacker Industrialised",
+    "Automated Reasoning",
+    "Nine Solutions, Three Families",
+    "Cybersecurity Solutions",
+    "1. Cloud Access-Policy & Entitlement Verification",
+    "2. Network Reachability & Segmentation Proofs",
+    "3. API-Usage Conformance",
+    "4. Hypervisor, Firmware & CVE Reachability",
+    "5. Post-Quantum Cryptography Migration",
+    "AI Security Solutions",
+    "6. AI and LLM Guardrail Verification",
+    "7. Neurosymbolic Assurance",
+    "Crypto Security Solutions",
+    "8. Formal Verification of Smart Contracts",
+    "9. Formal Verification of Distributed Protocols",
+    "Take Away",
+    "Thank You",
 ]
 
 
@@ -648,16 +700,16 @@ def build():
     os.makedirs(OUT, exist_ok=True)
     pages = {
         1: s01(), 2: s02(), 3: s03(), 4: s04(), 5: s05(),
-        6: section(6, "cyb", "Cybersecurity Solutions", "Chapter 4 · Solutions 1–5",
+        6: section(6, "cyb", "Cybersecurity Solutions",
                    [(1, "Cloud access-policy and entitlement verification"),
                     (2, "Network reachability and segmentation proofs"),
                     (3, "API-usage conformance"),
                     (4, "Hypervisor, firmware and CVE reachability"),
                     (5, "Post-quantum cryptography migration")]),
-        12: section(12, "ai", "AI Security Solutions", "Chapter 5 · Solutions 6–7",
+        12: section(12, "ai", "AI Security Solutions",
                     [(6, "Guardrail verification — what an agent may do"),
                      (7, "Neurosymbolic assurance — what an agent may say")]),
-        15: section(15, "cry", "Crypto Security Solutions", "Chapter 6 · Solutions 8–9",
+        15: section(15, "cry", "Crypto Security Solutions",
                     [(8, "Formal verification of smart contracts"),
                      (9, "Formal verification of distributed protocols")]),
         18: s18(), 19: s19(),
