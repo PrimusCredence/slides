@@ -135,6 +135,15 @@ def eyebrow(x, y, s, fill=GOLDINK, size=21, ls=3.2, maxw=None, anchor="start"):
     return t(x, y, s, size, fill, MONO, "500", anchor=anchor, ls=str(ls))
 
 
+# measured advance of the wordmark in Source Serif 4 semibold, per character
+# per unit of font size — the rule under it is drawn to exactly this width
+W_MARK = 0.4932
+
+
+def mark_width(size):
+    return len("PrimusCredence") * size * W_MARK
+
+
 def wordmark(x, y, size, anchor="start"):
     """Primus in black, Credence in gold, set solid."""
     a = f' text-anchor="{anchor}"' if anchor != "start" else ""
@@ -235,7 +244,8 @@ def s01():
     b = [water("gold"), symbol_field(GOLD),
          f'<rect x="0" y="0" width="{W}" height="7" fill="url(#goldbar)"/>']
     b.append(wordmark(M, 236, 88))
-    b.append(f'<rect x="{M}" y="272" width="300" height="4" rx="2" fill="{GOLD}"/>')
+    b.append(f'<rect x="{M}" y="272" width="{mark_width(88):.0f}" height="4" rx="2" '
+             f'fill="{GOLD}"/>')
     b.append(t(M, 356, "Provable Security Solutions", 46, GOLDINK, SERIF, "600"))
     b.append(t(M, 410, "to Cloud, AI & Crypto", 46, GOLDINK, SERIF, "600"))
 
@@ -445,17 +455,17 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
     blk, _ = block(M, 330, problem, lw, 25, 32, INK2, 5)
     b.append(blk)
     if note:
-        b.append(hline(M, 476, lw))
-        blk, _ = block(M, 508, note, lw, 24, 30, GOLDINK, 2, style="italic")
+        b.append(hline(M, 472, lw))
+        blk, _ = block(M, 500, note, lw, 24, 30, GOLDINK, 2, style="italic")
         b.append(blk)
-        ly = 578
+        ly = 566
     else:
         b.append(hline(M, 492, lw))
-        ly = 528
+        ly = 532
     b.append(t(M, ly, "PRECEDENT", 19, MUTED, MONO, "500", ls="2.4"))
     b.append(t(M + 140, ly, precedent, fit(precedent, lw - 140, 21, W_SANS, 16), INK2))
-    b.append(t(M, ly + 34, "BUYERS", 19, MUTED, MONO, "500", ls="2.4"))
-    b.append(t(M + 140, ly + 34, buyers, fit(buyers, lw - 140, 21, W_SANS, 16), INK2))
+    b.append(t(M, ly + 30, "BUYERS", 19, MUTED, MONO, "500", ls="2.4"))
+    b.append(t(M + 140, ly + 30, buyers, fit(buyers, lw - 140, 21, W_SANS, 16), INK2))
 
     # right — what we build
     b.append(glass(rx, 262, rw, 314, 18))
