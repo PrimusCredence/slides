@@ -108,6 +108,22 @@
     .tagline{display:none;}
   }
 
+  /* ------------------------------------------- fullscreen: nothing but the slide */
+  /* On a 16:10 MacBook Pro the A5 slide letterboxes; it is scaled to the larger
+     of the two fits and centred on black, with all chrome removed. */
+  :fullscreen{background:#000;}
+  :fullscreen header,
+  :fullscreen footer,
+  :fullscreen .progress,
+  :fullscreen .nav{display:none !important;}
+  :fullscreen main{padding:0; height:100vh; width:100vw;}
+  :fullscreen .stage{
+    width:min(100vw, calc(100vh * (var(--slide-w) / var(--slide-h))));
+    height:auto;
+    border-radius:0; box-shadow:none;
+  }
+  :fullscreen .zone{cursor:none;}
+
   /* ---------------------------------------------------------- print: A5 landscape */
   @media print{
     @page{size:210mm 148.5mm; margin:0;}
