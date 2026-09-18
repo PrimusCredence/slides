@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrimusCredence — Provable Security Solutions to Cloud, AI &amp; Crypto</title>
+<meta name="description" content="PrimusCredence slide deck: proof alongside testing, across cloud, AI and crypto. Nine solutions in three families.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+  :root{
+    --ink:#14181f; --ink-2:#4a5260; --muted:#767e8c;
+    --gold:#c8940a; --gold-ink:#a87c00;
+    --paper:#faf8f3; --panel:#f2efe6; --line:#ddd7c9;
+    --backdrop:#0e1116; --chrome:#181d26; --chrome-line:#2a3140;
+    --slide-w: 1050; --slide-h: 742;   /* A5 landscape, 5 units / mm */
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:var(--backdrop); color:#e7eaef;
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ---------------------------------------------------------- top bar */
+  header{
+    display:flex; align-items:center; gap:18px;
+    padding:12px 20px; background:var(--chrome);
+    border-bottom:1px solid var(--chrome-line); flex:none;
+  }
+  .brand{font-family:'Source Serif 4',Georgia,serif; font-weight:600; font-size:17px; white-space:nowrap;}
+  .brand span{color:var(--gold-ink);}
+  .tagline{font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  header .spacer{flex:1;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:#cfd5de;
+    background:#232a35; border:1px solid var(--chrome-line); border-radius:7px;
+    padding:6px 11px; cursor:pointer; line-height:1; white-space:nowrap;
+  }
+  .btn:hover{background:#2c3543; color:#fff;}
+  .counter{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--muted); min-width:64px; text-align:center;}
+
+  /* ---------------------------------------------------------- stage */
+  main{flex:1; position:relative; display:grid; place-items:center; padding:22px 64px 16px; min-height:0;}
+  .stage{
+    position:relative;
+    width:min(100%, calc((100vh - 150px) * (var(--slide-w) / var(--slide-h))));
+    aspect-ratio: var(--slide-w) / var(--slide-h);
+    background:var(--paper);
+    border-radius:8px; overflow:hidden;
+    box-shadow:0 18px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .stage object, .stage img{position:absolute; inset:0; width:100%; height:100%; pointer-events:none;}
+
+  /* click zones */
+  .zone{position:absolute; top:0; bottom:0; width:24%; cursor:pointer; opacity:0;}
+  .zone.prev{left:0;} .zone.next{right:0; width:60%;}
+
+  .nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:42px; height:42px; border-radius:50%;
+    background:#1b212c; border:1px solid var(--chrome-line); color:#cfd5de;
+    display:grid; place-items:center; cursor:pointer; font-size:19px; user-select:none;
+  }
+  .nav:hover{background:#252d3a; color:#fff;}
+  .nav.left{left:12px;} .nav.right{right:12px;}
+
+  /* progress */
+  .progress{flex:none; height:3px; background:#1b212c;}
+  .progress i{display:block; height:100%; background:var(--gold); transition:width .18s ease;}
+
+  footer{
+    flex:none; display:flex; align-items:center; gap:14px;
+    padding:8px 20px 12px; font-size:12.5px; color:var(--muted);
+  }
+  footer a{color:var(--gold-ink); text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+  footer .spacer{flex:1;}
+  kbd{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; background:#232a35;
+    border:1px solid var(--chrome-line); border-radius:4px; padding:1px 5px; color:#aab3c0;
+  }
+
+  /* ---------------------------------------------------------- overview */
+  .grid{
+    position:fixed; inset:0; background:rgba(8,10,14,.97); z-index:40;
+    overflow:auto; padding:28px; display:none;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:18px; align-content:start;
+  }
+  .grid.open{display:grid;}
+  .thumb{cursor:pointer; border-radius:6px; overflow:hidden; background:var(--paper);
+         box-shadow:0 0 0 1px rgba(255,255,255,.08); position:relative;}
+  .thumb img{display:block; width:100%; aspect-ratio:var(--slide-w)/var(--slide-h);}
+  .thumb b{
+    position:absolute; left:0; bottom:0; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; font-weight:500; color:#fff; background:rgba(20,24,31,.86);
+    padding:3px 7px; border-radius:0 6px 0 0;
+  }
+  .thumb:hover{box-shadow:0 0 0 2px var(--gold);}
+  .grid h2{grid-column:1/-1; font-family:'Source Serif 4',serif; font-weight:600;
+           font-size:20px; color:#e7eaef; margin-bottom:2px;}
+
+  @media (max-width:760px){
+    main{padding:14px 12px;}
+    .nav{display:none;}
+    .tagline{display:none;}
+  }
+
+  /* ---------------------------------------------------------- print: A5 landscape */
+  @media print{
+    @page{size:210mm 148.5mm; margin:0;}
+    html,body{height:auto; overflow:visible; background:#fff;}
+    header,footer,.progress,.nav,.zone,.grid{display:none !important;}
+    main{display:block; padding:0;}
+    .stage{display:none;}
+    .printset{display:block !important;}
+    .printset img{display:block; width:210mm; height:148.5mm; break-after:page;}
+  }
+  .printset{display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Primus<span>Credence</span></div>
+  <div class="tagline">Provable Security Solutions to Cloud, AI &amp; Crypto</div>
+  <div class="spacer"></div>
+  <button class="btn" id="overviewBtn" title="Overview (o)">Overview</button>
+  <button class="btn" id="printBtn" title="Print / PDF (A5 landscape)">Print</button>
+  <button class="btn" id="fsBtn" title="Fullscreen (f)">Fullscreen</button>
+  <div class="counter" id="counter">01 / 19</div>
+</header>
+
+<main>
+  <div class="nav left"  id="prevBtn" aria-label="Previous slide">&#8249;</div>
+  <div class="stage" id="stage">
+    <object id="frame" type="image/svg+xml" data="slides/01.svg" aria-label="slide"></object>
+    <div class="zone prev" id="zonePrev"></div>
+    <div class="zone next" id="zoneNext"></div>
+  </div>
+  <div class="nav right" id="nextBtn" aria-label="Next slide">&#8250;</div>
+</main>
+
+<div class="progress"><i id="bar" style="width:5%"></i></div>
+
+<footer>
+  <span id="slideTitle">PrimusCredence</span>
+  <span class="spacer"></span>
+  <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate &nbsp; <kbd>o</kbd> overview &nbsp; <kbd>f</kbd> fullscreen</span>
+  <span>·</span>
+  <a href="https://primuscredence.com">primuscredence.com</a>
+</footer>
+
+<div class="grid" id="grid"></div>
+
+<!-- printable copy: every slide, one A5 landscape page each -->
+<div class="printset" id="printset"></div>
+
+<script>
+const TITLES = [
+  "PrimusCredence — Provable security solutions",
+  "About — Dr. Raghavendra Ramesh",
+  "Why now: the attacker industrialised",
+  "The method: automated reasoning",
+  "Nine solutions, three families",
+  "Section — Cybersecurity Solutions",
+  "Solution 1 — Cloud access-policy & entitlement verification",
+  "Solution 2 — Network reachability & segmentation proofs",
+  "Solution 3 — API-usage conformance",
+  "Solution 4 — Hypervisor, firmware & CVE-reachability assurance",
+  "Solution 5 — Post-quantum cryptography migration",
+  "Section — AI Security Solutions",
+  "Solution 6 — AI and LLM guardrail verification",
+  "Solution 7 — Neurosymbolic assurance",
+  "Section — Crypto Security Solutions",
+  "Solution 8 — Formal verification of smart contracts",
+  "Solution 9 — Formal verification of distributed protocols",
+  "What to take away",
+  "Thank you"
+];
+const N = TITLES.length;
+const pad = n => String(n).padStart(2, "0");
+const src = n => `slides/${pad(n)}.svg`;
+
+let i = 1;
+const frame = document.getElementById("frame");
+const counter = document.getElementById("counter");
+const bar = document.getElementById("bar");
+const slideTitle = document.getElementById("slideTitle");
+const grid = document.getElementById("grid");
+
+function show(n, push = true){
+  i = Math.min(N, Math.max(1, n));
+  frame.setAttribute("data", src(i));
+  counter.textContent = `${pad(i)} / ${N}`;
+  bar.style.width = (i / N * 100) + "%";
+  slideTitle.textContent = TITLES[i - 1];
+  if (push) history.replaceState(null, "", "#" + i);
+  // warm the neighbours so navigation is instant
+  [i + 1, i - 1].forEach(k => { if (k >= 1 && k <= N) new Image().src = src(k); });
+}
+const next = () => show(i + 1);
+const prev = () => show(i - 1);
+
+document.getElementById("nextBtn").onclick = next;
+document.getElementById("prevBtn").onclick = prev;
+document.getElementById("zoneNext").onclick = next;
+document.getElementById("zonePrev").onclick = prev;
+
+function toggleGrid(force){
+  const open = force !== undefined ? force : !grid.classList.contains("open");
+  grid.classList.toggle("open", open);
+}
+document.getElementById("overviewBtn").onclick = () => toggleGrid();
+document.getElementById("printBtn").onclick = () => window.print();
+document.getElementById("fsBtn").onclick = () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+};
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { next(); e.preventDefault(); }
+  else if (e.key === "ArrowLeft" || e.key === "PageUp") { prev(); e.preventDefault(); }
+  else if (e.key === "Home") show(1);
+  else if (e.key === "End") show(N);
+  else if (e.key.toLowerCase() === "o") toggleGrid();
+  else if (e.key.toLowerCase() === "f") document.getElementById("fsBtn").click();
+  else if (e.key === "Escape") toggleGrid(false);
+  else if (/^[0-9]$/.test(e.key)) { /* number jump: type then Enter */ buffer += e.key; }
+});
+
+let buffer = "";
+document.addEventListener("keyup", e => {
+  if (e.key === "Enter" && buffer) { show(parseInt(buffer, 10)); buffer = ""; }
+});
+
+// swipe on touch devices
+let x0 = null;
+document.getElementById("stage").addEventListener("touchstart", e => x0 = e.touches[0].clientX, {passive:true});
+document.getElementById("stage").addEventListener("touchend", e => {
+  if (x0 === null) return;
+  const dx = e.changedTouches[0].clientX - x0;
+  if (Math.abs(dx) > 42) (dx < 0 ? next : prev)();
+  x0 = null;
+}, {passive:true});
+
+// build the overview grid and the printable set
+(function build(){
+  const h = document.createElement("h2");
+  h.textContent = "All slides — click to jump";
+  grid.appendChild(h);
+  const printset = document.getElementById("printset");
+  for (let n = 1; n <= N; n++){
+    const d = document.createElement("div");
+    d.className = "thumb";
+    d.innerHTML = `<img loading="lazy" src="${src(n)}" alt="${TITLES[n-1]}"><b>${pad(n)}</b>`;
+    d.onclick = () => { show(n); toggleGrid(false); };
+    grid.appendChild(d);
+
+    const p = document.createElement("img");
+    p.src = src(n); p.alt = TITLES[n-1];
+    printset.appendChild(p);
+  }
+})();
+
+show(parseInt((location.hash || "#1").slice(1), 10) || 1, false);
+</script>
+</body>
+</html>
