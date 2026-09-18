@@ -39,6 +39,15 @@ FAM = {
     "gold": dict(c=GOLDINK, tint="#f6efdd", name=""),
 }
 
+BLOOM_IDS = {GOLD: "bl-gold", GOLDINK: "bl-goldink", INK: "bl-ink",
+             FAM["cyb"]["c"]: "bl-cyb", FAM["ai"]["c"]: "bl-ai",
+             FAM["cry"]["c"]: "bl-cry"}
+BLOOM_GRADS = "".join(
+    f'<radialGradient id="{i}"><stop offset="0" stop-color="{c}" '
+    f'stop-opacity="1"/><stop offset="0.45" stop-color="{c}" stop-opacity="0.45"/>'
+    f'<stop offset="1" stop-color="{c}" stop-opacity="0"/></radialGradient>'
+    for c, i in BLOOM_IDS.items())
+
 SERIF = "'Source Serif 4','Iowan Old Style',Georgia,serif"
 SANS  = "'IBM Plex Sans','Helvetica Neue',Arial,sans-serif"
 MONO  = "'IBM Plex Mono','SF Mono',Menlo,monospace"
@@ -60,9 +69,6 @@ DEFS = f'''<defs>
 </filter>
 <filter id="liftsm" x="-30%" y="-40%" width="160%" height="200%">
   <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0b1a2e" flood-opacity="0.09"/>
-</filter>
-<filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
-  <feGaussianBlur stdDeviation="70"/>
 </filter>
 <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
   <stop offset="0" stop-color="#ffffff" stop-opacity="0.99"/>
@@ -89,7 +95,7 @@ DEFS = f'''<defs>
   <stop offset="0.55" stop-color="#e0b64a"/>
   <stop offset="1" stop-color="{GOLD}"/>
 </linearGradient>
-</defs>'''
+{BLOOM_GRADS}</defs>'''
 
 
 def esc(s):
@@ -235,8 +241,11 @@ def orb(cx, cy, r, fill=GOLD):
 
 
 def bloom(cx, cy, r, color, op=0.16):
-    return (f'<circle cx="{cx:.0f}" cy="{cy:.0f}" r="{r}" fill="{color}" '
-            f'opacity="{op}" filter="url(#bloom)"/>')
+    """A soft wash of colour. Drawn as a radial gradient rather than a blurred
+    circle: a Gaussian blur forces the renderer to rasterise the whole page,
+    which made the print PDF enormous."""
+    return (f'<circle cx="{cx:.0f}" cy="{cy:.0f}" r="{r * 1.9:.0f}" '
+            f'fill="url(#{BLOOM_IDS[color]})" opacity="{op}"/>')
 
 
 def water(fam="gold"):

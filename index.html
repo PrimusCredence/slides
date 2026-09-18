@@ -125,15 +125,15 @@
   }
   :fullscreen .zone{cursor:none;}
 
-  /* ---------------------------------------------------------- print: A5 landscape */
+  /* ---------------------------------------------------------- print: A4 landscape */
   @media print{
-    @page{size:210mm 148.5mm; margin:0;}
+    @page{size:297mm 210mm; margin:0;}
     html,body{height:auto; overflow:visible; background:#fff;}
     header,footer,.progress,.nav,.zone,.grid{display:none !important;}
     main{display:block; padding:0;}
     .stage{display:none;}
     .printset{display:block !important;}
-    .printset img{display:block; width:210mm; height:148.5mm; break-after:page;}
+    .printset img{display:block; width:297mm; height:209.4mm; break-after:page;}
   }
   .printset{display:none;}
 </style>
@@ -145,7 +145,7 @@
   <div class="tagline">Provable Security Solutions to Cloud, AI &amp; Crypto</div>
   <div class="spacer"></div>
   <button class="btn" id="overviewBtn" title="Overview (o)">Overview</button>
-  <button class="btn" id="printBtn" title="Print / PDF (A5 landscape)">Print</button>
+  <button class="btn" id="printBtn" title="Print / PDF (A4 landscape)">Print</button>
   <button class="btn" id="fsBtn" title="Fullscreen (f)">Fullscreen</button>
   <div class="counter" id="counter">1 / 23</div>
 </header>

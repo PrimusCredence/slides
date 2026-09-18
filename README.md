@@ -9,7 +9,13 @@ Solutions to Cloud, AI and Crypto*.
   white, with soft tinted blooms behind frosted-glass panels.
 - `index.html` — the deck: arrow keys, click zones, swipe, `o` for the
   overview grid, `f` for fullscreen (slide only, no chrome), deep links
-  (`#7`), and a print stylesheet that emits one A5 landscape page per slide.
+  (`#7`), and a print stylesheet that emits one A4 landscape page per slide.
+- `PrimusCredence-Deck-A4.pdf` — the deck as one A4-landscape PDF, a slide
+  per page, for printing and for sending to people who would rather have a
+  file than a link. Text stays selectable and searchable.
+- `make-pdf.js` — rebuilds that PDF (`node make-pdf.js [out.pdf]`). It inlines
+  the SVGs so their webfonts load, and needs puppeteer, which it takes from
+  this folder or from the sibling reports repo.
 - `build.py` — regenerates every SVG. Content lives in `SOLUTIONS` and the
   per-slide functions; the palette and type scale sit at the top.
 
@@ -48,7 +54,12 @@ a partner rather than as an end client.
 
 ```sh
 python3 build.py      # writes slides/01.svg … slides/23.svg
+node make-pdf.js      # writes PrimusCredence-Deck-A4.pdf
 ```
+
+The slides are drawn at A5 landscape and scale up to A4 without cropping:
+1050 × 742 is 1.4151:1, A4 landscape is 1.4143:1. Printed at A4 the body copy
+lands near 20 pt, so the deck doubles as a leave-behind.
 
 Text is wrapped against measured average glyph advances, and every block has
 a line budget, so copy that grows past its budget is clipped rather than
