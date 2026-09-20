@@ -10,7 +10,7 @@ Solutions to Cloud, AI and Crypto*.
 - `index.html` — the deck: arrow keys, click zones, swipe, `o` for the
   overview grid, `f` for fullscreen (slide only, no chrome), deep links
   (`#7`), and a print stylesheet that emits one A4 landscape page per slide.
-- `PrimusCredence-Deck-A4.pdf` — the deck as one A4-landscape PDF, a slide
+- `solutions-slides.pdf` — the deck as one A4-landscape PDF, a slide
   per page, for printing and for sending to people who would rather have a
   file than a link. Text stays selectable and searchable.
 - `make-pdf.js` — rebuilds that PDF (`node make-pdf.js [out.pdf]`). It inlines
@@ -54,7 +54,7 @@ a partner rather than as an end client.
 
 ```sh
 python3 build.py      # writes slides/01.svg … slides/23.svg
-node make-pdf.js      # writes PrimusCredence-Deck-A4.pdf
+node make-pdf.js      # writes solutions-slides.pdf
 ```
 
 The slides are drawn at A5 landscape and scale up to A4 without cropping:

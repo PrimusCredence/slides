@@ -26,7 +26,7 @@ function loadPuppeteer() {
 }
 
 const SLIDES = path.join(__dirname, 'slides');
-const OUT = path.resolve(process.argv[2] || path.join(__dirname, 'PrimusCredence-Deck-A4.pdf'));
+const OUT = path.resolve(process.argv[2] || path.join(__dirname, 'solutions-slides.pdf'));
 
 function slideFiles() {
   return fs.readdirSync(SLIDES)

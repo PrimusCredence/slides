@@ -303,12 +303,10 @@ def s01():
     b.append(t(M, 356, "Provable Security Solutions", 46, GOLDINK, SERIF, "600"))
     b.append(t(M, 410, "to Cloud, AI & Crypto", 46, GOLDINK, SERIF, "600"))
 
-    b.append(hline(M, 528, CW))
-    b.append(t(M, 578, "Dr. Raghavendra Ramesh", 33, INK, SERIF, "600"))
-    b.append(t(M, 612, "Founder & CEO", 24, INK2, SANS))
-    b.append(t(M, 644, "PhD, IISc Bangalore", 24, INK2, SANS))
-    b.append(t(W - M, 578, "primuscredence.com", 27, GOLDINK, MONO, "500", anchor="end"))
-    b.append(t(W - M, 612, "raghavendra@primuscredence.com", 24, INK2, MONO, anchor="end"))
+    # No name or email here: the founder is introduced on slide 2 and the
+    # contact details are on the closing slide.
+    b.append(hline(M, 592, CW))
+    b.append(t(M, 644, "primuscredence.com", 27, GOLDINK, MONO, "500"))
     b.append(t(W - M, 644, "UAE", 24, INK2, MONO, anchor="end"))
     return page("".join(b))
 
@@ -581,6 +579,67 @@ def s18(num=22):
     return page("".join(b))
 
 
+# --- QR code for primuscredence.com (25x25 modules, version 2, level M) -----
+# Precomputed so the build has no QR dependency. Regenerate with:
+#   python3 -c "import segno;[print(''.join('1' if c else '0' for c in r)) \
+#     for r in segno.make('https://primuscredence.com', error='m').matrix]"
+QR = [
+    "1111111011011111101111111",
+    "1000001001101100101000001",
+    "1011101000111001001011101",
+    "1011101011001111101011101",
+    "1011101010100111101011101",
+    "1000001011111100001000001",
+    "1111111010101010101111111",
+    "0000000011100010100000000",
+    "1000101111101000111111001",
+    "0010110110001011110011010",
+    "1101101100110111010001100",
+    "1011100000001000111000110",
+    "0100011100101000011001111",
+    "1111110000001111100010010",
+    "0001011111011101011111100",
+    "0000000100111010100110110",
+    "1111101110011000111111100",
+    "0000000011010111100010000",
+    "1111111010011010101010000",
+    "1000001001101010100011111",
+    "1011101010111010111111100",
+    "1011101000010011011100111",
+    "1011101001111110111001010",
+    "1000001001000000001111110",
+    "1111111011001001011000111",
+]
+
+
+def qr(x, y, size, quiet=2):
+    """A QR code for primuscredence.com drawn as one path, top-left at x, y.
+
+    size is the side of the finished block including the quiet zone.
+    """
+    n = len(QR)
+    u = size / (n + 2 * quiet)
+    d = []
+    for r, row in enumerate(QR):
+        c = 0
+        while c < n:
+            if row[c] == "1":
+                c2 = c
+                while c2 + 1 < n and row[c2 + 1] == "1":
+                    c2 += 1
+                px = x + (quiet + c) * u
+                py = y + (quiet + r) * u
+                d.append(f"M{px:.2f} {py:.2f}h{(c2-c+1)*u:.2f}v{u:.2f}h{-(c2-c+1)*u:.2f}z")
+                c = c2 + 1
+            else:
+                c += 1
+    return (f'<rect x="{x:.1f}" y="{y:.1f}" width="{size:.1f}" height="{size:.1f}" '
+            f'rx="6" fill="{WHITE}"/>'
+            f'<rect x="{x:.1f}" y="{y:.1f}" width="{size:.1f}" height="{size:.1f}" '
+            f'rx="6" fill="none" stroke="{LINE}"/>'
+            f'<path d="{"".join(d)}" fill="{INK}"/>')
+
+
 # ============================================================ 19 · thank you
 def s19():
     b = [water("gold"), symbol_field(GOLD),
@@ -591,6 +650,10 @@ def s19():
                SERIF, "400", style="italic"))
     b.append(t(M, 420, "then judge the method on the result.", 31, INK2,
                SERIF, "400", style="italic"))
+
+    qx = W - M - 158
+    b.append(qr(qx, 300, 158))
+    b.append(t(qx + 79, 484, "primuscredence.com", 21, INK2, MONO, anchor="middle"))
 
     b.append(hline(M, 500, CW))
     b.append(t(M, 552, "Dr. Raghavendra Ramesh", 33, INK, SERIF, "600"))
