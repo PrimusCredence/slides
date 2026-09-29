@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * Renders the deck to a single A4-landscape PDF, one slide per page.
+ * Renders the deck to a single 16:10 PDF, one slide per page.
  *
  *   node make-pdf.js  [output.pdf]
  *
- * The slides are drawn at A5 landscape (1050 x 742 units, 1.4151:1). A4
- * landscape is 1.4143:1, so each slide fills the page with a hairline of
- * white at the foot rather than being cropped or stretched.
+ * The slides are drawn at 16:10 (1187 x 742 units), the MacBook / widescreen
+ * aspect. The page box is 320 x 200 mm (also 16:10), a hair under on the
+ * height so each slide fills the page rather than spilling a blank one after.
  *
  * The SVGs are inlined rather than linked, so their webfonts load before the
  * PDF is written. Puppeteer is taken from this folder if present, otherwise
@@ -53,13 +53,13 @@ function inline(file) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap">
 <style>
-  @page { size: A4 landscape; margin: 0; }
+  @page { size: 320mm 200mm; margin: 0; }
   *{ margin:0; padding:0; }
   html,body{ background:#fff; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  /* a hair under the page box: an element exactly 210mm tall rounds up and
+  /* a hair under the page box: an element exactly 200mm tall rounds up and
      spills a blank page after every slide */
   .page{
-    width:297mm; height:209.4mm; overflow:hidden; background:#fff;
+    width:320mm; height:199.4mm; overflow:hidden; background:#fff;
     display:flex; align-items:center; justify-content:center;
     break-after:page; page-break-after:always;
   }
@@ -79,8 +79,6 @@ ${files.map(f => `<div class="page">${inline(f)}</div>`).join('\n')}
   await new Promise(r => setTimeout(r, 1200));   // let the last webfont settle
   await page.pdf({
     path: OUT,
-    format: 'A4',
-    landscape: true,
     printBackground: true,
     preferCSSPageSize: true,
     margin: { top: 0, right: 0, bottom: 0, left: 0 },

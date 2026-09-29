@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PrimusCredence — Provable Security Solutions to Cloud, AI &amp; Crypto</title>
-<meta name="description" content="PrimusCredence slide deck: proof alongside testing, across cloud, AI and crypto. Nine solutions in three families.">
+<title>PrimusCredence — Provable Security for Apps &amp; AI Agents</title>
+<meta name="description" content="PrimusCredence slide deck: proof alongside testing, across cloud, applications and AI agents. Six solutions in two families.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
@@ -14,7 +14,7 @@
     --gold:#c8940a; --gold-ink:#a87c00;
     --paper:#faf8f3; --panel:#f2efe6; --line:#ddd7c9;
     --backdrop:#eef1f6; --chrome:#ffffff; --chrome-line:#e0e4eb;
-    --slide-w: 1050; --slide-h: 742;   /* A5 landscape, 5 units / mm */
+    --slide-w: 1187; --slide-h: 742;   /* 16:10 — MacBook / widescreen */
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html,body{height:100%;}
@@ -110,8 +110,8 @@
   }
 
   /* ------------------------------------------- fullscreen: nothing but the slide */
-  /* On a 16:10 MacBook Pro the A5 slide letterboxes; it is scaled to the larger
-     of the two fits and centred on black, with all chrome removed. */
+  /* The slide is 16:10, so on a MacBook display it fills the screen edge to edge;
+     it is scaled to fit and centred on black, with all chrome removed. */
   :fullscreen{background:#000;}
   :fullscreen header,
   :fullscreen footer,
@@ -125,15 +125,15 @@
   }
   :fullscreen .zone{cursor:none;}
 
-  /* ---------------------------------------------------------- print: A4 landscape */
+  /* -------------------------------------- print: 16:10 pages, one slide each */
   @media print{
-    @page{size:297mm 210mm; margin:0;}
+    @page{size:320mm 200mm; margin:0;}
     html,body{height:auto; overflow:visible; background:#fff;}
     header,footer,.progress,.nav,.zone,.grid{display:none !important;}
     main{display:block; padding:0;}
     .stage{display:none;}
     .printset{display:block !important;}
-    .printset img{display:block; width:297mm; height:209.4mm; break-after:page;}
+    .printset img{display:block; width:320mm; height:199.4mm; break-after:page;}
   }
   .printset{display:none;}
 </style>
@@ -142,12 +142,12 @@
 
 <header>
   <div class="brand">Primus<span>Credence</span></div>
-  <div class="tagline">Provable Security Solutions to Cloud, AI &amp; Crypto</div>
+  <div class="tagline">Provable Security for Apps &amp; AI Agents</div>
   <div class="spacer"></div>
   <button class="btn" id="overviewBtn" title="Overview (o)">Overview</button>
   <button class="btn" id="printBtn" title="Print / PDF (A4 landscape)">Print</button>
   <button class="btn" id="fsBtn" title="Fullscreen (f)">Fullscreen</button>
-  <div class="counter" id="counter">1 / 23</div>
+  <div class="counter" id="counter">1 / 20</div>
 </header>
 
 <main>
@@ -177,27 +177,24 @@
 
 <script>
 const TITLES = [
-  "PrimusCredence — Provable security solutions",
+  "PrimusCredence — Provable Security for Apps & AI Agents",
   "Dr. Raghavendra Ramesh",
   "Why Now: The Attacker Industrialised",
   "Automated Reasoning",
   "We Add a Layer to Your Stack",
-  "Nine Solutions, Three Families",
+  "Six Solutions, Two Families",
   "Cybersecurity Solutions",
   "1. Cloud Access-Policy & Entitlement Verification",
   "2. Network Reachability & Segmentation Proofs",
-  "3. API-Usage Conformance",
-  "4. Hypervisor, Firmware & CVE Reachability",
-  "5. Post-Quantum Cryptography Migration",
+  "3. Application & API-Usage Conformance",
+  "4. Post-Quantum Cryptography Migration",
   "AI Security Solutions",
-  "6. AI and LLM Guardrail Verification",
-  "7. Neurosymbolic Assurance",
-  "Crypto Security Solutions",
-  "8. Formal Verification of Smart Contracts",
-  "9. Formal Verification of Distributed Protocols",
+  "5. Agentic AI Guardrail Verification",
+  "6. Neurosymbolic Assurance",
   "Why Your Clients Will Ask",
   "What a Provider Can Resell",
   "One Result, Three Registers",
+  "Investment",
   "Take Away",
   "Thank You"
 ];
