@@ -985,34 +985,30 @@ def s_vision(num=18):
 
 
 def s_shortterm(num=18):
-    """As a young firm we sit behind the established providers and reach their
-    clients through them — the GCC client base enumerated."""
-    b = [water("gold"), heading("We Sit Behind the Providers")]
-    b.append(t(M, 184, "No reputation yet — we add value to the providers, and through "
-                       "them, their clients.", 26, INK, SERIF, "600", style="italic"))
+    """Our approach: we partner with cybersecurity solutions providers, adding
+    provable control effectiveness to their bids and reaching their clients."""
+    b = [water("gold"), heading("Our Approach")]
+    b.append(t(M, 184, "We partner with cybersecurity solutions providers, adding provable "
+                       "assurance.", 26, INK, SERIF, "600", style="italic"))
 
-    hw = CW / 2 - 12
-    b.append(glass(M, 214, hw, 164, 18, FAM["gold"]["tint"], 0.42))
-    b.append(eyebrow(M + 26, 252, "Why behind — for now", GOLDINK, 20, 2.6, maxw=hw - 52))
-    bl, _ = bullets(M + 26, 292, [
-        "Startup wins no tender on its name alone",
-        "Providers hold the trust and the contract",
-        "We add provable assurance to bids they win",
-    ], hw - 52, 21, 27, 10, INK2, GOLD, maxlines=1)
-    b.append(bl)
+    # how we partner — no named firms
+    b.append(glass(M, 220, CW, 146, 18, FAM["gold"]["tint"], 0.42))
+    b.append(eyebrow(M + 30, 258, "How we partner — through the providers", GOLDINK, 20, 2.6,
+                     maxw=CW - 60))
+    pts = [
+        "Provable control effectiveness inside their bids.",
+        "They keep the client relationship and the contract.",
+        "We don't certify — a channel, not a rival.",
+    ]
+    colw = (CW - 60 - 2 * 24) / 3
+    for i, p in enumerate(pts):
+        x = M + 30 + i * (colw + 24)
+        b.append(f'<rect x="{x:.0f}" y="296" width="30" height="3" rx="1.5" fill="{GOLD}"/>')
+        blk, _ = block(x, 326, p, colw, 21, 26, INK2, 2)
+        b.append(blk)
 
-    b.append(glass(M + hw + 24, 214, hw, 164, 18))
-    b.append(eyebrow(M + hw + 50, 252, "Our channel — the providers", FAM["cyb"]["c"],
-                     20, 2.6, maxw=hw - 52))
-    bl, _ = bullets(M + hw + 50, 292, [
-        "Help AG — e& enterprise, largest MSSP",
-        "Regional MSSPs, consultancies, auditors",
-        "CyberE71 — UAE Council cyber ecosystem",
-    ], hw - 52, 21, 27, 10, INK2, FAM["cyb"]["c"], maxlines=1)
-    b.append(bl)
-
-    by = 398
-    b.append(glass(M, by, CW, 290, 18))
+    by = 392
+    b.append(glass(M, by, CW, 288, 18))
     b.append(eyebrow(M + 30, by + 36, "Whom we reach through them — the GCC client base",
                      INK2, 20, 2.6, maxw=CW - 60))
     sectors = [
