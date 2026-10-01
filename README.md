@@ -1,9 +1,9 @@
 # PrimusCredence — slide deck
 
-Twenty slides drawn from `Solutions-Confidential.md`: *Provable Security
-for Apps & AI Agents*.
+Twenty-four slides drawn from `Solutions-Confidential.md`, `HelpAG/appsec.md`
+and `reports/fv-pqc.md`: *Provable Security for Apps & AI Agents*.
 
-- `slides/01.svg` … `slides/20.svg` — one SVG per slide, each self-contained
+- `slides/01.svg` … `slides/24.svg` — one SVG per slide, each self-contained
   (it loads its own webfonts), sized 16:10 (1187 × 742 units), the MacBook /
   widescreen aspect, so the deck fills a laptop display edge to edge. Body copy
   sits at 23–26 units. Every slide is white, with soft tinted blooms behind
@@ -31,29 +31,39 @@ particular slide.
 | # | Slide |
 |---|---|
 | 1 | Title |
-| 2 | Dr. Raghavendra Ramesh |
-| 3 | Why Now: The Attacker Industrialised |
-| 4 | Automated Reasoning |
-| 5 | We Add a Layer to Your Stack |
-| 6 | Six Solutions, Two Families |
-| 7 | § Cybersecurity Solutions |
-| 8–11 | Solutions 1–4 |
-| 12 | § AI Security Solutions |
-| 13–14 | Solutions 5–6 |
-| 15 | Why Your Clients Will Ask |
-| 16 | What a Provider Can Resell |
-| 17 | One Result, Three Registers |
-| 18 | Investment |
-| 19 | Take Away |
-| 20 | Thank You |
+| 2 | Dr. Raghavendra Ramesh — founder bio (up front) |
+| 3 | OWASP 2025 — Access Control & Misconfiguration (+ incidents) |
+| 4 | Apps Misuse the APIs They Run On (exploits + cost) |
+| 5 | The Base Went Post-Quantum. Are the Apps Ready? |
+| 6 | AI Industrialises the Attacker |
+| 7 | Why Today's Security Stack Isn't Enough |
+| 8 | Proof — Now Feasible |
+| 9 | Automated Reasoning |
+| 10 | Solutions (overview) |
+| 11 | Solution 1 — Application Access-Policy & Entitlement Verification |
+| 12 | Solution 2 — App-to-Cloud Escalation-Path Proofs |
+| 13–14 | Solutions 3–4 |
+| 15 | AI Agents Are Multiplying Faster Than the Rules |
+| 16 | Solution 5 — Agentic AI Guardrail Verification |
+| 17 | The Long-Term Vision — the Assurance Hub |
+| 18 | Short Term — We Sit Behind the Providers (clientele) |
+| 19 | Why the Provider's Clients Will Ask |
+| 20 | What a Provider Can Resell |
+| 21 | One Result, Three Registers |
+| 22 | Investment |
+| 23 | Take Away |
+| 24 | Thank You |
 
-Slides 5 and 15–17 address a security solutions provider reading the deck as
-a partner rather than as an end client.
+Slides 3–8 are the motivation arc (access control & misconfiguration, apps &
+APIs, post-quantum, AI, the stack's gap, and why proof is now feasible).
+Slides 17–21 set out the business model — the long-term assurance-hub vision,
+the short-term channel through established providers (with the GCC clientele
+they reach), and what one result is worth to a partner reselling it.
 
 ## Rebuilding
 
 ```sh
-python3 build.py      # writes slides/01.svg … slides/20.svg
+python3 build.py      # writes slides/01.svg … slides/24.svg
 node make-pdf.js      # writes solutions-slides.pdf
 ```
 
