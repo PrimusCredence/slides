@@ -446,19 +446,19 @@ def sol_card(x, y, w, h, fam, n, title, sub):
 
 def s05(num=11):
     b = [water("gold"), heading("Solutions")]
+    b.append(t(M, 176, "One method — four solutions, across the application and its seams.",
+               26, INK, SERIF, "600", style="italic"))
 
-    # one unified set — five solutions, no family split. 3 on top, 2 below.
+    # four cyber solutions, no family split — a 2×2 grid.
     sols = [(1, "App entitlement proofs", "Who can reach what?"),
             (2, "App→cloud escalation", "A path through the app?"),
             (3, "App & API conformance", "SDKs used correctly?"),
-            (4, "Post-quantum migration", "Bound on a PQC base?"),
-            (5, "Agentic guardrail verification", "What an agent may do?")]
-    cw3 = (CW - 2 * 20) / 3
-    for i, (n, title, sub) in enumerate(sols[:3]):
-        b.append(sol_card(M + i * (cw3 + 20), 236, cw3, 190, "cyb", n, title, sub))
+            (4, "Post-quantum migration", "Bound on a PQC base?")]
     cw2 = (CW - 20) / 2
-    for i, (n, title, sub) in enumerate(sols[3:]):
-        b.append(sol_card(M + i * (cw2 + 20), 452, cw2, 190, "cyb", n, title, sub))
+    for i, (n, title, sub) in enumerate(sols):
+        x = M + (i % 2) * (cw2 + 20)
+        y = 226 + (i // 2) * (210 + 20)
+        b.append(sol_card(x, y, cw2, 210, "cyb", n, title, sub))
 
     b.append(chrome(num))
     return page("".join(b))
@@ -534,7 +534,7 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
 
 
 # ============================================================ 18 · take away
-def s18(num=22):
+def s18(num=20):
     b = [water("gold"), heading("Take Away")]
 
     b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
@@ -651,8 +651,8 @@ def s19():
                "500", anchor="end"))
     b.append(t(W - M, 590, "+971 58 189 2803", 24, INK2, MONO, anchor="end"))
     b.append(t(W - M, 622, "UAE", 24, INK2, MONO, anchor="end"))
-    b.append(t(M, 676, "Provable Security for Apps & AI Agents", 22, GOLDINK, MONO,
-               "500", ls="1.6"))
+    b.append(t(M, 676, "Provable Security for Applications", 22, GOLDINK, MONO,
+               "500", ls="1.8"))
     return page("".join(b))
 
 
@@ -722,25 +722,10 @@ SOLUTIONS = [
          buyers="Gov ID · PKI · banks · healthcare · defence",
          note="Verified app crypto on an already-verified cloud — proof end to end."),
 
-    dict(num=17, fam="ai", n=5,
-         title="Agentic AI Guardrail Verification",
-         question="Not “how often does the agent fail?” but “can it do this at all?”",
-         problem="An agent is a non-human identity with delegated privilege and an instruction "
-                 "channel the adversary can write to. A guard model judging a model is "
-                 "detective, not preventive.",
-         build=["Tool-call constraints over identity and arguments",
-                "Data-access boundaries in the Solution 1 logic",
-                "Composition safety across call sequences"],
-         output="A result about the mediation layer, not the model: nothing permitted escapes "
-                "the envelope, and no path bypasses it.",
-         precedent="Bedrock Automated Reasoning",
-         buyers="Banks · sovereign AI · OT · healthcare",
-         note="Provable: no rows outside the caller's ACL. Not provable: no PII ever reaches the user."),
-
 ]
 
 TITLES = [
-    "PrimusCredence — Provable Security for Apps & AI Agents",
+    "PrimusCredence — Provable Security for Applications",
     "Dr. Raghavendra Ramesh",
     "Where the Risk Actually Lives",
     "OWASP 2025 — Access Control & Misconfiguration",
@@ -755,8 +740,6 @@ TITLES = [
     "2. App-to-Cloud Escalation-Path Proofs",
     "3. Application & API-Usage Conformance",
     "4. Post-Quantum Cryptography Migration",
-    "AI Agents Are Multiplying Faster Than the Rules",
-    "5. Agentic AI Guardrail Verification",
     "We Sit Behind the Providers",
     "Why the Provider's Clients Will Ask",
     "What a Provider Can Resell",
@@ -774,10 +757,9 @@ def build():
         3: s_layers(3),
         4: s_owasp(4), 5: s_api(5), 6: s_pqc(6), 7: s03(7),
         8: s_landscape(8), 9: s_feasible(9), 10: s04(10), 11: s05(11),
-        16: s_ai_motivation(16),
-        18: s_shortterm(18), 19: s_demand(19),
-        20: s_resell(20), 21: s_registers(21),
-        22: s18(22), 23: s19(),
+        16: s_shortterm(16), 17: s_demand(17),
+        18: s_resell(18), 19: s_registers(19),
+        20: s18(20), 21: s19(),
     }
     for sol in SOLUTIONS:
         pages[sol["num"]] = solution(**sol)
@@ -864,7 +846,7 @@ def s_stack(num=5):
     return page("".join(b))
 
 
-def s_demand(num=19):
+def s_demand(num=17):
     """The demand signal: why a provider's existing clients will ask for this."""
     b = [water("gold"),
          heading("Why the Provider's Clients Will Ask")]
@@ -876,8 +858,8 @@ def s_demand(num=19):
          "UAE cyber-resilience obligations now carry penalties of AED 100k–3m."),
         ("Assurance shifted to evidence",
          "Regulators increasingly ask for demonstrable control effectiveness, not attestation."),
-        ("AI rules arrived before AI assurance",
-         "Risk-tiered obligations demand evidence the market cannot yet produce."),
+        ("Third-party risk is now in scope",
+         "Rules increasingly require evidence that integrations and components are controlled."),
         ("Sovereignty is a reachability question",
          "Localisation asks whether regulated data can leave — our reachability proofs settle it."),
     ]
@@ -892,9 +874,9 @@ def s_demand(num=19):
 
     b.append(glass(M, 470, CW, 172, 18))
     b.append(eyebrow(M + 30, 508, "Where a finding also lands", INK2, 20, 2.6))
-    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2"), ("UAE PDPL", "2 3 5"),
-              ("SAMA CSF", "1 2 3 5"), ("NCA ECC", "1 2 3"), ("UAE AI Act", "5"),
-              ("ISO 27001", "1 2 3 4"), ("ISO 42001", "5"), ("NIST CSF 2.0", "1–5")]
+    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2"), ("UAE PDPL", "2 3"),
+              ("SAMA CSF", "1 2 3"), ("NCA ECC", "1 2 3"), ("PCI DSS 4.0", "1 2 3"),
+              ("ISO 27001", "1 2 3 4"), ("CIS Controls", "1 2 3"), ("NIST CSF 2.0", "1–4")]
     colw = (CW - 60) / 3
     for i, (name, nums) in enumerate(frames):
         x = M + 30 + (i % 3) * colw
@@ -917,7 +899,7 @@ def arrow_r(x1, x2, y, color=GOLD, sw=2.6):
             f'stroke-linejoin="round"/>')
 
 
-def s_vision(num=18):
+def s_vision(num=16):
     """The long-term vision: PrimusCredence as the assurance hub — it takes the
     mandate from clients and awards the build to cybersecurity vendors."""
     b = [water("gold"), heading("The Long-Term Vision — the Assurance Hub")]
@@ -984,9 +966,9 @@ def s_vision(num=18):
     return page("".join(b))
 
 
-def s_shortterm(num=18):
-    """As a young firm we sit behind the established providers and reach their
-    clients through them — the GCC client base enumerated."""
+def s_shortterm(num=16):
+    """Short term: as a young firm we sit behind the established providers and
+    reach their clients through them — the GCC client base enumerated."""
     b = [water("gold"), heading("We Sit Behind the Providers")]
     b.append(t(M, 184, "No reputation yet — we add value to the providers, and through "
                        "them, their clients.", 26, INK, SERIF, "600", style="italic"))
@@ -1034,7 +1016,7 @@ def s_shortterm(num=18):
     return page("".join(b))
 
 
-def s_resell(num=20):
+def s_resell(num=18):
     """The channel case: what a provider can sell, and why it deploys easily."""
     b = [water("gold"), heading("What a Provider Can Resell")]
     b.append(t(M, 184, "We do not certify — so an audit firm or an MSSP is a channel, "
@@ -1074,7 +1056,7 @@ def s_resell(num=20):
     return page("".join(b))
 
 
-def s_registers(num=21):
+def s_registers(num=19):
     """One analysis, three deliverables — the evidence multiplier."""
     b = [water("gold"), heading("One Result, Three Registers")]
 
@@ -1110,7 +1092,7 @@ def s_registers(num=21):
     return page("".join(b))
 
 
-def s_invest(num=23):
+def s_invest(num=21):
     """Early-stage raise: what the money buys — feasibility studies and pilots."""
     b = [water("gold"), heading("Investment")]
     b.append(t(M, 184, "Early-stage — we raise to prove the method, not to scale ahead "
@@ -1121,7 +1103,7 @@ def s_invest(num=23):
         ("Feasibility studies",
          "Validate each solution on real client artefacts — a claim becomes a proof, "
          "or a counter-example, on systems that matter.",
-         ["De-risk five solutions on live estates",
+         ["De-risk four solutions on live estates",
           "Turn research into productised checks",
           "Reference results to show the next buyer"]),
         ("Pilot projects",

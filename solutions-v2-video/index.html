@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrimusCredence — Provable Security for Applications (video deck)</title>
+<meta name="description" content="Minimal, animated walkthrough deck for the PrimusCredence voice-over. One idea at a time.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap');
+
+:root{
+  --bg:#ffffff; --ink:#14181f; --ink2:#4a5260; --muted:#8a92a0; --line:#e7eaf0;
+  --gold:#c8940a; --goldink:#a87c00; --cyb:#1d5fa8; --cybtint:#eaf0f9;
+  --green:#2f7d4f; --greentint:#e8f3ec; --pink:#b81f63;
+  --serif:'Source Serif 4','Iowan Old Style',Georgia,serif;
+  --sans:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono','SF Mono',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1100px 620px at 82% -8%, rgba(200,148,10,.10), transparent 60%),
+    radial-gradient(900px 560px at -6% 108%, rgba(200,148,10,.08), transparent 60%),
+    var(--bg);
+  color:var(--ink); font-family:var(--sans); overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---- stage: 16:9, centred, scales to viewport ---- */
+#stage{position:fixed; inset:0; display:grid; place-items:center;}
+#deck{
+  position:relative; width:1280px; height:720px;
+}
+.slide{
+  position:absolute; inset:0; padding:92px 108px;
+  display:flex; flex-direction:column; justify-content:center;
+  opacity:0; visibility:hidden; transition:opacity .55s ease;
+  pointer-events:none;
+}
+.slide.active{opacity:1; visibility:visible; pointer-events:auto;}
+
+/* ---- reveal fragments ---- */
+.frag{opacity:0; transform:translateY(16px); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);}
+.frag.on{opacity:1; transform:none;}
+.frag.rise{transform:translateY(26px) scale(.985);}
+.frag.rise.on{transform:none;}
+
+/* ---- type scale ---- */
+.eyebrow{font-family:var(--mono); font-size:16px; letter-spacing:.26em; text-transform:uppercase; color:var(--goldink); font-weight:500;}
+h1.big{font-family:var(--serif); font-weight:600; font-size:72px; line-height:1.05; letter-spacing:-.01em;}
+h1.huge{font-family:var(--serif); font-weight:600; font-size:150px; line-height:.95; letter-spacing:-.02em; color:var(--goldink);}
+h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; letter-spacing:-.01em;}
+.lead{font-family:var(--serif); font-size:34px; line-height:1.3; color:var(--ink2); font-weight:400;}
+.lead.it{font-style:italic;}
+.sub{font-size:25px; line-height:1.45; color:var(--ink2); font-weight:300;}
+.mono{font-family:var(--mono); font-size:19px; letter-spacing:.04em; color:var(--muted);}
+.gold{color:var(--goldink);} .cyb{color:var(--cyb);} .green{color:var(--green);} .pink{color:var(--pink);}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}.mt44{margin-top:44px}.mt64{margin-top:64px}
+.rule{width:132px; height:4px; border-radius:2px; background:var(--gold); margin:26px 0;}
+
+/* wordmark */
+.wordmark{font-family:var(--serif); font-weight:600; font-size:96px; letter-spacing:-.015em;}
+.wordmark .p{color:#0b0d12}.wordmark .c{color:var(--goldink)}
+
+/* stat row */
+.stats{display:flex; gap:64px; flex-wrap:wrap}
+.stat b{display:block; font-family:var(--serif); font-weight:600; font-size:88px; color:var(--goldink); line-height:1}
+.stat span{display:block; margin-top:10px; font-size:20px; color:var(--ink2); max-width:300px; font-weight:300}
+
+/* chips */
+.chips{display:flex; gap:14px; flex-wrap:wrap}
+.chip{font-family:var(--mono); font-size:20px; color:var(--ink2); background:#fff; border:1px solid var(--line);
+  border-radius:999px; padding:12px 22px; box-shadow:0 2px 10px rgba(15,25,45,.05);}
+
+/* solution cards */
+.cards{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:8px}
+.card{border:1px solid var(--line); border-left:5px solid var(--cyb); border-radius:14px; background:#fff;
+  padding:26px 28px; box-shadow:0 10px 30px rgba(15,25,45,.06); display:flex; align-items:center; gap:22px}
+.card .n{flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--cyb); color:#fff;
+  font-family:var(--mono); font-size:22px; display:grid; place-items:center}
+.card .t{font-family:var(--serif); font-weight:600; font-size:28px}
+.card .q{font-size:19px; color:var(--cyb); margin-top:3px; font-weight:400}
+
+/* steps */
+.steps{display:flex; gap:18px; align-items:stretch}
+.step{flex:1; border:1px solid var(--line); border-radius:14px; background:#fff; padding:26px 22px; text-align:center; box-shadow:0 10px 30px rgba(15,25,45,.05)}
+.step .n{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#fff;font-family:var(--mono);display:grid;place-items:center;margin:0 auto 14px}
+.step .h{font-family:var(--serif); font-weight:600; font-size:28px}
+.step .d{font-size:18px; color:var(--ink2); margin-top:8px; font-weight:300}
+
+/* ---- the stack diagram (the anchor) ---- */
+.stack{display:flex; flex-direction:column; gap:12px; width:760px}
+.layer{border-radius:14px; padding:18px 26px; border:1px solid var(--line); box-shadow:0 10px 28px rgba(15,25,45,.06); position:relative}
+.layer .lt{font-family:var(--serif); font-weight:600; font-size:26px}
+.layer .ls{font-size:18px; color:var(--ink2); margin-top:3px; font-weight:300}
+.layer.plugins{background:#faf6ea}
+.layer.app{background:var(--cybtint); border-left:6px solid var(--cyb)}
+.layer.seam{background:#fbf3df; border-left:6px solid var(--gold); display:flex; gap:30px; align-items:center; flex-wrap:wrap}
+.layer.seam .lt{font-size:19px; font-family:var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--goldink); font-weight:500}
+.layer.seam .items{display:flex; gap:26px; flex-wrap:wrap; font-size:18px; color:var(--ink2)}
+.layer.seam .items i{font-style:normal; display:inline-flex; align-items:center; gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.layer.cloud{background:var(--greentint); border-left:6px solid var(--green)}
+.verdict{position:absolute; right:-18px; top:50%; transform:translateY(-50%) translateX(100%);
+  font-family:var(--mono); font-size:15px; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap}
+.badge{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:15px; letter-spacing:.1em;
+  text-transform:uppercase; padding:5px 12px; border-radius:999px}
+.badge.ok{color:var(--green); background:var(--greentint); border:1px solid #bfe0cb}
+.badge.no{color:var(--goldink); background:#f7efda; border:1px solid #ecd9a6}
+.stackwrap{display:flex; gap:40px; align-items:center}
+.stacknote{max-width:300px}
+
+/* hub */
+.hub{display:flex; align-items:center; gap:30px; justify-content:center}
+.node{border:1px solid var(--line); border-radius:16px; padding:26px 30px; background:#fff; text-align:center; box-shadow:0 10px 30px rgba(15,25,45,.06); min-width:230px}
+.node.center{background:#0b0d12; color:#fff; border:none}
+.node .k{font-family:var(--mono); font-size:15px; letter-spacing:.16em; text-transform:uppercase; color:var(--goldink)}
+.node.center .k{color:var(--gold)}
+.node .v{font-family:var(--serif); font-weight:600; font-size:27px; margin-top:8px}
+.arrow{font-size:40px; color:var(--gold); line-height:1}
+
+/* contact */
+.contact b{font-family:var(--serif); font-weight:600; font-size:34px}
+.contact .m{font-family:var(--mono); font-size:22px; color:var(--goldink); margin-top:14px}
+.contact .m2{font-family:var(--mono); font-size:19px; color:var(--ink2); margin-top:6px}
+
+/* ---- chrome ---- */
+#bar{position:fixed; left:0; right:0; bottom:0; height:3px; background:transparent; z-index:30}
+#bar i{display:block; height:100%; background:linear-gradient(90deg,var(--gold),#e0b64a); width:0; transition:width .5s ease}
+#mark{position:fixed; left:26px; bottom:16px; font-family:var(--serif); font-weight:600; font-size:17px; color:var(--muted); z-index:30; user-select:none}
+#mark .c{color:var(--goldink)}
+#count{position:fixed; right:26px; bottom:15px; font-family:var(--mono); font-size:14px; color:var(--muted); z-index:30; user-select:none}
+#hint{position:fixed; left:50%; bottom:14px; transform:translateX(-50%); font-family:var(--mono); font-size:12.5px; color:#c2c8d2; z-index:30; transition:opacity .4s; user-select:none}
+#auto{position:fixed; right:26px; top:20px; font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); z-index:30; user-select:none}
+#auto b{color:var(--green)}
+.zone{position:fixed; top:0; bottom:0; width:32%; z-index:20; cursor:pointer}
+.zone.l{left:0} .zone.r{right:0; width:68%}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+
+<!-- 1 · title -->
+<section class="slide">
+  <div class="wordmark"><span class="p">Primus</span><span class="c">Credence</span></div>
+  <div class="rule frag"></div>
+  <div class="lead frag" style="font-size:42px;color:var(--goldink);font-weight:600">Provable Security for Applications</div>
+  <div class="mono frag mt44">primuscredence.com &nbsp;·&nbsp; UAE</div>
+</section>
+
+<!-- 2 · founder -->
+<section class="slide">
+  <div class="eyebrow">Founder &amp; CEO</div>
+  <h1 class="big frag mt16">Dr. Raghavendra Ramesh</h1>
+  <div class="rule frag"></div>
+  <div class="sub frag" style="font-size:28px">22 years in provable security.</div>
+  <div class="mono frag mt24" style="font-size:20px;color:var(--ink2)">PhD, IISc&nbsp;&nbsp;·&nbsp;&nbsp;Oracle Labs&nbsp;&nbsp;·&nbsp;&nbsp;ConsenSys&nbsp;&nbsp;·&nbsp;&nbsp;Supra</div>
+</section>
+
+<!-- 3 · the stack (anchor, animated) -->
+<section class="slide" style="padding:72px 96px">
+  <div class="eyebrow">The picture to hold onto</div>
+  <div class="stackwrap mt24">
+    <div class="stack">
+      <div class="layer plugins frag rise">
+        <div class="lt">Plugins &amp; extensions</div>
+        <div class="ls">run inside the app — inherit its privilege</div>
+      </div>
+      <div class="layer app frag rise">
+        <div class="lt">Application <span class="badge no" style="margin-left:10px">unproven</span></div>
+        <div class="ls">its own roles, tokens &amp; config — OWASP #1 &amp; #2</div>
+      </div>
+      <div class="layer seam frag rise">
+        <div class="lt">The seam</div>
+        <div class="items">
+          <i><span class="dot" style="background:var(--cyb)"></span>APIs</i>
+          <i><span class="dot" style="background:var(--cyb)"></span>libraries</i>
+          <i><span class="dot" style="background:var(--pink)"></span>PQC binding</i>
+        </div>
+      </div>
+      <div class="layer cloud frag rise">
+        <div class="lt">Cloud &amp; infrastructure <span class="badge ok" style="margin-left:10px">proven ✓</span></div>
+        <div class="ls">VMs · DBs · queues · storage · IAM · network</div>
+      </div>
+    </div>
+    <div class="stacknote">
+      <div class="lead it frag" style="font-size:30px">The base is proven.</div>
+      <div class="lead it frag" style="font-size:30px;margin-top:14px">The app — and the seams — are not.</div>
+      <div class="mono frag mt24" style="color:var(--goldink)">→ that gap is what we prove</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · the risk -->
+<section class="slide">
+  <div class="eyebrow">OWASP 2025 — the top two</div>
+  <h1 class="huge frag mt16">100%</h1>
+  <div class="lead frag mt16">of applications tested had broken access control <span class="gold">and</span> misconfiguration.</div>
+  <div class="mono frag mt24">#1 Broken Access Control&nbsp;&nbsp;·&nbsp;&nbsp;#2 Security Misconfiguration</div>
+</section>
+
+<!-- 5 · authentic not authorised -->
+<section class="slide">
+  <div class="eyebrow">Every breach looked normal</div>
+  <div class="stats mt32">
+    <div class="stat frag"><b>~95%</b><span>of API attacks carry a valid token</span></div>
+  </div>
+  <h2 class="frag mt44" style="max-width:900px">Authentic — <span class="gold">but not authorised.</span></h2>
+  <div class="sub frag mt24" style="max-width:860px">A well-formed, authenticated request to an endpoint you may use — asking for data you may not.</div>
+</section>
+
+<!-- 6 · post-quantum -->
+<section class="slide">
+  <div class="eyebrow">Post-quantum</div>
+  <h2 class="frag mt16"><span class="green">The base went quantum-safe. ✓ proven.</span></h2>
+  <h2 class="frag mt24"><span class="gold">The app on top did not.</span></h2>
+  <div class="sub frag mt32" style="max-width:860px">ML-KEM is machine-checked. But if the app doesn't bind identity to that channel, the proof beneath it is quietly undone.</div>
+</section>
+
+<!-- 7 · AI industrialises the attacker -->
+<section class="slide">
+  <div class="eyebrow">The attacker changed</div>
+  <div class="stats mt32">
+    <div class="stat frag"><b>4.5×</b><span>revenue of AI-assisted attacks</span></div>
+    <div class="stat frag"><b>$3.52</b><span>cost per AI-agent exploit</span></div>
+    <div class="stat frag"><b>87%</b><span>of CVEs exploited from the description alone</span></div>
+  </div>
+  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">A sampling defence cannot answer an <span class="gold">enumerating</span> attacker.</h2>
+</section>
+
+<!-- 8 · today's stack samples -->
+<section class="slide">
+  <div class="eyebrow">Keep every tool — but see the gap</div>
+  <div class="chips mt32" style="max-width:980px">
+    <span class="chip frag">SAST</span><span class="chip frag">DAST</span><span class="chip frag">IAST / RASP</span>
+    <span class="chip frag">SCA</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
+    <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span>
+  </div>
+  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">They sample. They guess. <span class="gold">None decides over every request.</span></h2>
+</section>
+
+<!-- 9 · proof now feasible -->
+<section class="slide" style="padding:80px 96px">
+  <div class="eyebrow">Proof — now feasible</div>
+  <div class="steps mt32">
+    <div class="step frag"><div class="n">1</div><div class="h">Formalise</div><div class="d">artefact → model</div></div>
+    <div class="step frag"><div class="n">2</div><div class="h">State</div><div class="d">the bad state, as a formula</div></div>
+    <div class="step frag"><div class="n">3</div><div class="h">Solve</div><div class="d">decide it</div></div>
+    <div class="step frag"><div class="n">4</div><div class="h">Report</div><div class="d">proof, or counter-example</div></div>
+  </div>
+  <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request that breaks it.</div>
+</section>
+
+<!-- 10 · four solutions -->
+<section class="slide" style="padding:72px 96px">
+  <div class="eyebrow">One method — four solutions</div>
+  <div class="cards mt24">
+    <div class="card frag"><div class="n">1</div><div><div class="t">App entitlement proofs</div><div class="q">Who can reach what?</div></div></div>
+    <div class="card frag"><div class="n">2</div><div><div class="t">App→cloud escalation</div><div class="q">A path through the app?</div></div></div>
+    <div class="card frag"><div class="n">3</div><div><div class="t">App &amp; API conformance</div><div class="q">SDKs used correctly?</div></div></div>
+    <div class="card frag"><div class="n">4</div><div><div class="t">Post-quantum migration</div><div class="q">Bound on a PQC base?</div></div></div>
+  </div>
+</section>
+
+<!-- 11 · solution 1 -->
+<section class="slide">
+  <div class="eyebrow">Solution 1</div>
+  <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
+  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
+</section>
+
+<!-- 12 · solution 2 -->
+<section class="slide">
+  <div class="eyebrow">Solution 2</div>
+  <h2 class="frag mt16" style="max-width:1020px">Can a user reach the app's cloud role — its secrets and keys — <span class="gold">through a plugin?</span></h2>
+  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the escalation path, edge by edge, or a proof none exists.</div>
+</section>
+
+<!-- 13 · solution 3 -->
+<section class="slide">
+  <div class="eyebrow">Solution 3</div>
+  <h2 class="frag mt16" style="max-width:1020px">Does our code use the APIs it's built on <span class="gold">the way their contracts require?</span></h2>
+  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the call site, the trace, the pattern violated, the corrected sequence.</div>
+</section>
+
+<!-- 14 · solution 4 -->
+<section class="slide">
+  <div class="eyebrow">Solution 4</div>
+  <h2 class="frag mt16" style="max-width:1020px">On a quantum-safe cloud, does the app still authenticate <span class="gold">the right party, every session?</span></h2>
+  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the CBOM and a plan; then a proof of the binding, or the relay that breaks it.</div>
+</section>
+
+<!-- 15 · we sit behind the providers / clientele -->
+<section class="slide">
+  <div class="eyebrow">We sit behind the providers</div>
+  <div class="sub frag mt24" style="font-size:27px">Help AG &nbsp;·&nbsp; regional MSSPs &amp; consultancies &nbsp;·&nbsp; CyberE71</div>
+  <div class="chips mt44">
+    <span class="chip frag">Government &amp; sovereign</span>
+    <span class="chip frag">Aviation &amp; CNI</span>
+    <span class="chip frag">Energy &amp; oil &amp; gas</span>
+    <span class="chip frag">Banking &amp; finance</span>
+    <span class="chip frag">Telecom &amp; cloud</span>
+  </div>
+  <div class="lead it frag mt44" style="font-size:26px;color:var(--muted)">The population for which proof beats posture.</div>
+</section>
+
+<!-- 16 · why they ask -->
+<section class="slide">
+  <div class="eyebrow">Why their clients will ask</div>
+  <h2 class="frag mt16" style="max-width:1020px">Regulation routes the finding to a second reader.</h2>
+  <h2 class="frag mt24" style="max-width:1020px"><span class="gold">It is not the reason to commission it. The reason is that it's true.</span></h2>
+</section>
+
+<!-- 17 · take away -->
+<section class="slide">
+  <div class="eyebrow">Take away</div>
+  <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel, cheap.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The addition.</h2><div class="sub" style="margin-top:4px">We make one class of controls machine-checkable.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — we state both.</div></div>
+</section>
+
+<!-- 18 · thank you -->
+<section class="slide">
+  <div class="wordmark" style="font-size:64px"><span class="p">Primus</span><span class="c">Credence</span></div>
+  <div class="rule frag"></div>
+  <h2 class="frag" style="max-width:1000px;font-size:44px">Let us prove one property on your estate.</h2>
+  <div class="contact frag mt44">
+    <div class="m">raghavendra@primuscredence.com</div>
+    <div class="m2">primuscredence.com &nbsp;·&nbsp; Dr. Raghavendra Ramesh &nbsp;·&nbsp; UAE</div>
+  </div>
+</section>
+
+</div></div>
+
+<div class="zone l" id="zl"></div>
+<div class="zone r" id="zr"></div>
+<div id="mark"><span>Primus</span><span class="c">Credence</span></div>
+<div id="count">1 / 18</div>
+<div id="hint">→ / space reveal · ← back · F fullscreen · A autoplay</div>
+<div id="auto">auto <b id="autostate">off</b></div>
+<div id="bar"><i></i></div>
+
+<script>
+(function(){
+  const deck = document.getElementById('deck');
+  const slides = [...deck.querySelectorAll('.slide')];
+  const bar = document.querySelector('#bar i');
+  const count = document.getElementById('count');
+  const hint = document.getElementById('hint');
+  const autostate = document.getElementById('autostate');
+  let si = 0, fi = 0, auto = false, timer = null;
+  const AUTO_MS = 3200;
+
+  function frags(s){ return [...s.querySelectorAll('.frag')]; }
+
+  function show(idx, revealAll){
+    si = Math.max(0, Math.min(slides.length-1, idx));
+    slides.forEach((s,k)=> s.classList.toggle('active', k===si));
+    const f = frags(slides[si]);
+    fi = 0;
+    f.forEach(el=> el.classList.remove('on'));
+    if(revealAll){ f.forEach(el=> el.classList.add('on')); fi = f.length; }
+    update();
+  }
+  function update(){
+    const total = slides.length;
+    count.textContent = (si+1)+' / '+total;
+    bar.style.width = (((si)/(total-1))*100)+'%';
+  }
+  function next(){
+    const f = frags(slides[si]);
+    if(fi < f.length){ f[fi].classList.add('on'); fi++; }
+    else if(si < slides.length-1){ show(si+1, false); }
+  }
+  function prev(){
+    // step back one fragment; if none shown, go to previous slide fully revealed
+    const f = frags(slides[si]);
+    if(fi > 0){ fi--; f[fi].classList.remove('on'); }
+    else if(si > 0){ show(si-1, true); }
+  }
+  function toggleAuto(){
+    auto = !auto; autostate.textContent = auto ? 'on' : 'off';
+    autostate.style.color = auto ? 'var(--green)' : '';
+    if(auto){ tick(); } else { clearTimeout(timer); }
+  }
+  function tick(){
+    clearTimeout(timer);
+    if(!auto) return;
+    timer = setTimeout(()=>{
+      if(si===slides.length-1 && fi>=frags(slides[si]).length){ toggleAuto(); return; }
+      next(); tick();
+    }, AUTO_MS);
+  }
+
+  document.addEventListener('keydown', e=>{
+    if(e.key===' '||e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); next(); tick(); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ show(0,false); }
+    else if(e.key==='End'){ show(slides.length-1,true); }
+    else if(e.key.toLowerCase()==='f'){ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+    else if(e.key.toLowerCase()==='a'){ toggleAuto(); }
+  });
+  document.getElementById('zr').addEventListener('click', ()=>{ next(); tick(); });
+  document.getElementById('zl').addEventListener('click', prev);
+
+  // fade the hint after a few seconds
+  setTimeout(()=>{ hint.style.opacity = '0'; }, 4200);
+  document.addEventListener('mousemove', ()=>{ hint.style.opacity=''; clearTimeout(hint._t); hint._t=setTimeout(()=>hint.style.opacity='0',2600); });
+
+  // fit the 1280×720 deck into the viewport
+  function fit(){
+    const s = Math.min(window.innerWidth/1280, window.innerHeight/720);
+    deck.style.transform = 'scale('+s+')';
+    deck.style.transformOrigin = 'center center';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // deep-link #n
+  const h = parseInt(location.hash.replace('#',''),10);
+  show(Number.isFinite(h)&&h>=1 ? h-1 : 0, false);
+})();
+</script>
+</body>
+</html>
