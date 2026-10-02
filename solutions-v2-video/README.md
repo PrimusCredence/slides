@@ -29,8 +29,9 @@ take-away · thank-you.
 This deck is pitched **to** cybersecurity solutions providers, so the long-term
 "assurance hub" vision and the investment ask are omitted.
 
-The **stack diagram is retained** and is now animated — the cloud base, the app,
-the plugins and the seam (APIs, libraries, network paths) come in in turn, with "proven" / "unproven" badges.
+The **stack diagram is retained** and is now animated, built from the ground up —
+the cloud base first, then the seam (APIs, libraries, network paths), the app and
+the plugins are each set down on top in turn, with "proven" / "unproven" badges.
 
 ## Recording tips
 - Press **F** for fullscreen at 1920×1080, then screen-record.

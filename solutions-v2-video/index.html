@@ -92,7 +92,10 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 .step .d{font-size:18px; color:var(--ink2); margin-top:8px; font-weight:300}
 
 /* ---- the stack diagram (the anchor) ---- */
-.stack{display:flex; flex-direction:column; gap:12px; width:760px}
+/* layers are written base-first, so they reveal bottom-up; column-reverse draws the base at the bottom */
+.stack{display:flex; flex-direction:column-reverse; gap:12px; width:760px}
+.stack .frag.rise{transform:translateY(-34px) scale(.985);}   /* each layer is set down on top */
+.stack .frag.rise.on{transform:none;}
 .layer{border-radius:14px; padding:18px 26px; border:1px solid var(--line); box-shadow:0 10px 28px rgba(15,25,45,.06); position:relative}
 .layer .lt{font-family:var(--serif); font-weight:600; font-size:26px}
 .layer .ls{font-size:18px; color:var(--ink2); margin-top:3px; font-weight:300}
@@ -165,13 +168,9 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="eyebrow">The picture to hold onto</div>
   <div class="stackwrap mt24">
     <div class="stack">
-      <div class="layer plugins frag rise">
-        <div class="lt">Plugins &amp; extensions</div>
-        <div class="ls">run inside the app — inherit its privilege</div>
-      </div>
-      <div class="layer app frag rise">
-        <div class="lt">Application <span class="badge no" style="margin-left:10px">unproven</span></div>
-        <div class="ls">its own roles, tokens &amp; config — OWASP #1 &amp; #2</div>
+      <div class="layer cloud frag rise">
+        <div class="lt">Cloud &amp; infrastructure <span class="badge ok" style="margin-left:10px">proven ✓</span></div>
+        <div class="ls">VMs · DBs · queues · storage · IAM · network</div>
       </div>
       <div class="layer seam frag rise">
         <div class="lt">The seam</div>
@@ -181,9 +180,13 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
           <i><span class="dot" style="background:var(--cyb)"></span>network paths</i>
         </div>
       </div>
-      <div class="layer cloud frag rise">
-        <div class="lt">Cloud &amp; infrastructure <span class="badge ok" style="margin-left:10px">proven ✓</span></div>
-        <div class="ls">VMs · DBs · queues · storage · IAM · network</div>
+      <div class="layer app frag rise">
+        <div class="lt">Application <span class="badge no" style="margin-left:10px">unproven</span></div>
+        <div class="ls">its own roles, tokens &amp; config — OWASP #1 &amp; #2</div>
+      </div>
+      <div class="layer plugins frag rise">
+        <div class="lt">Plugins &amp; extensions</div>
+        <div class="ls">run inside the app — inherit its privilege</div>
       </div>
     </div>
     <div class="stacknote">
