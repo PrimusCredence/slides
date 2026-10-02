@@ -1,24 +1,27 @@
-# PrimusCredence — slide deck (v2, four solutions)
+# PrimusCredence — slide deck (v2, three solutions)
 
 A variant of the main deck (`../`) with the **AI guardrail solution dropped** —
-it sells the **four cybersecurity solutions** only: application entitlement
-proofs, app-to-cloud escalation, app & API-usage conformance, and post-quantum
-migration. The "AI Industrialises the Attacker" slide is **kept**, because it
-argues *why* proof is needed (attacks are now exhaustive), which still motivates
-the four solutions.
+it sells the **three cybersecurity solutions** only: access control
+(application entitlement proofs), network-layer isolation (reachability &
+segmentation proofs), and API protocols (app & API-usage conformance). The
+"AI Industrialises the Attacker" slide is **kept**, because it argues *why* proof
+is needed (attacks are now exhaustive), which still motivates the three
+solutions. Post-quantum migration has been dropped as a solution, along with its
+motivation slide.
 
-23 slides, 16:10 (1187 × 742), same house style as the parent deck.
+20 slides, 16:10 (1187 × 742), same house style as the parent deck.
 
 ## What differs from `../`
 - No "AI Agents Multiply…" motivation slide and no "Agentic Guardrail
   Verification" solution slide.
-- Solutions overview is a 2×2 of four cards; "one method — four solutions".
+- Solutions overview is a row of three cards; "one method — three solutions".
 - The regulatory grid and the "why clients ask" tiles drop the AI-governance
   rows (UAE AI Act, ISO 42001) in favour of cyber frameworks (PCI DSS 4.0, CIS
   Controls) and a third-party-risk shift.
 - Product tagline is "Provable Security for Applications" (not "… for Apps & AI
   Agents").
-- The anchor stack diagram (slide 3) is **retained** unchanged.
+- The anchor stack diagram (slide 3) is **retained**; its seam is now APIs,
+  SDK/library usage and network paths (no PQC binding).
 
 ## Structure
 
@@ -29,20 +32,19 @@ the four solutions.
 | 3 | Where the Risk Actually Lives — the stack diagram (anchor) |
 | 4 | OWASP 2025 — Access Control & Misconfiguration |
 | 5 | Apps Misuse the APIs They Run On |
-| 6 | The Base Went Post-Quantum. Are the Apps Ready? |
-| 7 | AI Industrialises the Attacker |
-| 8 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
-| 9 | Why Today's Security Stack Isn't Enough |
-| 10 | Proof — Now Feasible |
-| 11 | Automated Reasoning |
-| 12 | Solutions (overview, four) |
-| 13–16 | Solutions 1–4 |
-| 17 | Our Approach — partner with cybersecurity solutions providers |
-| 18 | Why the Provider's Clients Will Ask |
-| 19 | What a Provider Can Resell |
-| 20 | One Result, Three Registers |
-| 21 | Take Away |
-| 22 | Thank You |
+| 6 | AI Industrialises the Attacker |
+| 7 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
+| 8 | Why Today's Security Stack Isn't Enough |
+| 9 | Proof — Now Feasible |
+| 10 | Automated Reasoning |
+| 11 | Solutions (overview, three) |
+| 12–14 | Solutions 1–3 |
+| 15 | Our Approach — partner with cybersecurity solutions providers |
+| 16 | Why the Provider's Clients Will Ask |
+| 17 | What a Provider Can Resell |
+| 18 | One Result, Three Registers |
+| 19 | Take Away |
+| 20 | Thank You |
 
 This deck is pitched **to** cybersecurity solutions providers, so the long-term
 "assurance hub" vision slide and the investment ask are omitted (they are only
@@ -51,6 +53,6 @@ in the parent deck's history, not here).
 ## Rebuilding
 
 ```sh
-python3 build.py      # writes slides/01.svg … slides/22.svg
+python3 build.py      # writes slides/01.svg … slides/20.svg
 node make-pdf.js      # writes solutions-slides.pdf (puppeteer from ../node_modules)
 ```

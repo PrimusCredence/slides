@@ -1,7 +1,8 @@
 # PrimusCredence — video deck (minimal, animated)
 
 A single-file, animated presentation built for **recording the voice-over**. It
-carries the same four-solution story as `../solutions-v2/`, but with **minimal
+carries the same three-solution story as `../solutions-v2/` (access control,
+network-layer isolation, API protocols), but with **minimal
 text** so the audience follows your voice, not the slide. Content reveals **one
 element at a time**, so you narrate a point and bring it on screen as you say it.
 
@@ -20,16 +21,16 @@ webfonts.
 
 ## The 18 beats
 Title · founder · **the stack** (the anchor — layers reveal with proven/unproven
-badges) · 100% risk · authentic-not-authorised · post-quantum · AI attacker ·
-the stack samples · proof in four steps · the four solutions · one slide each for
-solutions 1–4 · we-sit-behind-the-providers + clientele · why clients ask ·
+badges) · 100% risk · the cost · authentic-not-authorised · AI attacker ·
+lateral movement · the stack samples · proof in four steps · the three solutions · one slide each for
+solutions 1–3 · we-sit-behind-the-providers + clientele · why clients ask ·
 take-away · thank-you.
 
 This deck is pitched **to** cybersecurity solutions providers, so the long-term
 "assurance hub" vision and the investment ask are omitted.
 
 The **stack diagram is retained** and is now animated — the cloud base, the app,
-the plugins and the seam come in in turn, with "proven" / "unproven" badges.
+the plugins and the seam (APIs, libraries, network paths) come in in turn, with "proven" / "unproven" badges.
 
 ## Recording tips
 - Press **F** for fullscreen at 1920×1080, then screen-record.

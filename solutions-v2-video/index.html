@@ -75,13 +75,14 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   border-radius:999px; padding:12px 22px; background:var(--panel);}
 
 /* solution cards */
-.cards{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:8px}
+.cards{display:grid; grid-template-columns:1fr; gap:22px; margin-top:8px; max-width:980px}
 .card{border:1px solid var(--line); border-left:5px solid var(--cyb); border-radius:14px; background:var(--panel);
   padding:26px 28px; box-shadow:0 10px 30px rgba(15,25,45,.06); display:flex; align-items:center; gap:22px}
 .card .n{flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--cyb); color:#fff;
   font-family:var(--mono); font-size:22px; display:grid; place-items:center}
 .card .t{font-family:var(--serif); font-weight:600; font-size:28px}
 .card .q{font-size:19px; color:var(--cyb); margin-top:3px; font-weight:400}
+.card .a{font-family:var(--mono); font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:4px}
 
 /* steps */
 .steps{display:flex; gap:18px; align-items:stretch}
@@ -177,7 +178,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
         <div class="items">
           <i><span class="dot" style="background:var(--cyb)"></span>APIs</i>
           <i><span class="dot" style="background:var(--cyb)"></span>libraries</i>
-          <i><span class="dot" style="background:var(--pink)"></span>PQC binding</i>
+          <i><span class="dot" style="background:var(--cyb)"></span>network paths</i>
         </div>
       </div>
       <div class="layer cloud frag rise">
@@ -222,15 +223,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="sub frag mt24" style="max-width:860px">A well-formed, authenticated request to an endpoint you may use — asking for data you may not.</div>
 </section>
 
-<!-- 6 · post-quantum -->
-<section class="slide">
-  <div class="eyebrow">Post-quantum</div>
-  <h2 class="frag mt16"><span class="green">The base went quantum-safe. ✓ proven.</span></h2>
-  <h2 class="frag mt24"><span class="gold">The app on top did not.</span></h2>
-  <div class="sub frag mt32" style="max-width:860px">ML-KEM is machine-checked. But if the app doesn't bind identity to that channel, the proof beneath it is quietly undone.</div>
-</section>
-
-<!-- 7 · AI industrialises the attacker -->
+<!-- 6 · AI industrialises the attacker -->
 <section class="slide">
   <div class="eyebrow">The attacker changed</div>
   <div class="stats mt32">
@@ -241,7 +234,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <h2 class="frag mt44" style="font-size:40px;max-width:1000px">A sampling defence cannot answer an <span class="gold">enumerating</span> attacker.</h2>
 </section>
 
-<!-- 8 · segmentation / lateral movement -->
+<!-- 7 · segmentation / lateral movement -->
 <section class="slide">
   <div class="eyebrow">Once inside — lateral movement</div>
   <div class="stats mt32">
@@ -252,7 +245,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Segmentation is <span class="gold">asserted, not proven.</span></h2>
 </section>
 
-<!-- 9 · today's stack samples -->
+<!-- 8 · today's stack samples -->
 <section class="slide">
   <div class="eyebrow">Hard-won over years — keep all of it</div>
   <div class="chips mt32" style="max-width:980px">
@@ -275,7 +268,17 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request that breaks it.</div>
 </section>
 
-<!-- solution 1 -->
+<!-- 10 · the three solutions -->
+<section class="slide">
+  <div class="eyebrow">One method — three solutions</div>
+  <div class="cards mt24">
+    <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who can reach what?</div></div></div>
+    <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">Any path across zones?</div></div></div>
+    <div class="card frag"><div class="n">3</div><div><div class="a">API protocols</div><div class="t">App &amp; API conformance</div><div class="q">SDKs used correctly?</div></div></div>
+  </div>
+</section>
+
+<!-- 11 · solution 1 -->
 <section class="slide">
   <div class="eyebrow">Solution 1</div>
   <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
@@ -296,14 +299,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the call site, the trace, the pattern violated, the corrected sequence.</div>
 </section>
 
-<!-- 14 · solution 4 -->
-<section class="slide">
-  <div class="eyebrow">Solution 4</div>
-  <h2 class="frag mt16" style="max-width:1020px">On a quantum-safe cloud, does the app still authenticate <span class="gold">the right party, every session?</span></h2>
-  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the CBOM and a plan; then a proof of the binding, or the relay that breaks it.</div>
-</section>
-
-<!-- 15 · our approach — partner with providers / clientele -->
+<!-- 14 · our approach — partner with providers / clientele -->
 <section class="slide">
   <div class="eyebrow">Our approach</div>
   <div class="sub frag mt24" style="font-size:27px">We partner with cybersecurity solutions providers — <span class="gold">adding provable assurance to the bids they already win.</span></div>
@@ -317,14 +313,14 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="lead it frag mt44" style="font-size:26px;color:var(--muted)">The population for which proof beats posture.</div>
 </section>
 
-<!-- 16 · why they ask -->
+<!-- 15 · why they ask -->
 <section class="slide">
   <div class="eyebrow">Why their clients will ask</div>
   <h2 class="frag mt16" style="max-width:1020px">Regulation routes the finding to a second reader.</h2>
   <h2 class="frag mt24" style="max-width:1020px"><span class="gold">It is not the reason to commission it. The reason is that it's true.</span></h2>
 </section>
 
-<!-- 17 · take away -->
+<!-- 16 · take away -->
 <section class="slide">
   <div class="eyebrow">Take away</div>
   <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel and continuous.</div></div>
@@ -332,7 +328,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — we state both.</div></div>
 </section>
 
-<!-- 18 · thank you -->
+<!-- 17 · thank you -->
 <section class="slide">
   <div class="wordmark" style="font-size:64px"><span class="p">Primus</span><span class="c">Credence</span></div>
   <div class="rule frag"></div>
@@ -348,7 +344,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <div class="zone l" id="zl"></div>
 <div class="zone r" id="zr"></div>
 <div id="mark"><span>Primus</span><span class="c">Credence</span></div>
-<div id="count">1 / 19</div>
+<div id="count">1 / 18</div>
 <div id="hint">→ / space reveal · ← back · F fullscreen · A autoplay</div>
 <div id="auto">auto <b id="autostate">off</b></div>
 <div id="bar"><i></i></div>
