@@ -31,17 +31,18 @@ the four solutions.
 | 5 | Apps Misuse the APIs They Run On |
 | 6 | The Base Went Post-Quantum. Are the Apps Ready? |
 | 7 | AI Industrialises the Attacker |
-| 8 | Why Today's Security Stack Isn't Enough |
-| 9 | Proof — Now Feasible |
-| 10 | Automated Reasoning |
-| 11 | Solutions (overview, four) |
-| 12–15 | Solutions 1–4 |
-| 16 | We Sit Behind the Providers |
-| 17 | Why the Provider's Clients Will Ask |
-| 18 | What a Provider Can Resell |
-| 19 | One Result, Three Registers |
-| 20 | Take Away |
-| 21 | Thank You |
+| 8 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
+| 9 | Why Today's Security Stack Isn't Enough |
+| 10 | Proof — Now Feasible |
+| 11 | Automated Reasoning |
+| 12 | Solutions (overview, four) |
+| 13–16 | Solutions 1–4 |
+| 17 | Our Approach — partner with cybersecurity solutions providers |
+| 18 | Why the Provider's Clients Will Ask |
+| 19 | What a Provider Can Resell |
+| 20 | One Result, Three Registers |
+| 21 | Take Away |
+| 22 | Thank You |
 
 This deck is pitched **to** cybersecurity solutions providers, so the long-term
 "assurance hub" vision slide and the investment ask are omitted (they are only
@@ -50,6 +51,6 @@ in the parent deck's history, not here).
 ## Rebuilding
 
 ```sh
-python3 build.py      # writes slides/01.svg … slides/21.svg
+python3 build.py      # writes slides/01.svg … slides/22.svg
 node make-pdf.js      # writes solutions-slides.pdf (puppeteer from ../node_modules)
 ```

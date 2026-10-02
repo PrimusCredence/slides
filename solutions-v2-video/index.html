@@ -9,19 +9,20 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap');
 
 :root{
-  --bg:#ffffff; --ink:#14181f; --ink2:#4a5260; --muted:#8a92a0; --line:#e7eaf0;
-  --gold:#c8940a; --goldink:#a87c00; --cyb:#1d5fa8; --cybtint:#eaf0f9;
-  --green:#2f7d4f; --greentint:#e8f3ec; --pink:#b81f63;
+  --bg:#000000; --panel:#101014; --ink:#ece4d6; --ink2:#b3aa9b; --muted:#716b5e; --line:#26262c;
+  --gold:#d9a826; --goldink:#e3c46b; --cyb:#7ba3d9; --cybtint:#111a27;
+  --green:#7fb08a; --greentint:#0e1912; --pink:#d98bb0;
   --serif:'Source Serif 4','Iowan Old Style',Georgia,serif;
   --sans:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
   --mono:'IBM Plex Mono','SF Mono',Menlo,monospace;
+  color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   background:
-    radial-gradient(1100px 620px at 82% -8%, rgba(200,148,10,.10), transparent 60%),
-    radial-gradient(900px 560px at -6% 108%, rgba(200,148,10,.08), transparent 60%),
+    radial-gradient(1100px 620px at 82% -8%, rgba(217,168,38,.12), transparent 60%),
+    radial-gradient(900px 560px at -6% 108%, rgba(217,168,38,.09), transparent 62%),
     var(--bg);
   color:var(--ink); font-family:var(--sans); overflow:hidden;
   -webkit-font-smoothing:antialiased;
@@ -61,7 +62,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 
 /* wordmark */
 .wordmark{font-family:var(--serif); font-weight:600; font-size:96px; letter-spacing:-.015em;}
-.wordmark .p{color:#0b0d12}.wordmark .c{color:var(--goldink)}
+.wordmark .p{color:var(--ink)}.wordmark .c{color:var(--goldink)}
 
 /* stat row */
 .stats{display:flex; gap:64px; flex-wrap:wrap}
@@ -70,12 +71,12 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 
 /* chips */
 .chips{display:flex; gap:14px; flex-wrap:wrap}
-.chip{font-family:var(--mono); font-size:20px; color:var(--ink2); background:#fff; border:1px solid var(--line);
-  border-radius:999px; padding:12px 22px; box-shadow:0 2px 10px rgba(15,25,45,.05);}
+.chip{font-family:var(--mono); font-size:20px; color:var(--ink2); border:1px solid var(--line);
+  border-radius:999px; padding:12px 22px; background:var(--panel);}
 
 /* solution cards */
 .cards{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:8px}
-.card{border:1px solid var(--line); border-left:5px solid var(--cyb); border-radius:14px; background:#fff;
+.card{border:1px solid var(--line); border-left:5px solid var(--cyb); border-radius:14px; background:var(--panel);
   padding:26px 28px; box-shadow:0 10px 30px rgba(15,25,45,.06); display:flex; align-items:center; gap:22px}
 .card .n{flex:0 0 auto; width:46px; height:46px; border-radius:50%; background:var(--cyb); color:#fff;
   font-family:var(--mono); font-size:22px; display:grid; place-items:center}
@@ -84,7 +85,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 
 /* steps */
 .steps{display:flex; gap:18px; align-items:stretch}
-.step{flex:1; border:1px solid var(--line); border-radius:14px; background:#fff; padding:26px 22px; text-align:center; box-shadow:0 10px 30px rgba(15,25,45,.05)}
+.step{flex:1; border:1px solid var(--line); border-radius:14px; background:var(--panel); padding:26px 22px; text-align:center}
 .step .n{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#fff;font-family:var(--mono);display:grid;place-items:center;margin:0 auto 14px}
 .step .h{font-family:var(--serif); font-weight:600; font-size:28px}
 .step .d{font-size:18px; color:var(--ink2); margin-top:8px; font-weight:300}
@@ -94,9 +95,9 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 .layer{border-radius:14px; padding:18px 26px; border:1px solid var(--line); box-shadow:0 10px 28px rgba(15,25,45,.06); position:relative}
 .layer .lt{font-family:var(--serif); font-weight:600; font-size:26px}
 .layer .ls{font-size:18px; color:var(--ink2); margin-top:3px; font-weight:300}
-.layer.plugins{background:#faf6ea}
+.layer.plugins{background:#18130a}
 .layer.app{background:var(--cybtint); border-left:6px solid var(--cyb)}
-.layer.seam{background:#fbf3df; border-left:6px solid var(--gold); display:flex; gap:30px; align-items:center; flex-wrap:wrap}
+.layer.seam{background:#1a1206; border-left:6px solid var(--gold); display:flex; gap:30px; align-items:center; flex-wrap:wrap}
 .layer.seam .lt{font-size:19px; font-family:var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--goldink); font-weight:500}
 .layer.seam .items{display:flex; gap:26px; flex-wrap:wrap; font-size:18px; color:var(--ink2)}
 .layer.seam .items i{font-style:normal; display:inline-flex; align-items:center; gap:8px}
@@ -106,15 +107,15 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   font-family:var(--mono); font-size:15px; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap}
 .badge{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:15px; letter-spacing:.1em;
   text-transform:uppercase; padding:5px 12px; border-radius:999px}
-.badge.ok{color:var(--green); background:var(--greentint); border:1px solid #bfe0cb}
-.badge.no{color:var(--goldink); background:#f7efda; border:1px solid #ecd9a6}
+.badge.ok{color:var(--green); background:var(--greentint); border:1px solid rgba(127,176,138,.4)}
+.badge.no{color:var(--goldink); background:rgba(217,168,38,.12); border:1px solid rgba(217,168,38,.4)}
 .stackwrap{display:flex; gap:40px; align-items:center}
 .stacknote{max-width:300px}
 
 /* hub */
 .hub{display:flex; align-items:center; gap:30px; justify-content:center}
-.node{border:1px solid var(--line); border-radius:16px; padding:26px 30px; background:#fff; text-align:center; box-shadow:0 10px 30px rgba(15,25,45,.06); min-width:230px}
-.node.center{background:#0b0d12; color:#fff; border:none}
+.node{border:1px solid var(--line); border-radius:16px; padding:26px 30px; background:var(--panel); text-align:center; min-width:230px}
+.node.center{background:#17120a; color:#fff; border:1px solid rgba(217,168,38,.45)}
 .node .k{font-family:var(--mono); font-size:15px; letter-spacing:.16em; text-transform:uppercase; color:var(--goldink)}
 .node.center .k{color:var(--gold)}
 .node .v{font-family:var(--serif); font-weight:600; font-size:27px; margin-top:8px}
@@ -196,8 +197,19 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">OWASP 2025 — the top two</div>
   <h1 class="huge frag mt16">100%</h1>
-  <div class="lead frag mt16">of applications tested had broken access control <span class="gold">and</span> misconfiguration.</div>
-  <div class="mono frag mt24">#1 Broken Access Control&nbsp;&nbsp;·&nbsp;&nbsp;#2 Security Misconfiguration</div>
+  <div class="lead frag mt16">of applications tested had broken access control — and <span class="gold">100%</span> had security misconfiguration.</div>
+  <div class="mono frag mt24">OWASP Top 10 : 2025 — #1 and #2</div>
+</section>
+
+<!-- 4b · the cost -->
+<section class="slide">
+  <div class="eyebrow">And the losses are real</div>
+  <div class="stats mt32">
+    <div class="stat frag"><b>$4.4M</b><span>average cost of a data breach (IBM, 2025)</span></div>
+    <div class="stat frag"><b>106M</b><span>records — Capital One, via one over-privileged role</span></div>
+    <div class="stat frag"><b>241 days</b><span>mean time to identify and contain a breach</span></div>
+  </div>
+  <div class="lead frag mt44" style="font-size:30px;max-width:1080px">Capital One · Optus · T-Mobile · Dell · Trello — and a monitor read every request as normal.</div>
 </section>
 
 <!-- 5 · authentic not authorised -->
@@ -229,15 +241,26 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <h2 class="frag mt44" style="font-size:40px;max-width:1000px">A sampling defence cannot answer an <span class="gold">enumerating</span> attacker.</h2>
 </section>
 
-<!-- 8 · today's stack samples -->
+<!-- 8 · segmentation / lateral movement -->
 <section class="slide">
-  <div class="eyebrow">Keep every tool — but see the gap</div>
+  <div class="eyebrow">Once inside — lateral movement</div>
+  <div class="stats mt32">
+    <div class="stat frag"><b>29 min</b><span>average breakout to the first lateral move</span></div>
+    <div class="stat frag"><b>27 sec</b><span>the fastest breakout observed</span></div>
+    <div class="stat frag"><b>82%</b><span>of intrusions malware-free — valid access</span></div>
+  </div>
+  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Segmentation is <span class="gold">asserted, not proven.</span></h2>
+</section>
+
+<!-- 9 · today's stack samples -->
+<section class="slide">
+  <div class="eyebrow">Hard-won over years — keep all of it</div>
   <div class="chips mt32" style="max-width:980px">
     <span class="chip frag">SAST</span><span class="chip frag">DAST</span><span class="chip frag">IAST / RASP</span>
     <span class="chip frag">SCA</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
     <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span>
   </div>
-  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">They sample. They guess. <span class="gold">None decides over every request.</span></h2>
+  <h2 class="frag mt44" style="font-size:38px;max-width:1060px">The collective wisdom of years of breaches — yet each only samples. <span class="gold">None decides over every request.</span></h2>
 </section>
 
 <!-- 9 · proof now feasible -->
@@ -252,18 +275,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request that breaks it.</div>
 </section>
 
-<!-- 10 · four solutions -->
-<section class="slide" style="padding:72px 96px">
-  <div class="eyebrow">One method — four solutions</div>
-  <div class="cards mt24">
-    <div class="card frag"><div class="n">1</div><div><div class="t">App entitlement proofs</div><div class="q">Who can reach what?</div></div></div>
-    <div class="card frag"><div class="n">2</div><div><div class="t">App→cloud escalation</div><div class="q">A path through the app?</div></div></div>
-    <div class="card frag"><div class="n">3</div><div><div class="t">App &amp; API conformance</div><div class="q">SDKs used correctly?</div></div></div>
-    <div class="card frag"><div class="n">4</div><div><div class="t">Post-quantum migration</div><div class="q">Bound on a PQC base?</div></div></div>
-  </div>
-</section>
-
-<!-- 11 · solution 1 -->
+<!-- solution 1 -->
 <section class="slide">
   <div class="eyebrow">Solution 1</div>
   <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
@@ -315,7 +327,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <!-- 17 · take away -->
 <section class="slide">
   <div class="eyebrow">Take away</div>
-  <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel, cheap.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel and continuous.</div></div>
   <div class="frag mt24"><h2 style="font-size:40px">The addition.</h2><div class="sub" style="margin-top:4px">We make one class of controls machine-checkable.</div></div>
   <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — we state both.</div></div>
 </section>
@@ -336,7 +348,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <div class="zone l" id="zl"></div>
 <div class="zone r" id="zr"></div>
 <div id="mark"><span>Primus</span><span class="c">Credence</span></div>
-<div id="count">1 / 18</div>
+<div id="count">1 / 19</div>
 <div id="hint">→ / space reveal · ← back · F fullscreen · A autoplay</div>
 <div id="auto">auto <b id="autostate">off</b></div>
 <div id="bar"><i></i></div>

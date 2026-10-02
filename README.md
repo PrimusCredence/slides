@@ -1,9 +1,9 @@
 # PrimusCredence — slide deck
 
-Twenty-three slides drawn from `Solutions-Confidential.md`, `HelpAG/appsec.md`
+Twenty-four slides drawn from `Solutions-Confidential.md`, `HelpAG/appsec.md`
 and `reports/fv-pqc.md`: *Provable Security for Apps & AI Agents*.
 
-- `slides/01.svg` … `slides/23.svg` — one SVG per slide, each self-contained
+- `slides/01.svg` … `slides/24.svg` — one SVG per slide, each self-contained
   (it loads its own webfonts), sized 16:10 (1187 × 742 units), the MacBook /
   widescreen aspect, so the deck fills a laptop display edge to edge. Body copy
   sits at 23–26 units. Every slide is white, with soft tinted blooms behind
@@ -37,36 +37,37 @@ particular slide.
 | 5 | Apps Misuse the APIs They Run On (exploits + cost) |
 | 6 | The Base Went Post-Quantum. Are the Apps Ready? |
 | 7 | AI Industrialises the Attacker |
-| 8 | Why Today's Security Stack Isn't Enough |
-| 9 | Proof — Now Feasible |
-| 10 | Automated Reasoning |
-| 11 | Solutions (overview) |
-| 12 | Solution 1 — Application Access-Policy & Entitlement Verification |
-| 13 | Solution 2 — App-to-Cloud Escalation-Path Proofs |
-| 14–15 | Solutions 3–4 |
-| 16 | AI Agents Are Multiplying Faster Than the Rules |
-| 17 | Solution 5 — Agentic AI Guardrail Verification |
-| 18 | We Sit Behind the Providers (clientele) |
-| 19 | Why the Provider's Clients Will Ask |
-| 20 | What a Provider Can Resell |
-| 21 | One Result, Three Registers |
-| 22 | Take Away |
-| 23 | Thank You |
+| 8 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
+| 9 | Why Today's Security Stack Isn't Enough |
+| 10 | Proof — Now Feasible |
+| 11 | Automated Reasoning |
+| 12 | Solutions (overview) |
+| 13 | Solution 1 — Application Access-Policy & Entitlement Verification |
+| 14 | Solution 2 — App-to-Cloud Escalation-Path Proofs |
+| 15–16 | Solutions 3–4 |
+| 17 | AI Agents Are Multiplying Faster Than the Rules |
+| 18 | Solution 5 — Agentic AI Guardrail Verification |
+| 19 | Our Approach — partner with cybersecurity solutions providers (clientele) |
+| 20 | Why the Provider's Clients Will Ask |
+| 21 | What a Provider Can Resell |
+| 22 | One Result, Three Registers |
+| 23 | Take Away |
+| 24 | Thank You |
 
 Slide 3 is the anchor diagram — plugins on top of the app, the app on a proven
 cloud base, and the API / library / PQC seam between them — the mental model the
-rest of the talk returns to. Slides 4–9 are the motivation arc (access control &
-misconfiguration, apps & APIs, post-quantum, AI, the stack's gap, and why proof
-is now feasible). Slides 18–21 set out the channel model for a cybersecurity
-solutions provider — how this sits behind them, why their clients will ask, what
-they can resell, and what one result is worth. (This deck is pitched to the
-providers, so the long-term "assurance hub" vision and the investment ask are
-deliberately omitted.)
+rest of the talk returns to. Slides 4–10 are the motivation arc (access control &
+misconfiguration, apps & APIs, post-quantum, AI, network reachability, the
+stack's gap, and why proof is now feasible). Slides 19–22 set out the channel
+model for a cybersecurity solutions provider — how we partner with them, why
+their clients will ask, what they can resell, and what one result is worth. (This
+deck is pitched to the providers, so the long-term "assurance hub" vision and the
+investment ask are deliberately omitted.)
 
 ## Rebuilding
 
 ```sh
-python3 build.py      # writes slides/01.svg … slides/23.svg
+python3 build.py      # writes slides/01.svg … slides/24.svg
 node make-pdf.js      # writes solutions-slides.pdf
 ```
 

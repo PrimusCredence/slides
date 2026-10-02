@@ -321,7 +321,7 @@ def s02(num=2):
     steps = [("PhD, IISc Bangalore", "Model checking for information-flow security"),
              ("Oracle Labs · 2014–2019", "Java vulnerability detection"),
              ("ConsenSys R&D · 2019–2021", "Cross-chain protocols, consensus verification"),
-             ("Supra · VP of R&D · 2021–ongoing", "BFT design & FV, bridges, DeFi")]
+             ("Supra · VP of R&D · 2021–ongoing", "BFT design & FV, bridges, DeFi & Crypto")]
     cy = 292
     for head, sub in steps:
         b.append(f'<rect x="{M}" y="{cy-25}" width="4" height="54" rx="2" fill="{GOLD}"/>')
@@ -382,7 +382,7 @@ def s03(num=7):
 
 
 # ============================================================ the method
-def s04(num=10):
+def s04(num=11):
     b = [water("gold"), heading("Automated Reasoning")]
     b.append(t(M, 184, "Proof establishes that bad things cannot happen.",
                30, INK, SERIF, "600", style="italic"))
@@ -423,8 +423,9 @@ def s04(num=10):
                    hw - 52, 22, 28, INK2, 3)
     b.append(blk)
 
-    b.append(t(M, 664, "Industrial practice: AWS (Zelkova, Tiros, Nitro) · Microsoft (Z3) · "
-                       "Meta (Infer) · Airbus (Astrée)", 21, MUTED, SANS))
+    b.append(t(M, 648, "Not every property is decidable, and a proof holds only for the "
+                       "property and model stated.", 20, MUTED, SANS))
+    b.append(t(M, 676, "Industrial practice: AWS · Microsoft · Meta · Airbus.", 20, MUTED, SANS))
     b.append(chrome(num))
     return page("".join(b))
 
@@ -444,7 +445,7 @@ def sol_card(x, y, w, h, fam, n, title, sub):
     return "".join(out)
 
 
-def s05(num=11):
+def s05(num=12):
     b = [water("gold"), heading("Solutions")]
     b.append(t(M, 176, "One method — four solutions, across the application and its seams.",
                26, INK, SERIF, "600", style="italic"))
@@ -534,7 +535,7 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
 
 
 # ============================================================ 18 · take away
-def s18(num=20):
+def s18(num=21):
     b = [water("gold"), heading("Take Away")]
 
     b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
@@ -658,7 +659,7 @@ def s19():
 
 # ==================================================================== content
 SOLUTIONS = [
-    dict(num=12, fam="cyb", n=1,
+    dict(num=13, fam="cyb", n=1,
          title="Application Access-Policy & Entitlement Verification",
          question="What can each app role, API token and public user do inside the app — "
                   "and can any of them reach what they should not?",
@@ -674,7 +675,7 @@ SOLUTIONS = [
          buyers="Platform & AppSec teams · ISVs",
          note="Portable: it reads the app's own config, so it holds on-prem, not only in cloud."),
 
-    dict(num=13, fam="cyb", n=2,
+    dict(num=14, fam="cyb", n=2,
          title="App-to-Cloud Escalation-Path Proofs",
          question="Can a non-admin user reach the app's cloud role — its secrets, buckets "
                   "and keys — through a plugin or an IdP group?",
@@ -690,7 +691,7 @@ SOLUTIONS = [
          buyers="AppSec teams · plugin-heavy app stacks",
          note="On-prem only the far end changes — the path through the app is identical."),
 
-    dict(num=14, fam="cyb", n=3,
+    dict(num=15, fam="cyb", n=3,
          title="Application and API-Usage Conformance",
          question="Does our own code use the APIs it is built on — cloud, credential and crypto "
                   "SDKs, and its own data-access calls — the way their contracts require?",
@@ -706,7 +707,7 @@ SOLUTIONS = [
          buyers="Platform and AppSec teams · ISVs",
          note="A correct policy invoked through a misused SDK still leaks. Bounded by the library."),
 
-    dict(num=15, fam="cyb", n=4,
+    dict(num=16, fam="cyb", n=4,
          title="Post-Quantum Cryptography Migration",
          question="On an already quantum-safe cloud, does the app's integration still "
                   "authenticate the right party in every session?",
@@ -732,6 +733,7 @@ TITLES = [
     "Apps Misuse the APIs They Run On",
     "The Base Went Post-Quantum. Are the Apps Ready?",
     "AI Industrialises the Attacker",
+    "Segmentation Is Asserted, Not Proven",
     "Why Today's Security Stack Isn't Enough",
     "Proof — Now Feasible",
     "Automated Reasoning",
@@ -740,7 +742,7 @@ TITLES = [
     "2. App-to-Cloud Escalation-Path Proofs",
     "3. Application & API-Usage Conformance",
     "4. Post-Quantum Cryptography Migration",
-    "We Sit Behind the Providers",
+    "Our Approach",
     "Why the Provider's Clients Will Ask",
     "What a Provider Can Resell",
     "One Result, Three Registers",
@@ -756,10 +758,11 @@ def build():
         2: s02(2),
         3: s_layers(3),
         4: s_owasp(4), 5: s_api(5), 6: s_pqc(6), 7: s03(7),
-        8: s_landscape(8), 9: s_feasible(9), 10: s04(10), 11: s05(11),
-        16: s_shortterm(16), 17: s_demand(17),
-        18: s_resell(18), 19: s_registers(19),
-        20: s18(20), 21: s19(),
+        8: s_network(8),
+        9: s_landscape(9), 10: s_feasible(10), 11: s04(11), 12: s05(12),
+        17: s_shortterm(17), 18: s_demand(18),
+        19: s_resell(19), 20: s_registers(20),
+        21: s18(21), 22: s19(),
     }
     for sol in SOLUTIONS:
         pages[sol["num"]] = solution(**sol)
@@ -846,7 +849,7 @@ def s_stack(num=5):
     return page("".join(b))
 
 
-def s_demand(num=17):
+def s_demand(num=18):
     """The demand signal: why a provider's existing clients will ask for this."""
     b = [water("gold"),
          heading("Why the Provider's Clients Will Ask")]
@@ -966,7 +969,7 @@ def s_vision(num=16):
     return page("".join(b))
 
 
-def s_shortterm(num=16):
+def s_shortterm(num=17):
     """Our approach: we partner with cybersecurity solutions providers, adding
     provable control effectiveness to their bids and reaching their clients."""
     b = [water("gold"), heading("Our Approach")]
@@ -1012,7 +1015,7 @@ def s_shortterm(num=16):
     return page("".join(b))
 
 
-def s_resell(num=18):
+def s_resell(num=19):
     """The channel case: what a provider can sell, and why it deploys easily."""
     b = [water("gold"), heading("What a Provider Can Resell")]
     b.append(t(M, 184, "We do not certify — so an audit firm or an MSSP is a channel, "
@@ -1052,7 +1055,7 @@ def s_resell(num=18):
     return page("".join(b))
 
 
-def s_registers(num=19):
+def s_registers(num=20):
     """One analysis, three deliverables — the evidence multiplier."""
     b = [water("gold"), heading("One Result, Three Registers")]
 
@@ -1238,6 +1241,52 @@ def s_layers(num=3):
     return page("".join(b))
 
 
+# ================================================= network reachability
+def s_network(num=8):
+    """Motivation: network reachability & segmentation. Once inside, lateral
+    movement is fast, and segmentation is asserted far more than it is proven."""
+    b = [water("gold"), heading("Segmentation Is Asserted, Not Proven")]
+    b.append(t(M, 184, "Once inside, lateral movement is the phase that turns an incident "
+                       "into a breach.", 27, INK, SERIF, "600", style="italic"))
+
+    stats = [("29 min", "average breakout to the first lateral move (2025)"),
+             ("27 sec", "the fastest breakout ever observed"),
+             ("82%", "of intrusions were malware-free — valid access, not code")]
+    tw = (CW - 2 * 20) / 3
+    for i, (big, sub) in enumerate(stats):
+        x = M + i * (tw + 20)
+        b.append(glass(x, 216, tw, 158, 16, FAM["gold"]["tint"], 0.45))
+        b.append(t(x + 24, 280, big, 48, GOLDINK, SERIF, "600"))
+        blk, _ = block(x + 24, 312, sub, tw - 48, 20, 25, INK2, 3)
+        b.append(blk)
+
+    y, hw = 404, CW / 2 - 12
+    b.append(glass(M, y, hw, 188, 16))
+    b.append(eyebrow(M + 26, y + 40, "Why probing can't answer it", FAM["cyb"]["c"],
+                     maxw=hw - 52))
+    bl, _ = bullets(M + 26, y + 80, [
+        "Tests only the paths you thought of",
+        "Can't tell blocked from about-to-change",
+        "East-west is claimed more than shown",
+    ], hw - 52, 22, 30, 14, INK2, FAM["cyb"]["c"], maxlines=1)
+    b.append(bl)
+
+    b.append(glass(M + CW / 2 + 12, y, hw, 188, 16, FAM["gold"]["tint"], 0.45))
+    b.append(eyebrow(M + CW / 2 + 38, y + 40, "Reachability is a config property", GOLDINK,
+                     maxw=hw - 52))
+    bl, _ = bullets(M + CW / 2 + 38, y + 80, [
+        "Routes, SGs, NACLs, firewall rules",
+        "Decided statically — no scanning window",
+        "Precedent: AWS Tiros · Batfish",
+    ], hw - 52, 22, 30, 14, INK2, GOLDINK, maxlines=1)
+    b.append(bl)
+
+    b.append(t(M, 654, "On an OT network probing is forbidden — the IT/OT boundary must be "
+                       "proven, not tested.", 24, GOLDINK, SANS, "500"))
+    b.append(chrome(num))
+    return page("".join(b))
+
+
 # ============================================================ 2 · OWASP top two
 def s_owasp(num=4):
     b = [water("gold"), heading("OWASP 2025 — Access Control & Misconfiguration")]
@@ -1371,9 +1420,9 @@ def s_pqc(num=6):
 
 
 # ============================================================ 6 · the landscape
-def s_landscape(num=8):
+def s_landscape(num=9):
     b = [water("gold"), heading("Why Today's Security Stack Isn't Enough")]
-    b.append(t(M, 176, "All essential, all stay — but each only samples what happened.",
+    b.append(t(M, 176, "The collective wisdom of years of breaches — yet each only samples.",
                26, INK, SERIF, "600", style="italic"))
 
     ch, cy = chip_rows(W / 2, 224,
@@ -1408,7 +1457,7 @@ def s_landscape(num=8):
 
 
 # ============================================================ 7 · proof, feasible
-def s_feasible(num=9):
+def s_feasible(num=10):
     b = [water("gold"), heading("Proof — Now Feasible")]
     b.append(t(M, 176, "Formal verification used to take expert teams years. AI brings it "
                        "into range.", 26, INK, SERIF, "600", style="italic"))
