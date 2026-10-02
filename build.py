@@ -450,7 +450,7 @@ def s05(num=12):
 
     # one unified set — five solutions, no family split. 3 on top, 2 below.
     sols = [(1, "App entitlement proofs", "Who can reach what?"),
-            (2, "App→cloud escalation", "A path through the app?"),
+            (2, "Network segmentation", "Any path across zones?"),
             (3, "App & API conformance", "SDKs used correctly?"),
             (4, "Post-quantum migration", "Bound on a PQC base?"),
             (5, "Agentic guardrail verification", "What an agent may do?")]
@@ -676,20 +676,20 @@ SOLUTIONS = [
          note="Portable: it reads the app's own config, so it holds on-prem, not only in cloud."),
 
     dict(num=14, fam="cyb", n=2,
-         title="App-to-Cloud Escalation-Path Proofs",
-         question="Can a non-admin user reach the app's cloud role — its secrets, buckets "
-                  "and keys — through a plugin or an IdP group?",
-         problem="Each layer passes on its own — the cloud role is not public, the plugin is "
-                 "legitimate, every call looks normal. No tool composes them: CNAPP starts "
-                 "from a vulnerable workload, not an app role.",
-         build=["Plugins and IdP groups as principals, with their grants",
-                "App role → plugin → cloud IAM role → data, one graph",
-                "Admin-panel and network reachability as the boundary"],
-         output="The path through the app, edge by edge — each step checkable in the layer that "
-                "owns it — or a proof no such path exists.",
-         precedent="AWS Zelkova + Tiros, composed",
-         buyers="AppSec teams · plugin-heavy app stacks",
-         note="On-prem only the far end changes — the path through the app is identical."),
+         title="Network Reachability & Segmentation Proofs",
+         question="Does any path exist from an untrusted zone to this subnet — and does "
+                  "east-west segmentation actually hold?",
+         problem="Probing tests the paths you thought of, when you ran it. Reachability is a "
+                 "property of the configuration — routes, security groups, firewall rules — "
+                 "not of the packets you send.",
+         build=["Hybrid and on-prem estate modelled with Batfish",
+                "Soufflé and Z3 over the cloud topology, statically",
+                "Microsegmentation checked against the declared policy"],
+         output="A proof that no path exists — or the path, hop by hop, with the rule that "
+                "permits it and the owner of that rule.",
+         precedent="AWS Tiros → VPC Reachability Analyzer",
+         buyers="Regulated finance · OT & critical infra · sovereign cloud",
+         note="No scanning window, no production traffic — it re-runs on every change."),
 
     dict(num=15, fam="cyb", n=3,
          title="Application and API-Usage Conformance",
@@ -754,7 +754,7 @@ TITLES = [
     "Automated Reasoning",
     "Solutions",
     "1. Application Access-Policy & Entitlement Verification",
-    "2. App-to-Cloud Escalation-Path Proofs",
+    "2. Network Reachability & Segmentation Proofs",
     "3. Application & API-Usage Conformance",
     "4. Post-Quantum Cryptography Migration",
     "AI Agents Are Multiplying Faster Than the Rules",
