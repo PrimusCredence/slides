@@ -21,8 +21,8 @@ webfonts.
 
 ## The 18 beats
 Title · founder · **the stack** (the anchor — layers reveal with proven/unproven
-badges) · 100% risk · the cost · authentic-not-authorised · AI attacker ·
-lateral movement · the stack samples · proof in four steps · the three solutions · one slide each for
+badges) · 100% risk · the cost · lateral movement · authentic-not-authorised ·
+AI attacker · the stack samples · proof in four steps · the three solutions · one slide each for
 solutions 1–3 · we-sit-behind-the-providers + clientele · why clients ask ·
 take-away · thank-you.
 
