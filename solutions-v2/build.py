@@ -345,7 +345,7 @@ def s02(num=2):
 
 
 # ============================================================ AI industrialises the attacker
-def s03(num=6):
+def s03(num=7):
     b = [water("gold"), heading("AI Industrialises the Attacker")]
     b.append(t(M, 184, "A sampling defence cannot answer an enumerating attack.",
                30, INK, SERIF, "600", style="italic"))
@@ -730,9 +730,9 @@ TITLES = [
     "Dr. Raghavendra Ramesh",
     "Where the Risk Actually Lives",
     "OWASP 2025 — Access Control & Misconfiguration",
+    "Segmentation Is Asserted, Not Proven",
     "Apps Misuse the APIs They Run On",
     "AI Industrialises the Attacker",
-    "Segmentation Is Asserted, Not Proven",
     "Why Today's Security Stack Isn't Enough",
     "Proof — Now Feasible",
     "Automated Reasoning",
@@ -755,8 +755,8 @@ def build():
         1: s01(),
         2: s02(2),
         3: s_layers(3),
-        4: s_owasp(4), 5: s_api(5), 6: s03(6),
-        7: s_network(7),
+        4: s_owasp(4), 5: s_network(5),
+        6: s_api(6), 7: s03(7),
         8: s_landscape(8), 9: s_feasible(9), 10: s04(10), 11: s05(11),
         15: s_shortterm(15), 16: s_demand(16),
         17: s_resell(17), 18: s_registers(18),
@@ -1238,7 +1238,7 @@ def s_layers(num=3):
 
 
 # ================================================= network reachability
-def s_network(num=7):
+def s_network(num=5):
     """Motivation: network reachability & segmentation. Once inside, lateral
     movement is fast, and segmentation is asserted far more than it is proven."""
     b = [water("gold"), heading("Segmentation Is Asserted, Not Proven")]
@@ -1333,7 +1333,7 @@ def s_owasp(num=4):
 
 
 # ============================================================ 3 · apps & APIs
-def s_api(num=5):
+def s_api(num=6):
     b = [water("gold"), heading("Apps Misuse the APIs They Run On")]
     b.append(t(M, 176, "Cloud and app APIs are protocols, not calls — misuse still "
                        "compiles.", 26, INK, SERIF, "600", style="italic"))

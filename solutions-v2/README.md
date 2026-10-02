@@ -31,9 +31,9 @@ motivation slide.
 | 2 | Dr. Raghavendra Ramesh — founder bio |
 | 3 | Where the Risk Actually Lives — the stack diagram (anchor) |
 | 4 | OWASP 2025 — Access Control & Misconfiguration |
-| 5 | Apps Misuse the APIs They Run On |
-| 6 | AI Industrialises the Attacker |
-| 7 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
+| 5 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
+| 6 | Apps Misuse the APIs They Run On |
+| 7 | AI Industrialises the Attacker |
 | 8 | Why Today's Security Stack Isn't Enough |
 | 9 | Proof — Now Feasible |
 | 10 | Automated Reasoning |
