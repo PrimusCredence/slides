@@ -347,7 +347,7 @@ def s02(num=2):
 # ============================================================ AI industrialises the attacker
 def s03(num=7):
     b = [water("gold"), heading("AI Industrialises the Attacker")]
-    b.append(t(M, 184, "A sampling defence cannot answer an enumerating attack.",
+    b.append(t(M, 184, "Point-in-time testing cannot keep pace with an enumerating attack.",
                30, INK, SERIF, "600", style="italic"))
 
     stats = [("4.5×", "revenue of AI-assisted scam operations versus non-AI equivalents"),
@@ -561,7 +561,7 @@ def s18(num=19):
                33, GOLD, SERIF, "600", anchor="middle"))
 
     cols = [("The shift", "Attack path discovery is automated, parallel and cheap. "
-                          "A defence that only samples cannot answer one that enumerates."),
+                          "Detection shows what is happening; proof shows what cannot happen."),
             ("The addition", "We do not replace testing, monitoring or the SOC. "
                              "We make one class of controls machine checkable."),
             ("The honesty", "A proof is relative to a model and a specification — both stated. "
@@ -684,7 +684,7 @@ SOLUTIONS = [
                  "CNAPP reads it; DAST only samples.",
          build=["The app's roles, API tokens and public users, into Cedar",
                 "SymCC decides over all requests — BOLA, BFLA, BOPLA",
-                "CheckNoNewAccess gates every role change in CI"],
+                "CheckNoNewAccess gates every admin policy change"],
          output="Proof that no role, token or public user reaches what it must not — over all "
                 "requests — or the exact request that breaks it.",
          precedent="Cedar + SymCC → Cedar Analysis",
@@ -733,7 +733,7 @@ TITLES = [
     "Segmentation Is Asserted, Not Proven",
     "Apps Misuse the APIs They Run On",
     "AI Industrialises the Attacker",
-    "Why Today's Security Stack Isn't Enough",
+    "What Today's Security Stack Leaves Open",
     "Proof — Now Feasible",
     "Automated Reasoning",
     "Solutions",
@@ -1020,11 +1020,11 @@ def s_resell(num=17):
                        "not a rival.", 27, INK, SERIF, "600", style="italic"))
 
     b.append(glass(M, 214, CW, 82, 16))
-    left_txt = "Scanning · posture reporting · monitoring"
+    left_txt = "Detection · response · posture reporting"
     right_txt = "Provable control effectiveness"
     b.append(t(M + 30, 262, left_txt, fit(left_txt, 420, 25, W_SANS, 20), MUTED, SANS))
-    b.append(f'<path d="M{M+476},254 l34,0 M{M+502},246 l8,8 -8,8" stroke="{GOLD}" '
-             f'stroke-width="2.5" fill="none"/>')
+    b.append(f'<path d="M{M+493},244 l0,20 M{M+483},254 l20,0" stroke="{GOLD}" '
+             f'stroke-width="3" fill="none"/>')
     b.append(t(M + CW - 30, 262, right_txt,
                fit(right_txt, CW - 30 - 546, 25, W_SANS, 19), GOLDINK, SANS, "600",
                anchor="end"))
@@ -1326,8 +1326,8 @@ def s_owasp(num=4):
         b.append(t(M + 274, cy, cause, fit(cause, CW - 274 - 30, 22, W_SANS, 17), INK2))
         cy += 27
 
-    b.append(t(M, 680, "Every one was a well-formed, authenticated request a monitor read as "
-                       "normal.", 24, GOLDINK, SANS, "500"))
+    b.append(t(M, 680, "All were authenticated requests — the flaw was "
+                       "what the policy allowed.", 24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
@@ -1375,8 +1375,8 @@ def s_api(num=6):
 
 # ============================================================ 6 · the landscape
 def s_landscape(num=8):
-    b = [water("gold"), heading("Why Today's Security Stack Isn't Enough")]
-    b.append(t(M, 176, "The collective wisdom of years of breaches — yet each only samples.",
+    b = [water("gold"), heading("What Today's Security Stack Leaves Open")]
+    b.append(t(M, 176, "Each tool answers its own question well. One question stays open.",
                26, INK, SERIF, "600", style="italic"))
 
     ch, cy = chip_rows(W / 2, 224,
@@ -1389,11 +1389,11 @@ def s_landscape(num=8):
     b.append(glass(M, 342, CW, 258, 18))
     rows = [
         ("SAST", "Knows code patterns, not intent. A check present but wrong still passes."),
-        ("DAST", "Only crawled endpoints and seeded data; even multi-persona only samples."),
+        ("DAST", "Tests the endpoints and personas it is given — not every user × object."),
         ("IAST / RASP", "Same-code-path BOLA is invisible — was the call even permitted?"),
         ("SCA / ASPM", "Known CVEs and risk diffs; never whether a grant is actually correct."),
         ("CNAPP / CSPM", "Stops at the cloud IAM role; never reads the app's own roles."),
-        ("WAF / API sec", "A permitted request and a legitimate one look identical on the wire."),
+        ("WAF / API sec", "Judges traffic, not grants: whether it should be permitted is upstream."),
     ]
     ry = 384
     for name, lim in rows:
