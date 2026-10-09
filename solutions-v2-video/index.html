@@ -74,7 +74,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 .chip{font-family:var(--mono); font-size:20px; color:var(--ink2); border:1px solid var(--line);
   border-radius:999px; padding:12px 22px; background:var(--panel);}
 
-/* solution cards */
+/* service cards */
 .cards{display:grid; grid-template-columns:1fr; gap:22px; margin-top:8px; max-width:980px}
 .card{border:1px solid var(--line); border-left:5px solid var(--cyb); border-radius:14px; background:var(--panel);
   padding:26px 28px; box-shadow:0 10px 30px rgba(15,25,45,.06); display:flex; align-items:center; gap:22px}
@@ -271,9 +271,9 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request that breaks it.</div>
 </section>
 
-<!-- 10 · the three solutions -->
+<!-- 10 · the three services -->
 <section class="slide">
-  <div class="eyebrow">One method — three solutions</div>
+  <div class="eyebrow">One method — three services</div>
   <div class="cards mt24">
     <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who can reach what?</div></div></div>
     <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">Any path across zones?</div></div></div>
@@ -281,23 +281,23 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   </div>
 </section>
 
-<!-- 11 · solution 1 -->
+<!-- 11 · service 1 -->
 <section class="slide">
-  <div class="eyebrow">Solution 1</div>
+  <div class="eyebrow">Service 1</div>
   <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
 </section>
 
-<!-- 12 · solution 2 -->
+<!-- 12 · service 2 -->
 <section class="slide">
-  <div class="eyebrow">Solution 2</div>
+  <div class="eyebrow">Service 2</div>
   <h2 class="frag mt16" style="max-width:1040px">Does any path reach this subnet from an untrusted zone — and does <span class="gold">east-west segmentation actually hold?</span></h2>
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof no path exists, hop by hop, or the exact path that violates it.</div>
 </section>
 
-<!-- 13 · solution 3 -->
+<!-- 13 · service 3 -->
 <section class="slide">
-  <div class="eyebrow">Solution 3</div>
+  <div class="eyebrow">Service 3</div>
   <h2 class="frag mt16" style="max-width:1020px">Does our code use the APIs it's built on <span class="gold">the way their contracts require?</span></h2>
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the call site, the trace, the pattern violated, the corrected sequence.</div>
 </section>

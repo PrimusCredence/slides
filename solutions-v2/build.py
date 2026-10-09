@@ -34,8 +34,8 @@ GREEN    = "#2f7d4f"
 AMBER    = "#b06a00"
 
 FAM = {
-    "cyb":  dict(c="#1d5fa8", tint="#e9eff9", name="Cybersecurity Solutions"),
-    "ai":   dict(c="#0f766e", tint="#e3f1ef", name="AI Security Solutions"),
+    "cyb":  dict(c="#1d5fa8", tint="#e9eff9", name="Cybersecurity Services"),
+    "ai":   dict(c="#0f766e", tint="#e3f1ef", name="AI Security Services"),
     "cry":  dict(c="#b81f63", tint="#fbe8f0", name=""),
     "gold": dict(c=GOLDINK, tint="#f6efdd", name=""),
 }
@@ -432,7 +432,7 @@ def s04(num=10):
 
 # ============================================================ the map
 def sol_card(x, y, w, h, fam, n, title, sub):
-    """One solution as a framed card: a number badge, a title, a one-line gloss."""
+    """One service as a framed card: a number badge, a title, a one-line gloss."""
     f = FAM[fam]
     out = [glass(x, y, w, h, 16, f["tint"], 0.4)]
     out.append(f'<rect x="{x}" y="{y}" width="6" height="{h}" rx="3" fill="{f["c"]}"/>')
@@ -446,11 +446,11 @@ def sol_card(x, y, w, h, fam, n, title, sub):
 
 
 def s05(num=11):
-    b = [water("gold"), heading("Solutions")]
-    b.append(t(M, 176, "One method — three solutions: access control, network isolation, "
+    b = [water("gold"), heading("Services")]
+    b.append(t(M, 176, "One method — three services: access control, network isolation, "
                        "API protocols.", 26, INK, SERIF, "600", style="italic"))
 
-    # three cyber solutions, no family split — one row of three tall cards.
+    # three cyber services, no family split — one row of three tall cards.
     sols = [(1, "Access control", "App entitlement proofs",
              "Every app role, API token and public user — decided over all requests.",
              "Who can reach what?"),
@@ -499,7 +499,7 @@ def section(num, fam, title, items):
     return page("".join(b))
 
 
-# ========================================================== solution template
+# ========================================================== service template
 def solution(num, fam, n, title, question, problem, build, output, precedent,
              buyers, note=None):
     f = FAM[fam]
@@ -577,7 +577,7 @@ def s18(num=19):
 
     b.append(glass(M, 566, CW, 112, 18, FAM["gold"]["tint"], 0.5))
     b.append(f'<rect x="{M+2}" y="580" width="5" height="84" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(M + 34, 606, "Start here — Micro Assessment of Solution 1",
+    b.append(eyebrow(M + 34, 606, "Start here — Micro Assessment of Service 1",
                      GOLDINK, 20, 2.4, maxw=CW - 80))
     b.append(t(M + 34, 640, "One narrow, high-risk slice. Read-only access, no agent deployed,",
                23, INK2))
@@ -736,7 +736,7 @@ TITLES = [
     "What Today's Security Stack Leaves Open",
     "Proof — Now Feasible",
     "Automated Reasoning",
-    "Solutions",
+    "Services",
     "1. Application Access-Policy & Entitlement Verification",
     "2. Network Reachability & Segmentation Proofs",
     "3. Application & API-Usage Conformance",
@@ -1098,9 +1098,9 @@ def s_invest(num=21):
     tw = (CW - 24) / 2
     cards = [
         ("Feasibility studies",
-         "Validate each solution on real client artefacts — a claim becomes a proof, "
+         "Validate each service on real client artefacts — a claim becomes a proof, "
          "or a counter-example, on systems that matter.",
-         ["De-risk three solutions on live estates",
+         ["De-risk three services on live estates",
           "Turn research into productised checks",
           "Reference results to show the next buyer"]),
         ("Pilot projects",
@@ -1499,7 +1499,7 @@ def s_ai_motivation(num=16):
         my += 58
 
     b.append(solid(M, 558, CW, 74, f["c"], 16, sheen=False, gloss=0.14, edge=0.22))
-    b.append(t(W / 2, 603, "Our AI-agentic guardrail solution proves the mediation layer, not "
+    b.append(t(W / 2, 603, "Our AI-agentic guardrail service proves the mediation layer, not "
                            "the model  →", 26, WHITE, SERIF, "600", anchor="middle"))
 
     b.append(chrome(num))
