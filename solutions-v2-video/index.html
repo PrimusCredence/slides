@@ -173,10 +173,10 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
         <div class="ls">VMs · DBs · queues · storage · IAM · network</div>
       </div>
       <div class="layer seam frag rise">
-        <div class="lt">The seam</div>
+        <div class="lt">The app ↔ cloud &amp; data seam</div>
         <div class="items">
           <i><span class="dot" style="background:var(--cyb)"></span>APIs</i>
-          <i><span class="dot" style="background:var(--cyb)"></span>libraries</i>
+          <i><span class="dot" style="background:var(--cyb)"></span>data paths &amp; copies</i>
           <i><span class="dot" style="background:var(--cyb)"></span>network paths</i>
         </div>
       </div>
@@ -227,14 +227,16 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Segmentation is <span class="gold">asserted, not proven.</span></h2>
 </section>
 
-<!-- 6 · authentic not authorised -->
+<!-- 6 · residency is reviewed, not proven -->
 <section class="slide">
-  <div class="eyebrow">Every breach looked normal</div>
+  <div class="eyebrow">Residency is reviewed, not proven</div>
   <div class="stats mt32">
-    <div class="stat frag"><b>~95%</b><span>of API attacks carry a valid token</span></div>
+    <div class="stat frag"><b>99%</b><span>of cloud identities over-permissioned (Unit 42)</span></div>
+    <div class="stat frag"><b>2.5×</b><span>more permissions in managed policies (Unit 42)</span></div>
+    <div class="stat frag"><b>$4.4M</b><span>average cost of a data breach (IBM, 2025)</span></div>
   </div>
-  <h2 class="frag mt44" style="max-width:900px">Authentic — <span class="gold">but not authorised.</span></h2>
-  <div class="sub frag mt24" style="max-width:860px">A well-formed, authenticated request to an endpoint you may use — asking for data you may not.</div>
+  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">A region lock answers where. <span class="gold">Sovereignty also asks whose.</span></h2>
+  <div class="sub frag mt24" style="max-width:980px">Every change is reviewed alone — nobody re-checks where the data can now go.</div>
 </section>
 
 <!-- 7 · AI industrialises the attacker -->
@@ -253,7 +255,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="eyebrow">Hard-won over years — keep all of it</div>
   <div class="chips mt32" style="max-width:980px">
     <span class="chip frag">SAST</span><span class="chip frag">DAST</span><span class="chip frag">IAST / RASP</span>
-    <span class="chip frag">SCA</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
+    <span class="chip frag">DSPM</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
     <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span>
   </div>
   <h2 class="frag mt44" style="font-size:38px;max-width:1060px">Each tool answers its own question well. <span class="gold">None decides what is allowed, over every request.</span></h2>
@@ -275,31 +277,31 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">One method — three services</div>
   <div class="cards mt24">
-    <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who can reach what?</div></div></div>
-    <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">Any path across zones?</div></div></div>
-    <div class="card frag"><div class="n">3</div><div><div class="a">API protocols</div><div class="t">App &amp; API conformance</div><div class="q">SDKs used correctly?</div></div></div>
+    <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who may do what</div></div></div>
+    <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">What traffic can reach where</div></div></div>
+    <div class="card frag"><div class="n">3</div><div><div class="a">Data residency</div><div class="t">Residency proofs</div><div class="q">Where regulated data can go</div></div></div>
   </div>
 </section>
 
 <!-- 11 · service 1 -->
 <section class="slide">
-  <div class="eyebrow">Service 1</div>
+  <div class="eyebrow">Service 1 — who may do what</div>
   <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
 </section>
 
 <!-- 12 · service 2 -->
 <section class="slide">
-  <div class="eyebrow">Service 2</div>
+  <div class="eyebrow">Service 2 — what traffic can reach where</div>
   <h2 class="frag mt16" style="max-width:1040px">Does any path reach this subnet from an untrusted zone — and does <span class="gold">east-west segmentation actually hold?</span></h2>
   <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof no path exists, hop by hop, or the exact path that violates it.</div>
 </section>
 
 <!-- 13 · service 3 -->
 <section class="slide">
-  <div class="eyebrow">Service 3</div>
-  <h2 class="frag mt16" style="max-width:1020px">Does our code use the APIs it's built on <span class="gold">the way their contracts require?</span></h2>
-  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — the call site, the trace, the pattern violated, the corrected sequence.</div>
+  <div class="eyebrow">Service 3 — where regulated data can go</div>
+  <h2 class="frag mt16" style="max-width:1040px">Can regulated data leave the country or the organisation — <span class="gold">or could anyone make it leave?</span></h2>
+  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof, or the chain: store · mechanism · role · policy line · destination.</div>
 </section>
 
 <!-- 14 · our approach — partner with providers / clientele -->

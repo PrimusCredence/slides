@@ -290,7 +290,7 @@ def page(body):
 
 def heading(title, fam="gold", y=112):
     f = FAM[fam]
-    return (t(M, y, title, fit(title, CW, 46, W_SERIF, 30), INK, SERIF, "600") +
+    return (t(M, y, title, fit(title, CW, 46, W_SERIF * 1.2, 30), INK, SERIF, "600") +
             f'<rect x="{M}" y="{y+16:.0f}" width="112" height="4" rx="2" fill="{f["c"]}"/>')
 
 
@@ -418,7 +418,7 @@ def s04(num=10):
     b.append(blk)
     b.append(t(M + 26, 614, "Not “none was found”.", 22, GREEN, SANS, "500"))
     b.append(t(M + CW / 2 + 38, 520, "SAT + witness", 29, AMBER, MONO, "500"))
-    blk, _ = block(M + CW / 2 + 38, 558, "The exact request, path or call ordering that "
+    blk, _ = block(M + CW / 2 + 38, 558, "The exact request, path or chain that "
                                          "breaks it — reproducible on your estate.",
                    hw - 52, 22, 28, INK2, 3)
     b.append(blk)
@@ -448,18 +448,18 @@ def sol_card(x, y, w, h, fam, n, title, sub):
 def s05(num=11):
     b = [water("gold"), heading("Services")]
     b.append(t(M, 176, "One method — three services: access control, network isolation, "
-                       "API protocols.", 26, INK, SERIF, "600", style="italic"))
+                       "data residency.", 26, INK, SERIF, "600", style="italic"))
 
     # three cyber services, no family split — one row of three tall cards.
     sols = [(1, "Access control", "App entitlement proofs",
              "Every app role, API token and public user — decided over all requests.",
-             "Who can reach what?"),
+             "Who may do what"),
             (2, "Network isolation", "Network segmentation",
              "Routes, security groups and firewall rules — every path between zones.",
-             "Any path across zones?"),
-            (3, "API protocols", "App & API conformance",
-             "Cloud, credential and data-access SDKs — used as their contracts require.",
-             "SDKs used correctly?")]
+             "What traffic can reach where"),
+            (3, "Data residency", "Residency proofs",
+             "Replication, backups, copies, keys and caches — every way regulated data can leave.",
+             "Where regulated data can go")]
     f = FAM["cyb"]
     cw3, y, h = (CW - 2 * 20) / 3, 222, 420
     for i, (n, area, title, body, sub) in enumerate(sols):
@@ -473,9 +473,10 @@ def s05(num=11):
                    INK, SERIF, "600"))
         blk, _ = block(x + 30, y + 222, body, cw3 - 60, 22, 29, INK2, 4)
         b.append(blk)
-        b.append(hline(x + 30, y + h - 74, cw3 - 60))
-        b.append(t(x + 30, y + h - 34, sub, fit(sub, cw3 - 60, 23, W_SANS, 18),
-                   f["c"], SANS, "600"))
+        b.append(hline(x + 30, y + h - 96, cw3 - 60))
+        blk, _ = block(x + 30, y + h - 56, sub, cw3 - 60, 23, 29, f["c"], 2,
+                       weight="600")
+        b.append(blk)
 
     b.append(chrome(num))
     return page("".join(b))
@@ -500,10 +501,12 @@ def section(num, fam, title, items):
 
 
 # ========================================================== service template
-def solution(num, fam, n, title, question, problem, build, output, precedent,
-             buyers, note=None):
+def solution(num, fam, n, title, summary, question, problem, build, output,
+             precedent, buyers, note=None):
     f = FAM[fam]
-    b = [water(fam), heading(f"{n}. {title}", fam, y=110)]
+    b = [water(fam), eyebrow(M, 60, f"Service {n} — {summary}", f["c"], 19, 2.6,
+                             maxw=CW),
+         heading(f"{n}. {title}", fam, y=110)]
 
     # the question it settles
     b.append(glass(M, 152, CW, 86, 16, f["tint"], 0.55))
@@ -512,7 +515,8 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
     if one_line >= 24:
         b.append(t(M + 34, 204, question, one_line, INK, SERIF, "600", style="italic"))
     else:
-        for i, ln in enumerate(wrap(question, CW - 80, 28, W_SERIF)[:2]):
+        # italic semibold runs wider than W_SERIF measures — wrap with slack
+        for i, ln in enumerate(wrap(question, CW - 140, 28, W_SERIF)[:2]):
             b.append(t(M + 34, 192 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
@@ -530,7 +534,7 @@ def solution(num, fam, n, title, question, problem, build, output, precedent,
         b.append(hline(M, 492, lw))
         ly = 532
     b.append(t(M, ly, "PRECEDENT", 19, MUTED, MONO, "500", ls="2.4"))
-    b.append(t(M + 140, ly, precedent, fit(precedent, lw - 140, 21, W_SANS, 16), INK2))
+    b.append(t(M + 140, ly, precedent, fit(precedent, lw - 180, 21, W_SANS, 16), INK2))
     b.append(t(M, ly + 30, "BUYERS", 19, MUTED, MONO, "500", ls="2.4"))
     b.append(t(M + 140, ly + 30, buyers, fit(buyers, lw - 140, 21, W_SANS, 16), INK2))
 
@@ -677,6 +681,7 @@ def s19():
 SOLUTIONS = [
     dict(num=12, fam="cyb", n=1,
          title="Application Access-Policy & Entitlement Verification",
+         summary="Who may do what",
          question="What can each app role, API token and public user do inside the app — "
                   "and can any of them reach what they should not?",
          problem="An app's authorisation lives in its own database and admin panel — which "
@@ -693,6 +698,7 @@ SOLUTIONS = [
 
     dict(num=13, fam="cyb", n=2,
          title="Network Reachability & Segmentation Proofs",
+         summary="What traffic can reach where",
          question="Does any path exist from an untrusted zone to this subnet — and does "
                   "east-west segmentation actually hold?",
          problem="Probing tests the paths you thought of, when you ran it. Reachability is a "
@@ -708,20 +714,21 @@ SOLUTIONS = [
          note="No scanning window, no production traffic — it re-runs on every change."),
 
     dict(num=14, fam="cyb", n=3,
-         title="Application and API-Usage Conformance",
-         question="Does our own code use the APIs it is built on — cloud, credential and crypto "
-                  "SDKs, and its own data-access calls — the way their contracts require?",
-         problem="Cloud and app APIs are protocols, not calls. Undrained pagination, a logged "
-                 "credential, an object fetched by request ID without an ownership check — all "
-                 "compile and pass review. Same risk on-prem or in cloud.",
-         build=["Object-ownership (BOLA/IDOR) and auth-routing patterns",
-                "A conformance gate for library publishers",
-                "PR-gate CI on Soot, CodeQL and Infer"],
-         output="The call site, the taint trace, the pattern violated and the corrected call "
-                "sequence — plus which patterns were checked.",
-         precedent="AWS RAPID → CodeGuru · 76% accepted",
-         buyers="Platform and AppSec teams · ISVs",
-         note="A correct policy invoked through a misused SDK still leaks. Bounded by the library."),
+         title="Data Residency & Sovereignty Proofs",
+         summary="Where regulated data can go",
+         question="Can regulated data leave the country or the organisation — or could anyone "
+                  "make it leave?",
+         problem="Localisation is asserted by configuration review. Backups, replicas, caches "
+                 "and keys are each reviewed alone; DSPM shows where data is, not where it "
+                 "can go.",
+         build=["Every channel — replication, backup, copy, sharing, keys, edge",
+                "SMT over IAM, SCPs and key policies — the destination left symbolic",
+                "Re-proven on every change; monthly residency evidence"],
+         output="A proof that no channel moves the data outside the approved jurisdiction or "
+                "organisation — or the chain: store, mechanism, role, policy line, destination.",
+         precedent="AWS Zelkova → IAM Access Analyzer",
+         buyers="Sovereign cloud · government · banks",
+         note="Two strengths: what moves data out today, and what anyone could set up."),
 
 ]
 
@@ -731,7 +738,7 @@ TITLES = [
     "Where the Risk Actually Lives",
     "OWASP 2025 — Access Control & Misconfiguration",
     "Segmentation Is Asserted, Not Proven",
-    "Apps Misuse the APIs They Run On",
+    "Residency Is Reviewed, Not Proven",
     "AI Industrialises the Attacker",
     "What Today's Security Stack Leaves Open",
     "Proof — Now Feasible",
@@ -739,7 +746,7 @@ TITLES = [
     "Services",
     "1. Application Access-Policy & Entitlement Verification",
     "2. Network Reachability & Segmentation Proofs",
-    "3. Application & API-Usage Conformance",
+    "3. Data Residency & Sovereignty Proofs",
     "Our Approach",
     "Why the Provider's Clients Will Ask",
     "What a Provider Can Resell",
@@ -756,7 +763,7 @@ def build():
         2: s02(2),
         3: s_layers(3),
         4: s_owasp(4), 5: s_network(5),
-        6: s_api(6), 7: s03(7),
+        6: s_residency(6), 7: s03(7),
         8: s_landscape(8), 9: s_feasible(9), 10: s04(10), 11: s05(11),
         15: s_shortterm(15), 16: s_demand(16),
         17: s_resell(17), 18: s_registers(18),
@@ -861,8 +868,8 @@ def s_demand(num=16):
          "Regulators increasingly ask for demonstrable control effectiveness, not attestation."),
         ("Third-party risk is now in scope",
          "Rules increasingly require evidence that integrations and components are controlled."),
-        ("Sovereignty is a reachability question",
-         "Localisation asks whether regulated data can leave — our reachability proofs settle it."),
+        ("Sovereignty must be demonstrable",
+         "Localisation asks whether regulated data can leave — our residency proofs settle it."),
     ]
     tw, th = (CW - 20) / 2, 106
     for i, (head, body) in enumerate(tiles):
@@ -875,8 +882,8 @@ def s_demand(num=16):
 
     b.append(glass(M, 470, CW, 172, 18))
     b.append(eyebrow(M + 30, 508, "Where a finding also lands", INK2, 20, 2.6))
-    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2"), ("UAE PDPL", "2 3"),
-              ("SAMA CSF", "1 2 3"), ("NCA ECC", "1 2 3"), ("PCI DSS 4.0", "1 2 3"),
+    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2 3"), ("UAE PDPL", "2 3"),
+              ("SAMA CSF", "1 2 3"), ("NCA ECC", "1 2 3"), ("PCI DSS 4.0", "1 2"),
               ("ISO 27001", "1 2 3"), ("CIS Controls", "1 2 3"), ("NIST CSF 2.0", "1–3")]
     colw = (CW - 60) / 3
     for i, (name, nums) in enumerate(frames):
@@ -1153,7 +1160,7 @@ def stat_tile(x, y, w, h, big, sub, tint="gold", accent=None):
 def s_layers(num=3):
     """The anchor diagram for the whole talk: the application stack. Plugins run
     inside the app; the app sits on a proven cloud base; and between them lies the
-    seam — APIs, third-party libraries, and the network paths between zones —
+    seam — APIs, the paths data takes and is copied along, and the network paths between zones —
     where access control and misconfiguration actually fail. The cloud base (IAM,
     network) is already formally proven; the app and the seam are not, and that
     is the layer we prove."""
@@ -1190,9 +1197,9 @@ def s_layers(num=3):
     y3, h3 = 436, 96
     b.append(glass(sx, y3, sw, h3, 14, FAM["gold"]["tint"], 0.4))
     b.append(f'<rect x="{sx+2}" y="{y3+12}" width="5" height="{h3-24}" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(sx + 26, y3 + 30, "The app ↔ cloud & library seam", GOLDINK, 19, 2.2,
+    b.append(eyebrow(sx + 26, y3 + 30, "The app ↔ cloud & data seam", GOLDINK, 19, 2.2,
                      maxw=sw - 52))
-    seam = [("Access control via APIs", cyb["c"]), ("SDK & library usage", cyb["c"]),
+    seam = [("Access control via APIs", cyb["c"]), ("Data paths & copies", cyb["c"]),
             ("Network paths & zones", cyb["c"])]
     seamx = [sx + 28, sx + 272, sx + 480]
     for (lab, col), xx in zip(seam, seamx):
@@ -1221,8 +1228,8 @@ def s_layers(num=3):
     b.append(eyebrow(vx + 26, 250, "Unproven today", GOLDINK, 19, 2.2, maxw=vw - 52))
     b.append(t(vx + 26, 290, "Where the", 27, INK, SERIF, "600"))
     b.append(t(vx + 26, 322, "breaches are", 27, INK, SERIF, "600"))
-    blk, _ = block(vx + 26, 362, "The app's own access control, its plugins, and the API, "
-                                 "library and network seams beneath it.", vw - 52, 21, 27, INK2, 5)
+    blk, _ = block(vx + 26, 362, "The app's own access control, its plugins, and the access, "
+                                 "data and network seams beneath it.", vw - 52, 21, 27, INK2, 5)
     b.append(blk)
     b.append(t(vx + 26, 510, "→ This is what we prove.", 21, GOLDINK, SANS, "600"))
 
@@ -1332,42 +1339,41 @@ def s_owasp(num=4):
     return page("".join(b))
 
 
-# ============================================================ 3 · apps & APIs
-def s_api(num=6):
-    b = [water("gold"), heading("Apps Misuse the APIs They Run On")]
-    b.append(t(M, 176, "Cloud and app APIs are protocols, not calls — misuse still "
-                       "compiles.", 26, INK, SERIF, "600", style="italic"))
+# ============================================================ 3 · data residency
+def s_residency(num=6):
+    """Motivation: data residency. Each change is reviewed alone; nobody re-checks
+    where the data can now go, and the standard tools stay green."""
+    b = [water("gold"), heading("Residency Is Reviewed, Not Proven")]
+    b.append(t(M, 176, "Every change is reviewed alone — nobody re-checks where the data "
+                       "can now go.", 26, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
     b.append(glass(M, 206, lw, 270, 18))
     b.append(eyebrow(M + 26, 246, "The pattern", FAM["cyb"]["c"], maxw=lw - 52))
     bl, _ = bullets(M + 26, 288, [
-        "An object fetched by request ID with no ownership check — BOLA / IDOR",
-        "A credential written to a log; pagination left undrained",
-        "Authorisation in middleware a scanner can't see",
+        "DR backups copied to a region IT allowed — and counsel didn't",
+        "A replica role scoped by bucket name — S3 ARNs carry no account ID",
+        "A CDN in front of regulated files, caching at the edge",
     ], lw - 52, 23, 27, 16, INK2, FAM["cyb"]["c"])
     b.append(bl)
 
     b.append(glass(rx, 206, rw, 270, 18, FAM["cry"]["tint"], 0.42))
-    b.append(eyebrow(rx + 26, 246, "The trend is not reversing", FAM["cry"]["c"], maxw=rw - 52))
-    trends = [("+29%", "IDOR reports year on year (HackerOne 2025)"),
-              ("+36%", "access-control criticals — now #1 (Bugcrowd 2025)"),
-              ("~95%", "of API attacks carry a valid token — authentic, not authorised")]
-    ty = 302
-    for big, sub in trends:
-        b.append(t(rx + 26, ty, big, 32, FAM["cry"]["c"], SERIF, "600"))
-        blk, _ = block(rx + 132, ty - 20, sub, rw - 132 - 26, 20, 25, INK2, 2)
-        b.append(blk)
-        ty += 58
+    b.append(eyebrow(rx + 26, 246, "Why the tools stay green", FAM["cry"]["c"], maxw=rw - 52))
+    bl, _ = bullets(rx + 26, 288, [
+        "Region locks govern where, not whose",
+        "DSPM shows where data is, not where it can go",
+        "CSPM checks one resource at a time — and rewards cross-region backups",
+    ], rw - 52, 23, 27, 16, INK2, FAM["cry"]["c"])
+    b.append(bl)
 
-    tiles = [("$4.4M", "average cost of a data breach (IBM 2025)"),
-             ("241 days", "mean time to identify and contain (IBM 2025)"),
-             ("258 / day", "API attacks per enterprise — 2× 2024 (Akamai 2025)")]
+    tiles = [("99%", "of cloud identities over-permissioned (Unit 42)"),
+             ("2.5×", "more permissions in managed policies (Unit 42)"),
+             ("$4.4M", "average cost of a data breach (IBM 2025)")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(tiles):
         b.append(stat_tile(M + i * (tw + 20), 478, tw, 138, big, sub, "gold"))
 
-    b.append(t(M, 668, "A correct policy invoked through a misused SDK still leaks.",
+    b.append(t(M, 668, "A region lock answers where. Sovereignty also asks whose.",
                24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
@@ -1380,7 +1386,7 @@ def s_landscape(num=8):
                26, INK, SERIF, "600", style="italic"))
 
     ch, cy = chip_rows(W / 2, 224,
-                       [["SAST / DAST / IAST", "SCA / supply chain", "ASPM",
+                       [["SAST / DAST / IAST", "DSPM", "ASPM",
                          "WAF / API security"],
                         ["CSPM · CIEM · CNAPP", "Pen test & red team", "SOC · EDR · SIEM",
                          "Policy-as-code"]])
@@ -1391,7 +1397,7 @@ def s_landscape(num=8):
         ("SAST", "Knows code patterns, not intent. A check present but wrong still passes."),
         ("DAST", "Tests the endpoints and personas it is given — not every user × object."),
         ("IAST / RASP", "Same-code-path BOLA is invisible — was the call even permitted?"),
-        ("SCA / ASPM", "Known CVEs and risk diffs; never whether a grant is actually correct."),
+        ("DSPM", "Finds where regulated data is — never where it can go."),
         ("CNAPP / CSPM", "Stops at the cloud IAM role; never reads the app's own roles."),
         ("WAF / API sec", "Judges traffic, not grants: whether it should be permitted is upstream."),
     ]
