@@ -303,6 +303,20 @@ def s01():
              f'fill="{GOLD}"/>')
     b.append(t(M, 384, "Provable Security", 46, GOLDINK, SERIF, "600"))
 
+    b.append(t(M, 432, "Not where your system was tested — what cannot happen in it.",
+               25, INK2, SERIF, "400", style="italic"))
+    svc = [("1", "Access control", "who may do what"),
+           ("2", "Network isolation", "what can reach where"),
+           ("3", "Data residency", "where data can go")]
+    sw = (CW - 2 * 20) / 3
+    for i, (n, head, sub) in enumerate(svc):
+        x = M + i * (sw + 20)
+        b.append(glass(x, 478, sw, 84, 14, FAM["cyb"]["tint"], 0.35))
+        b.append(orb(x + 38, 520, 17, FAM["cyb"]["c"]))
+        b.append(t(x + 38, 528, n, 20, WHITE, MONO, "500", anchor="middle"))
+        b.append(t(x + 70, 514, head, 23, INK, SANS, "600"))
+        b.append(t(x + 70, 542, sub, 19, FAM["cyb"]["c"], SANS, "500"))
+
     # No name or email here: the founder is introduced on slide 2 and the
     # contact details are on the closing slide.
     b.append(hline(M, 592, CW))
@@ -452,16 +466,18 @@ def s05(num=11):
 
     # three cyber services, no family split — one row of three tall cards.
     sols = [(1, "Access control", "App entitlement proofs",
-             "Every app role, API token and public user — decided over all requests.",
+             "Every app role, token, public user and cluster role — decided over all requests.",
              "Who may do what"),
             (2, "Network isolation", "Network segmentation",
-             "Routes, security groups and firewall rules — every path between zones.",
+             "Routes, security groups, firewall and Kubernetes rules — every path between zones.",
              "What traffic can reach where"),
             (3, "Data residency", "Residency proofs",
              "Replication, backups, copies, keys and caches — every way regulated data can leave.",
              "Where regulated data can go")]
     f = FAM["cyb"]
     cw3, y, h = (CW - 2 * 20) / 3, 222, 420
+    # one title size for all three cards, so no card looks louder than another
+    tsize = min(fit(title, cw3 - 60, 28, 0.52, 20) for _, _, title, _, _ in sols)
     for i, (n, area, title, body, sub) in enumerate(sols):
         x = M + i * (cw3 + 20)
         b.append(glass(x, y, cw3, h, 16, f["tint"], 0.4))
@@ -469,8 +485,7 @@ def s05(num=11):
         b.append(orb(x + 50, y + 56, 24, f["c"]))
         b.append(t(x + 50, y + 66, str(n), 26, WHITE, MONO, "500", anchor="middle"))
         b.append(eyebrow(x + 30, y + 132, area, f["c"], 20, 2.6, maxw=cw3 - 60))
-        b.append(t(x + 30, y + 176, title, fit(title, cw3 - 60, 28, 0.52, 20),
-                   INK, SERIF, "600"))
+        b.append(t(x + 30, y + 176, title, tsize, INK, SERIF, "600"))
         blk, _ = block(x + 30, y + 222, body, cw3 - 60, 22, 29, INK2, 4)
         b.append(blk)
         b.append(hline(x + 30, y + h - 96, cw3 - 60))
@@ -561,7 +576,7 @@ def s18(num=19):
     b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
     b.append(t(W / 2, 222, "Mathematical rigour to security —", 33, WHITE, SERIF,
                "600", anchor="middle"))
-    b.append(t(W / 2, 264, "proof alongside testing, across apps and AI.",
+    b.append(t(W / 2, 264, "proof alongside testing, from the app to the cloud.",
                33, GOLD, SERIF, "600", anchor="middle"))
 
     cols = [("The shift", "Attack path discovery is automated, parallel and cheap. "
@@ -687,7 +702,7 @@ SOLUTIONS = [
          problem="An app's authorisation lives in its own database and admin panel — which "
                  "role reads which type, what the Public role exposes. No SAST, CSPM or "
                  "CNAPP reads it; DAST only samples.",
-         build=["The app's roles, API tokens and public users, into Cedar",
+         build=["App roles, tokens and public users into Cedar — plus cluster RBAC",
                 "SymCC decides over all requests — BOLA, BFLA, BOPLA",
                 "CheckNoNewAccess gates every admin policy change"],
          output="Proof that no role, token or public user reaches what it must not — over all "
@@ -706,11 +721,11 @@ SOLUTIONS = [
                  "not of the packets you send.",
          build=["Hybrid and on-prem estate modelled with Batfish",
                 "Soufflé and Z3 over the cloud topology, statically",
-                "Microsegmentation checked against the declared policy"],
+                "Microsegmentation — from VPCs to Kubernetes — checked against policy"],
          output="A proof that no path exists — or the path, hop by hop, with the rule that "
                 "permits it and the owner of that rule.",
          precedent="AWS Tiros → VPC Reachability Analyzer",
-         buyers="Regulated finance · OT & critical infra · sovereign cloud",
+         buyers="Regulated finance · OT & CNI · sovereign cloud",
          note="No scanning window, no production traffic — it re-runs on every change."),
 
     dict(num=14, fam="cyb", n=3,
@@ -782,12 +797,19 @@ def build():
 # will ask, what they can resell, and what one result is worth.
 # ==========================================================================
 
+def text_w(s, size):
+    """Width estimate for IBM Plex Sans: capitals and digits run wider than
+    the lowercase average that W_SANS measures."""
+    wide = sum(1 for c in s if c.isupper() or c.isdigit())
+    return ((len(s) - wide) * W_SANS + wide * 0.62) * size
+
+
 def chips(x, y, items, maxw, size=21, gap=12, h=40, fill="#ffffff",
           textfill=INK2, edge=LINE, rows_lead=52):
     """Pills laid out left to right, wrapping within maxw."""
     out, cx, cy = [], x, y
     for it in items:
-        w = len(it) * size * W_SANS + 36
+        w = text_w(it, size) + 36
         if cx + w > x + maxw and cx > x:
             cx, cy = x, cy + rows_lead
         out.append(f'<g filter="url(#liftsm)">{rrect(cx, cy, w, h, fill, h / 2)}'
@@ -803,7 +825,7 @@ def chip_rows(cx, y, rows, size=21, gap=12, h=40, lead=52, fill="#ffffff",
     """Rows of pills, each row centred on cx."""
     out = []
     for ri, row in enumerate(rows):
-        widths = [len(it) * size * W_SANS + 36 for it in row]
+        widths = [text_w(it, size) + 36 for it in row]
         total = sum(widths) + gap * (len(row) - 1)
         x, ry = cx - total / 2, y + ri * lead
         for it, w in zip(row, widths):
@@ -1178,12 +1200,16 @@ def s_layers(num=3):
     b.append(glass(sx, y1, sw, h1, 14, FAM["gold"]["tint"], 0.45))
     b.append(t(sx + 26, y1 + 26, "Third-party plugins & extensions", 22, INK, SANS, "600"))
     b.append(t(sx + 26, y1 + 48, "Run inside the app — and inherit its privilege", 19, INK2))
+    b.append(orb(sx + sw - 34, y1 + 29, 13, cyb["c"]))
+    b.append(t(sx + sw - 34, y1 + 35, "1", 15, WHITE, MONO, "500", anchor="middle"))
 
     # ---- layer 2 — the application (the hero) --------------------------------
     y2, h2 = 274, 150
     b.append(glass(sx, y2, sw, h2, 16, cyb["tint"], 0.5))
     b.append(f'<rect x="{sx}" y="{y2}" width="6" height="{h2}" rx="3" fill="{cyb["c"]}"/>')
     b.append(t(sx + 30, y2 + 48, "APPLICATION", 30, INK, SERIF, "600"))
+    b.append(orb(sx + sw - 34, y2 + 38, 15, cyb["c"]))
+    b.append(t(sx + sw - 34, y2 + 45, "1", 17, WHITE, MONO, "500", anchor="middle"))
     b.append(t(sx + 30, y2 + 82, "Its own roles, API tokens and public users — the authorisation",
                22, INK2))
     b.append(t(sx + 30, y2 + 110, "logic and configuration in its database and admin panel",
@@ -1199,12 +1225,14 @@ def s_layers(num=3):
     b.append(f'<rect x="{sx+2}" y="{y3+12}" width="5" height="{h3-24}" rx="2.5" fill="{GOLD}"/>')
     b.append(eyebrow(sx + 26, y3 + 30, "The app ↔ cloud & data seam", GOLDINK, 19, 2.2,
                      maxw=sw - 52))
-    seam = [("Access control via APIs", cyb["c"]), ("Data paths & copies", cyb["c"]),
-            ("Network paths & zones", cyb["c"])]
-    seamx = [sx + 28, sx + 272, sx + 480]
-    for (lab, col), xx in zip(seam, seamx):
-        b.append(f'<circle cx="{xx}" cy="{y3+66}" r="4.5" fill="{col}"/>')
-        b.append(t(xx + 16, y3 + 72, lab, 19, INK2, SANS, "500"))
+    # each seam item carries the number of the service that proves it
+    seam = [("1", "Access via APIs"), ("3", "Data paths & copies"),
+            ("2", "Network paths & zones")]
+    seamx = [sx + 36, sx + 240, sx + 468]
+    for (n, lab), xx in zip(seam, seamx):
+        b.append(orb(xx, y3 + 65, 11, cyb["c"]))
+        b.append(t(xx, y3 + 70, n, 13, WHITE, MONO, "500", anchor="middle"))
+        b.append(t(xx + 18, y3 + 72, lab, 19, INK2, SANS, "500"))
 
     # ---- layer 4 — the cloud / infrastructure base (proven) -----------------
     y4, h4 = 548, 128
@@ -1231,7 +1259,7 @@ def s_layers(num=3):
     blk, _ = block(vx + 26, 362, "The app's own access control, its plugins, and the access, "
                                  "data and network seams beneath it.", vw - 52, 21, 27, INK2, 5)
     b.append(blk)
-    b.append(t(vx + 26, 510, "→ This is what we prove.", 21, GOLDINK, SANS, "600"))
+    b.append(t(vx + 26, 510, "→ Services 1 · 2 · 3 prove it.", 21, GOLDINK, SANS, "600"))
 
     # ---- verdict card 2 — proven base (cloud) -------------------------------
     b.append(glass(vx, 548, vw, 128, 16, "#e6f2ea", 0.6))
@@ -1348,14 +1376,33 @@ def s_residency(num=6):
                        "can now go.", 26, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
+    cyb, cry = FAM["cyb"]["c"], FAM["cry"]["c"]
+
+    # ---- left: the diagram — one regulated store, four quiet ways out -------
     b.append(glass(M, 206, lw, 270, 18))
-    b.append(eyebrow(M + 26, 246, "The pattern", FAM["cyb"]["c"], maxw=lw - 52))
-    bl, _ = bullets(M + 26, 288, [
-        "DR backups copied to a region IT allowed — and counsel didn't",
-        "A replica role scoped by bucket name — S3 ARNs carry no account ID",
-        "A CDN in front of regulated files, caching at the edge",
-    ], lw - 52, 23, 27, 16, INK2, FAM["cyb"]["c"])
-    b.append(bl)
+    b.append(eyebrow(M + 26, 246, "Four quiet ways out", cyb, maxw=lw - 52))
+    bx, by, bw, bh = M + 22, 270, 168, 186
+    b.append(rrect(bx, by, bw, bh, "#e6f2ea", 14, opacity=0.7))
+    b.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="14" fill="none" '
+             f'stroke="{GREEN}" stroke-width="2" stroke-dasharray="7 6"/>')
+    b.append(t(bx + bw / 2, by + 26, "UAE · YOUR ORG", 14, GREEN, MONO, "500",
+               anchor="middle", ls="1.4"))
+    b.append(orb(bx + bw / 2, by + 88, 24, cyb))
+    b.append(t(bx + bw / 2, by + 140, "Regulated", 20, INK, SANS, "600", anchor="middle"))
+    b.append(t(bx + bw / 2, by + 164, "data", 20, INK, SANS, "600", anchor="middle"))
+    outs = [("DR backup copy", "to a Frankfurt vault"),
+            ("Replica rule", "to any “-replica” bucket"),
+            ("CDN in front", "to edge caches worldwide"),
+            ("Multi-region key", "decryptable abroad")]
+    ox = bx + bw + 64
+    for i, (head, dest) in enumerate(outs):
+        yy = by + 6 + i * 46
+        b.append(f'<path d="M{bx+bw},{by+bh/2:.0f} C{bx+bw+30},{by+bh/2:.0f} '
+                 f'{ox-34},{yy+14} {ox-8},{yy+14}" stroke="{cry}" stroke-width="1.8" '
+                 f'fill="none" opacity="0.8"/>')
+        b.append(f'<circle cx="{ox-6}" cy="{yy+14}" r="3.5" fill="{cry}"/>')
+        b.append(t(ox + 4, yy + 12, head, 19, cry, SANS, "600"))
+        b.append(t(ox + 4, yy + 34, dest, 17, INK2))
 
     b.append(glass(rx, 206, rw, 270, 18, FAM["cry"]["tint"], 0.42))
     b.append(eyebrow(rx + 26, 246, "Why the tools stay green", FAM["cry"]["c"], maxw=rw - 52))
