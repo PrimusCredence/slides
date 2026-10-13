@@ -1,4 +1,4 @@
-# PrimusCredence — slide deck (v2, three solutions)
+# PrimusCredence — slide deck (v2, three Services)
 
 A variant of the main deck (`../`) with the **AI guardrail solution dropped** —
 it sells the **three Services** only: access control
@@ -6,7 +6,7 @@ it sells the **three Services** only: access control
 segmentation proofs), and data residency (residency proofs, since 11 Oct 2026). The
 "AI Industrialises the Attacker" slide is **kept**, because it argues *why* proof
 is needed (attacks are now exhaustive), which still motivates the three
-solutions. Post-quantum migration has been dropped as a solution, along with its
+Services. Post-quantum migration has been dropped as a service, along with its
 motivation slide.
 
 20 slides, 16:10 (1187 × 742), same house style as the parent deck.
@@ -14,7 +14,7 @@ motivation slide.
 ## What differs from `../`
 - No "AI Agents Multiply…" motivation slide and no "Agentic Guardrail
   Verification" solution slide.
-- Solutions overview is a row of three cards; "one method — three solutions".
+- Services overview is a row of three cards; "one method — three services".
 - The regulatory grid and the "why clients ask" tiles drop the AI-governance
   rows (UAE AI Act, ISO 42001) in favour of cyber frameworks (PCI DSS 4.0, CIS
   Controls) and a third-party-risk shift.

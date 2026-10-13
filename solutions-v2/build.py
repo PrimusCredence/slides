@@ -364,7 +364,8 @@ def s03(num=7):
     b.append(t(M, 184, "Point-in-time testing cannot keep pace with an enumerating attack.",
                30, INK, SERIF, "600", style="italic"))
 
-    stats = [("4.5×", "revenue of AI-assisted scam operations vs non-AI (Chainalysis 2026)"),
+    stats = [("54M", "lines of code analysed by autonomous AI systems "
+                     "(DARPA AIxCC 2025)"),
              ("$3.52", "compute cost per LLM-agent exploit attempt on a real CVE "
                        "(Fang et al. 2024)"),
              ("87%", "of 15 real CVEs exploited from the public advisory alone "
@@ -391,7 +392,9 @@ def s03(num=7):
         b.append(t(M + 26, y + 88 + i * 30, l, 23, INK2))
         b.append(t(M + CW / 2 + 38, y + 88 + i * 30, r, 23, WHITE))
 
-    b.append(t(M, 654, "Proof is the one capability that answers exhaustive search in kind.",
+    b.append(t(M, 618, "Path counts are orders of magnitude, for illustration.", 17, MUTED,
+               SANS, style="italic"))
+    b.append(t(M, 662, "Proof is the one capability that answers exhaustive search in kind.",
                26, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
@@ -474,26 +477,33 @@ def s05(num=11):
              "Routes, security groups, firewall and Kubernetes rules — every path between zones.",
              "What traffic can reach where"),
             (3, "Data residency", "Residency proofs",
-             "Replication, backups, copies, keys and caches — every way regulated data can leave.",
+             "Backups, replicas, keys, caches — not where data is, but where it can go.",
              "Where regulated data can go")]
     f = FAM["cyb"]
-    cw3, y, h = (CW - 2 * 20) / 3, 222, 420
+    cw3, y, h = (CW - 2 * 20) / 3, 224, 344
     # one title size for all three cards, so no card looks louder than another
     tsize = min(fit(title, cw3 - 60, 28, 0.52, 20) for _, _, title, _, _ in sols)
+    ssize = min(fit(sub, cw3 - 60, 23, W_SANS, 18) for _, _, _, _, sub in sols)
     for i, (n, area, title, body, sub) in enumerate(sols):
         x = M + i * (cw3 + 20)
         b.append(glass(x, y, cw3, h, 16, f["tint"], 0.4))
         b.append(f'<rect x="{x:.0f}" y="{y}" width="6" height="{h}" rx="3" fill="{f["c"]}"/>')
-        b.append(orb(x + 50, y + 56, 24, f["c"]))
-        b.append(t(x + 50, y + 66, str(n), 26, WHITE, MONO, "500", anchor="middle"))
-        b.append(eyebrow(x + 30, y + 132, area, f["c"], 20, 2.6, maxw=cw3 - 60))
-        b.append(t(x + 30, y + 176, title, tsize, INK, SERIF, "600"))
-        blk, _ = block(x + 30, y + 222, body, cw3 - 60, 22, 29, INK2, 4)
+        # number and area on one row, so the card carries no dead band
+        b.append(orb(x + 50, y + 48, 22, f["c"]))
+        b.append(t(x + 50, y + 57, str(n), 24, WHITE, MONO, "500", anchor="middle"))
+        b.append(eyebrow(x + 86, y + 55, area, f["c"], 18, 2.4, maxw=cw3 - 106))
+        b.append(t(x + 30, y + 120, title, tsize, INK, SERIF, "600"))
+        blk, _ = block(x + 30, y + 162, body, cw3 - 60, 22, 29, INK2, 4)
         b.append(blk)
-        b.append(hline(x + 30, y + h - 96, cw3 - 60))
-        blk, _ = block(x + 30, y + h - 56, sub, cw3 - 60, 23, 29, f["c"], 2,
-                       weight="600")
-        b.append(blk)
+        b.append(hline(x + 30, y + h - 62, cw3 - 60))
+        b.append(t(x + 30, y + h - 26, sub, ssize, f["c"],
+                   SANS, "600"))
+
+    # what every service hands back — the same two outcomes, whichever layer
+    b.append(glass(M, 596, CW, 60, 16, FAM["gold"]["tint"], 0.5))
+    b.append(t(M + 30, 633, "EVERY SERVICE ENDS", 18, GOLDINK, MONO, "500", ls="2.4"))
+    b.append(t(M + 276, 633, "in a proof — or the exact request, path or chain that breaks it.",
+               23, INK, SANS, "500"))
 
     b.append(chrome(num))
     return page("".join(b))
@@ -567,7 +577,7 @@ def solution(num, fam, n, title, summary, question, problem, demo, close, output
     top, bot = 256, 608
     b.append(glass(rx, top, rw, bot - top, 18))
     b.append(eyebrow(rx + 26, top + 36, "In the demo", f["c"], 20, 2.6, maxw=rw - 52))
-    b.append(t(rx + rw - 26, top + 36, "market tools clean first", 18, MUTED, SANS,
+    b.append(t(rx + rw - 26, top + 36, "tools run first; none decides these", 18, MUTED, SANS,
                "400", anchor="end", style="italic"))
     y = top + 72
     for verdict, head, witness in demo:
@@ -602,7 +612,7 @@ def s18(num=19):
     b = [water("gold"), heading("Take Away")]
 
     b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
-    b.append(t(W / 2, 222, "Mathematical rigour to security —", 33, WHITE, SERIF,
+    b.append(t(W / 2, 222, "Bringing mathematical rigour to security —", 33, WHITE, SERIF,
                "600", anchor="middle"))
     b.append(t(W / 2, 264, "proof alongside testing, from the app to the cloud.",
                33, GOLD, SERIF, "600", anchor="middle"))
@@ -754,11 +764,11 @@ SOLUTIONS = [
                  "the configuration — routes, firewall rules, NAT — across every segment "
                  "at once.",
          demo=[("VIOLATED", "One policy, every zone pair",
-                "FortiGate/OT, AWS, Kubernetes. AWS → historian → SCADA, "
+                "FortiGate/OT and AWS. AWS → historian → SCADA, "
                 "hop by hop, with the rule and its owner."),
                ("WOULD VIOLATE", "A change, before the CAB",
                 "A pending firewall rule opens 2 new paths into OT."),
-               ("VIOLATED", "One dash in a NetworkPolicy",
+               ("VIOLATED", "One dash in a NetworkPolicy (optional)",
                 "Any namespace reaches tenant B's database on 5432.")],
          close="every row, after the fix — no packet sent",
          output="A proof that no path exists — or the path, hop by hop, with the rule that "
@@ -1333,9 +1343,11 @@ def s_network(num=5):
     b.append(t(M, 184, "Once inside, lateral movement turns an incident into a breach.",
                27, INK, SERIF, "600", style="italic"))
 
-    stats = [("29 min", "average breakout to the first lateral move (2025)"),
+    # all three: CrowdStrike 2026 Global Threat Report (2025 data, eCrime)
+    stats = [("29 min", "average eCrime breakout in 2025: initial access to lateral "
+                        "movement"),
              ("27 sec", "the fastest breakout ever observed"),
-             ("82%", "of intrusions were malware-free — valid access, not code")]
+             ("82%", "of detections in 2025 were malware-free")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(stats):
         x = M + i * (tw + 20)
@@ -1343,8 +1355,10 @@ def s_network(num=5):
         b.append(t(x + 24, 280, big, 48, GOLDINK, SERIF, "600"))
         blk, _ = block(x + 24, 312, sub, tw - 48, 20, 25, INK2, 3)
         b.append(blk)
+    b.append(t(M + CW, 398, "Source: CrowdStrike 2026 Global Threat Report (2025 data)",
+               16, MUTED, SANS, anchor="end", style="italic"))
 
-    y, hw = 404, CW / 2 - 12
+    y, hw = 414, CW / 2 - 12
     b.append(glass(M, y, hw, 188, 16))
     b.append(eyebrow(M + 26, y + 40, "Why probing can't answer it", FAM["cyb"]["c"],
                      maxw=hw - 52))
@@ -1365,8 +1379,8 @@ def s_network(num=5):
     ], hw - 52, 22, 30, 14, INK2, GOLDINK, maxlines=1)
     b.append(bl)
 
-    b.append(t(M, 654, "On an OT network probing is forbidden — the IT/OT boundary must be "
-                       "proven, not tested.", 24, GOLDINK, SANS, "500"))
+    b.append(t(M, 654, "On OT networks active probing is often off-limits — the IT/OT "
+                       "boundary must be proven.", 24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
@@ -1432,7 +1446,7 @@ def s_residency(num=6):
     cyb, cry = FAM["cyb"]["c"], FAM["cry"]["c"]
 
     # ---- left: the diagram — one regulated store, four quiet ways out -------
-    b.append(glass(M, 206, lw, 270, 18))
+    b.append(glass(M, 206, lw, 262, 18))
     b.append(eyebrow(M + 26, 246, "Four quiet ways out", cyb, maxw=lw - 52))
     bx, by, bw, bh = M + 22, 270, 168, 186
     b.append(rrect(bx, by, bw, bh, "#e6f2ea", 14, opacity=0.7))
@@ -1457,7 +1471,7 @@ def s_residency(num=6):
         b.append(t(ox + 4, yy + 12, head, 19, cry, SANS, "600"))
         b.append(t(ox + 4, yy + 34, dest, 17, INK2))
 
-    b.append(glass(rx, 206, rw, 270, 18, FAM["cry"]["tint"], 0.42))
+    b.append(glass(rx, 206, rw, 262, 18, FAM["cry"]["tint"], 0.42))
     b.append(eyebrow(rx + 26, 246, "Why the tools stay green", FAM["cry"]["c"], maxw=rw - 52))
     bl, _ = bullets(rx + 26, 288, [
         "Region locks govern where, not whose",
@@ -1466,14 +1480,16 @@ def s_residency(num=6):
     ], rw - 52, 23, 27, 16, INK2, FAM["cry"]["c"])
     b.append(bl)
 
-    tiles = [("99%", "of cloud identities over-permissioned (Unit 42)"),
-             ("2.5×", "more permissions in managed policies (Unit 42)"),
-             ("$4.4M", "average cost of a data breach (IBM 2025)")]
+    # GDPR fines for where personal data went — each a regulator's final decision
+    tiles = [("€1.2B", "Meta, 2023: EU users' data sent to the US (Irish DPC)"),
+             ("€530M", "TikTok, 2025: EEA users' data remotely accessed from China "
+                       "(Irish DPC)"),
+             ("€290M", "Uber, 2024: EU drivers' data sent to the US (Dutch DPA)")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(tiles):
-        b.append(stat_tile(M + i * (tw + 20), 478, tw, 138, big, sub, "gold"))
+        b.append(stat_tile(M + i * (tw + 20), 482, tw, 154, big, sub, "gold"))
 
-    b.append(t(M, 668, "A region lock answers where. Sovereignty also asks whose.",
+    b.append(t(M, 680, "A region lock answers where. Sovereignty also asks whose.",
                24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
@@ -1485,14 +1501,7 @@ def s_landscape(num=8):
     b.append(t(M, 176, "Each tool answers its own question well. One question stays open.",
                26, INK, SERIF, "600", style="italic"))
 
-    ch, cy = chip_rows(W / 2, 224,
-                       [["SAST / DAST / IAST", "DSPM", "ASPM",
-                         "WAF / API security"],
-                        ["CSPM · CIEM · CNAPP", "Pen test & red team", "SOC · EDR · SIEM",
-                         "Policy-as-code"]])
-    b.append(ch)
-
-    b.append(glass(M, 342, CW, 258, 18))
+    b.append(glass(M, 210, CW, 396, 18))
     rows = [
         ("SAST", "Knows code patterns, not intent. A check present but wrong still passes."),
         ("DAST", "Tests the endpoints and personas it is given — not every user × object."),
@@ -1500,13 +1509,17 @@ def s_landscape(num=8):
         ("DSPM", "Finds where regulated data is — never where it can go."),
         ("CNAPP / CSPM", "Stops at the cloud IAM role; never reads the app's own roles."),
         ("WAF / API sec", "Judges traffic, not grants: whether it should be permitted is upstream."),
+        ("Pen test", "Shows a way in, or that none was found — not that none exists."),
+        ("SOC · SIEM", "Sees what happens — not what the rules would allow next."),
     ]
-    ry = 384
-    for name, lim in rows:
+    ry = 256
+    for i, (name, lim) in enumerate(rows):
+        if i:
+            b.append(hline(M + 30, ry - 31, CW - 60))
         b.append(f'<circle cx="{M+34}" cy="{ry-8}" r="4" fill="{GOLD}"/>')
-        b.append(t(M + 56, ry, name, 23, INK, SANS, "600"))
+        b.append(t(M + 56, ry, name, 24, INK, SANS, "600"))
         b.append(t(M + 262, ry, lim, fit(lim, CW - 262 - 30, 23, W_SANS, 18), INK2))
-        ry += 36
+        ry += 46
 
     b.append(t(M, 648, "They all share one gap: no statement of what is allowed, decided over "
                        "every request.", 24, INK, SANS, "500"))
@@ -1537,7 +1550,7 @@ def s_feasible(num=9):
     bl, _ = bullets(M + hw + 50, 292, [
         "AI assists modelling & proof search",
         "Expert owns & ratifies the spec",
-        "AWS runs ~1B SMT queries a day",
+        "AWS: ~1B SMT queries a day (CAV 2022)",
     ], hw - 52, 22, 28, 20, INK2, GOLDINK, maxlines=1)
     b.append(bl)
 
