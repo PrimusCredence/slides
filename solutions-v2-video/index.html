@@ -220,22 +220,23 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">Network segmentation</div>
   <div class="sub frag mt16" style="max-width:1000px">Once inside, lateral movement turns an incident into a breach.</div>
-  <!-- the three figures below are unsourced on deck slide 5 too; cite or drop them together with the deck -->
   <div class="stats mt32">
-    <div class="stat frag"><b>29 min</b><span>average breakout to the first lateral move</span></div>
-    <div class="stat frag"><b>27 sec</b><span>the fastest breakout observed</span></div>
-    <div class="stat frag"><b>82%</b><span>of intrusions malware-free — valid access</span></div>
+    <div class="stat frag"><b>29 min</b><span>average eCrime breakout in 2025: initial access to lateral movement</span></div>
+    <div class="stat frag"><b>27 sec</b><span>the fastest breakout ever observed</span></div>
+    <div class="stat frag"><b>82%</b><span>of detections in 2025 were malware-free</span></div>
   </div>
-  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Segmentation is <span class="gold">asserted, not proven.</span></h2>
+  <div class="mono frag mt16" style="font-size:15px">Source: CrowdStrike 2026 Global Threat Report (2025 data)</div>
+  <h2 class="frag mt32" style="font-size:40px;max-width:1000px">Segmentation is <span class="gold">asserted, not proven.</span></h2>
+  <div class="sub frag mt16" style="max-width:1000px">On OT networks active probing is often off-limits — the IT/OT boundary must be proven.</div>
 </section>
 
 <!-- 6 · residency is reviewed, not proven -->
 <section class="slide">
   <div class="eyebrow">Residency is reviewed, not proven</div>
   <div class="stats mt32">
-    <div class="stat frag"><b>99%</b><span>of cloud identities over-permissioned (Unit 42)</span></div>
-    <div class="stat frag"><b>2.5×</b><span>more permissions in managed policies (Unit 42)</span></div>
-    <div class="stat frag"><b>$4.4M</b><span>average cost of a data breach (IBM, 2025)</span></div>
+    <div class="stat frag"><b>€1.2B</b><span>Meta, 2023: EU users' data sent to the US (Irish DPC)</span></div>
+    <div class="stat frag"><b>€530M</b><span>TikTok, 2025: EEA users' data remotely accessed from China (Irish DPC)</span></div>
+    <div class="stat frag"><b>€290M</b><span>Uber, 2024: EU drivers' data sent to the US (Dutch DPA)</span></div>
   </div>
   <h2 class="frag mt44" style="font-size:40px;max-width:1000px">A region lock answers where. <span class="gold">Sovereignty also asks whose.</span></h2>
   <div class="sub frag mt24" style="max-width:980px">Every change is reviewed alone — nobody re-checks where the data can now go.</div>
@@ -245,7 +246,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">The attacker changed</div>
   <div class="stats mt32">
-    <div class="stat frag"><b>4.5×</b><span>revenue of AI-assisted scam operations vs non-AI (Chainalysis 2026)</span></div>
+    <div class="stat frag"><b>54M</b><span>lines of code analysed by autonomous AI systems (DARPA AIxCC 2025)</span></div>
     <div class="stat frag"><b>$3.52</b><span>compute cost per LLM-agent exploit attempt on a real CVE (Fang et al. 2024)</span></div>
     <div class="stat frag"><b>87%</b><span>of 15 real CVEs exploited from the public advisory alone (Fang et al. 2024)</span></div>
   </div>
@@ -260,7 +261,8 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
     <span class="chip frag">DSPM</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
     <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span><span class="chip frag">SOC · SIEM</span>
   </div>
-  <h2 class="frag mt44" style="font-size:38px;max-width:1060px">Each tool answers its own question well. <span class="gold">They share one gap: no statement of what is allowed, decided over every request.</span></h2>
+  <div class="frag mt32" style="max-width:1060px;font-size:21px;line-height:1.5;color:var(--ink2)"><b class="gold" style="font-family:var(--mono);font-weight:500">Pen test</b> — shows a way in, or that none was found — not that none exists.<br><b class="gold" style="font-family:var(--mono);font-weight:500">SOC · SIEM</b> — sees what happens — not what the rules would allow next.</div>
+  <h2 class="frag mt32" style="font-size:38px;max-width:1060px">Each tool answers its own question well. <span class="gold">They share one gap: no statement of what is allowed, decided over every request.</span></h2>
 </section>
 
 <!-- 9 · automated reasoning: the method -->
@@ -282,15 +284,16 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="cards mt24">
     <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who may do what — every app role, token, plugin route and public user</div></div></div>
     <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">What traffic can reach where — every path between zones</div></div></div>
-    <div class="card frag"><div class="n">3</div><div><div class="a">Data residency</div><div class="t">Residency proofs</div><div class="q">Where regulated data can go — every way it can leave</div></div></div>
+    <div class="card frag"><div class="n">3</div><div><div class="a">Data residency</div><div class="t">Residency proofs</div><div class="q">Where regulated data can go — backups, replicas, keys, caches</div></div></div>
   </div>
+  <div class="mono frag mt24" style="color:var(--goldink);letter-spacing:.12em">EVERY SERVICE ENDS <span style="color:var(--ink2);letter-spacing:.02em">in a proof — or the exact request, path or chain that breaks it.</span></div>
 </section>
 
 <!-- 11 · service 1 -->
 <section class="slide">
   <div class="eyebrow">Service 1 — who may do what</div>
   <h2 class="frag mt16" style="max-width:1020px">Can any app role, API token, plugin route or public user <span class="gold">reach data it must not</span> — through the app or its cloud role?</h2>
-  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — two harmless admin changes · a GraphQL side door · the app↔cloud seam</div>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo (tools run first; none decides these) — two harmless admin changes · a GraphQL side door · the app↔cloud seam</div>
   <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
 </section>
 
@@ -298,7 +301,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">Service 2 — what traffic can reach where</div>
   <h2 class="frag mt16" style="max-width:1040px">Does any path exist from an untrusted zone to this one — and does <span class="gold">east-west segmentation actually hold?</span></h2>
-  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — AWS → historian → SCADA · a pending rule: 2 paths into OT · one YAML dash</div>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo (tools run first; none decides these) — AWS → historian → SCADA · a pending rule: 2 new paths into OT · one NetworkPolicy dash (optional)</div>
   <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof no path exists, or the path hop by hop, with the rule and its owner.</div>
 </section>
 
@@ -306,7 +309,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">Service 3 — where regulated data can go</div>
   <h2 class="frag mt16" style="max-width:1040px">Can regulated data leave the country or the organisation — <span class="gold">or could anyone make it leave?</span></h2>
-  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — can: a “-replica” bucket outside the org · is: Frankfurt DR copy, CDN</div>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo (tools run first; none decides these) — can: a “-replica” bucket outside the org · is: Frankfurt DR copy, CDN</div>
   <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof, or the chain: store · mechanism · role · policy line · destination.</div>
 </section>
 
@@ -334,6 +337,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <!-- 16 · take away -->
 <section class="slide">
   <div class="eyebrow">Take away</div>
+  <div class="lead frag mt16" style="font-size:30px">Bringing mathematical rigour to security — <span class="gold">proof alongside testing, from the app to the cloud.</span></div>
   <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel and cheap. Detection shows what is happening; proof shows what cannot.</div></div>
   <div class="frag mt24"><h2 style="font-size:40px">The addition.</h2><div class="sub" style="margin-top:4px">We don't replace testing, monitoring or the SOC. We make one class of controls machine-checkable.</div></div>
   <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — both stated. We produce the evidence; we don't certify.</div></div>
@@ -344,6 +348,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="wordmark" style="font-size:64px"><span class="p">Primus</span><span class="c">Credence</span></div>
   <div class="rule frag"></div>
   <h2 class="frag" style="max-width:1000px;font-size:44px">Let us prove one property on your estate.</h2>
+  <div class="mono frag mt24" style="color:var(--goldink)">Start here — Micro Assessment of Service 1</div>
   <div class="contact frag mt44">
     <div class="m">raghavendra@primuscredence.com</div>
     <div class="m2">primuscredence.com &nbsp;·&nbsp; Dr. Raghavendra Ramesh &nbsp;·&nbsp; UAE</div>
