@@ -1,9 +1,9 @@
 # PrimusCredence — slide deck (v2, three solutions)
 
 A variant of the main deck (`../`) with the **AI guardrail solution dropped** —
-it sells the **three cybersecurity solutions** only: access control
+it sells the **three Services** only: access control
 (application entitlement proofs), network-layer isolation (reachability &
-segmentation proofs), and API protocols (app & API-usage conformance). The
+segmentation proofs), and data residency (residency proofs, since 11 Oct 2026). The
 "AI Industrialises the Attacker" slide is **kept**, because it argues *why* proof
 is needed (attacks are now exhaustive), which still motivates the three
 solutions. Post-quantum migration has been dropped as a solution, along with its
@@ -20,8 +20,8 @@ motivation slide.
   Controls) and a third-party-risk shift.
 - Product tagline is "Provable Security for Applications" (not "… for Apps & AI
   Agents").
-- The anchor stack diagram (slide 3) is **retained**; its seam is now APIs,
-  SDK/library usage and network paths (no PQC binding).
+- The anchor stack diagram (slide 3) is **retained**; its seam is APIs, network
+  paths and data paths, numbered by the Service that proves each.
 
 ## Structure
 
@@ -32,13 +32,13 @@ motivation slide.
 | 3 | Where the Risk Actually Lives — the stack diagram (anchor) |
 | 4 | OWASP 2025 — Access Control & Misconfiguration |
 | 5 | Segmentation Is Asserted, Not Proven — network reachability & lateral movement |
-| 6 | Apps Misuse the APIs They Run On |
+| 6 | Residency Is Reviewed, Not Proven |
 | 7 | AI Industrialises the Attacker |
-| 8 | Why Today's Security Stack Isn't Enough |
+| 8 | What Today's Security Stack Leaves Open |
 | 9 | Proof — Now Feasible |
 | 10 | Automated Reasoning |
-| 11 | Solutions (overview, three) |
-| 12–14 | Solutions 1–3 |
+| 11 | Services (overview, three) |
+| 12–14 | Services 1–3 — each with an "In the demo" card of verdicts |
 | 15 | Our Approach — partner with cybersecurity solutions providers |
 | 16 | Why the Provider's Clients Will Ask |
 | 17 | What a Provider Can Resell |
@@ -54,5 +54,7 @@ in the parent deck's history, not here).
 
 ```sh
 python3 build.py      # writes slides/01.svg … slides/20.svg
-node make-pdf.js      # writes solutions-slides.pdf (puppeteer from ../node_modules)
+# PDF: render each slide to its own PDF page with headless Chrome, then
+# pdfunite them into solutions-slides.pdf (a single make-pdf.js call times out
+# on the heavier slides)
 ```
