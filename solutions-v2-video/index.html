@@ -211,14 +211,16 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
   <div class="stats mt32">
     <div class="stat frag"><b>$4.4M</b><span>average cost of a data breach (IBM, 2025)</span></div>
     <div class="stat frag"><b>106M</b><span>records — Capital One, via one over-privileged role</span></div>
-    <div class="stat frag"><b>241 days</b><span>mean time to identify and contain a breach</span></div>
+    <div class="stat frag"><b>241 days</b><span>mean time to identify and contain a breach (IBM, 2025)</span></div>
   </div>
-  <div class="lead frag mt44" style="font-size:30px;max-width:1080px">Capital One · Optus · T-Mobile · Dell · Trello — all authenticated requests; the flaw was what the policy allowed.</div>
+  <div class="lead frag mt44" style="font-size:30px;max-width:1080px">Capital One · Optus · T-Mobile · Dell · Trello — each system did exactly what its access rules allowed. <span class="gold">The rules were wrong.</span></div>
 </section>
 
 <!-- 5 · segmentation / lateral movement -->
 <section class="slide">
-  <div class="eyebrow">Once inside — lateral movement</div>
+  <div class="eyebrow">Network segmentation</div>
+  <div class="sub frag mt16" style="max-width:1000px">Once inside, lateral movement turns an incident into a breach.</div>
+  <!-- the three figures below are unsourced on deck slide 5 too; cite or drop them together with the deck -->
   <div class="stats mt32">
     <div class="stat frag"><b>29 min</b><span>average breakout to the first lateral move</span></div>
     <div class="stat frag"><b>27 sec</b><span>the fastest breakout observed</span></div>
@@ -243,65 +245,69 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <section class="slide">
   <div class="eyebrow">The attacker changed</div>
   <div class="stats mt32">
-    <div class="stat frag"><b>4.5×</b><span>revenue of AI-assisted attacks</span></div>
-    <div class="stat frag"><b>$3.52</b><span>cost per AI-agent exploit</span></div>
-    <div class="stat frag"><b>87%</b><span>of CVEs exploited from the description alone</span></div>
+    <div class="stat frag"><b>4.5×</b><span>revenue of AI-assisted scam operations vs non-AI (Chainalysis 2026)</span></div>
+    <div class="stat frag"><b>$3.52</b><span>compute cost per LLM-agent exploit attempt on a real CVE (Fang et al. 2024)</span></div>
+    <div class="stat frag"><b>87%</b><span>of 15 real CVEs exploited from the public advisory alone (Fang et al. 2024)</span></div>
   </div>
-  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Point-in-time testing cannot keep pace with an <span class="gold">enumerating</span> attacker.</h2>
+  <h2 class="frag mt44" style="font-size:40px;max-width:1000px">Point-in-time testing cannot keep pace with an <span class="gold">enumerating</span> attack.</h2>
 </section>
 
-<!-- 8 · today's stack samples -->
+<!-- 8 · what today's stack leaves open -->
 <section class="slide">
   <div class="eyebrow">Hard-won over years — keep all of it</div>
   <div class="chips mt32" style="max-width:980px">
     <span class="chip frag">SAST</span><span class="chip frag">DAST</span><span class="chip frag">IAST / RASP</span>
     <span class="chip frag">DSPM</span><span class="chip frag">ASPM</span><span class="chip frag">CNAPP</span>
-    <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span>
+    <span class="chip frag">WAF / API</span><span class="chip frag">pen test</span><span class="chip frag">SOC · SIEM</span>
   </div>
-  <h2 class="frag mt44" style="font-size:38px;max-width:1060px">Each tool answers its own question well. <span class="gold">None decides what is allowed, over every request.</span></h2>
+  <h2 class="frag mt44" style="font-size:38px;max-width:1060px">Each tool answers its own question well. <span class="gold">They share one gap: no statement of what is allowed, decided over every request.</span></h2>
 </section>
 
-<!-- 9 · proof now feasible -->
+<!-- 9 · automated reasoning: the method -->
 <section class="slide" style="padding:80px 96px">
-  <div class="eyebrow">Proof — now feasible</div>
+  <div class="eyebrow">Automated reasoning — four steps</div>
   <div class="steps mt32">
-    <div class="step frag"><div class="n">1</div><div class="h">Formalise</div><div class="d">artefact → model</div></div>
-    <div class="step frag"><div class="n">2</div><div class="h">State</div><div class="d">the bad state, as a formula</div></div>
-    <div class="step frag"><div class="n">3</div><div class="h">Solve</div><div class="d">decide it</div></div>
-    <div class="step frag"><div class="n">4</div><div class="h">Report</div><div class="d">proof, or counter-example</div></div>
+    <div class="step frag"><div class="n">1</div><div class="h">Formalise</div><div class="d">your existing artefact becomes a logical model</div></div>
+    <div class="step frag"><div class="n">2</div><div class="h">State</div><div class="d">the bad state you fear becomes a formula</div></div>
+    <div class="step frag"><div class="n">3</div><div class="h">Solve</div><div class="d">Z3, CVC5 and Batfish decide every case</div></div>
+    <div class="step frag"><div class="n">4</div><div class="h">Report</div><div class="d">a proof, or a reproducible witness</div></div>
   </div>
-  <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request that breaks it.</div>
+  <div class="mono frag mt24" style="text-align:center;color:var(--goldink);letter-spacing:.18em">AI ASSISTS EVERY STEP · THE EXPERT OWNS THE SPEC</div>
+  <div class="sub frag mt44" style="font-size:27px;max-width:1040px"><b class="green">UNSAT</b> — no violating state exists. &nbsp;&nbsp;/&nbsp;&nbsp; <b class="gold">SAT</b> — the exact request, path or chain.</div>
 </section>
 
 <!-- 10 · the three services -->
 <section class="slide">
   <div class="eyebrow">One method — three services</div>
   <div class="cards mt24">
-    <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who may do what</div></div></div>
-    <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">What traffic can reach where</div></div></div>
-    <div class="card frag"><div class="n">3</div><div><div class="a">Data residency</div><div class="t">Residency proofs</div><div class="q">Where regulated data can go</div></div></div>
+    <div class="card frag"><div class="n">1</div><div><div class="a">Access control</div><div class="t">App entitlement proofs</div><div class="q">Who may do what — every app role, token, plugin route and public user</div></div></div>
+    <div class="card frag"><div class="n">2</div><div><div class="a">Network isolation</div><div class="t">Network segmentation</div><div class="q">What traffic can reach where — every path between zones</div></div></div>
+    <div class="card frag"><div class="n">3</div><div><div class="a">Data residency</div><div class="t">Residency proofs</div><div class="q">Where regulated data can go — every way it can leave</div></div></div>
   </div>
 </section>
 
 <!-- 11 · service 1 -->
 <section class="slide">
   <div class="eyebrow">Service 1 — who may do what</div>
-  <h2 class="frag mt16" style="max-width:1020px">What can each role, token and public user <span class="gold">reach</span> — and can any reach what it must not?</h2>
-  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
+  <h2 class="frag mt16" style="max-width:1020px">Can any app role, API token, plugin route or public user <span class="gold">reach data it must not</span> — through the app or its cloud role?</h2>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — two harmless admin changes · a GraphQL side door · the app↔cloud seam</div>
+  <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof over all requests, or the exact request that breaks it.</div>
 </section>
 
 <!-- 12 · service 2 -->
 <section class="slide">
   <div class="eyebrow">Service 2 — what traffic can reach where</div>
-  <h2 class="frag mt16" style="max-width:1040px">Does any path reach this subnet from an untrusted zone — and does <span class="gold">east-west segmentation actually hold?</span></h2>
-  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof no path exists, hop by hop, or the exact path that violates it.</div>
+  <h2 class="frag mt16" style="max-width:1040px">Does any path exist from an untrusted zone to this one — and does <span class="gold">east-west segmentation actually hold?</span></h2>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — AWS → historian → SCADA · a pending rule: 2 paths into OT · one YAML dash</div>
+  <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof no path exists, or the path hop by hop, with the rule and its owner.</div>
 </section>
 
 <!-- 13 · service 3 -->
 <section class="slide">
   <div class="eyebrow">Service 3 — where regulated data can go</div>
   <h2 class="frag mt16" style="max-width:1040px">Can regulated data leave the country or the organisation — <span class="gold">or could anyone make it leave?</span></h2>
-  <div class="mono frag mt32" style="font-size:20px;color:var(--ink2)">Output — a proof, or the chain: store · mechanism · role · policy line · destination.</div>
+  <div class="mono frag mt32" style="font-size:19px;color:var(--ink2)">In the demo — can: a “-replica” bucket outside the org · is: Frankfurt DR copy, CDN</div>
+  <div class="mono frag mt16" style="font-size:19px;color:var(--ink2)">Output — a proof, or the chain: store · mechanism · role · policy line · destination.</div>
 </section>
 
 <!-- 14 · our approach — partner with providers / clientele -->
@@ -315,7 +321,7 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
     <span class="chip frag">Banking &amp; finance</span>
     <span class="chip frag">Telecom &amp; cloud</span>
   </div>
-  <div class="lead it frag mt44" style="font-size:26px;color:var(--muted)">The population for which proof beats posture.</div>
+  <div class="lead it frag mt44" style="font-size:26px;color:var(--muted)">We don't certify — a channel, not a rival. They keep the client and the contract.</div>
 </section>
 
 <!-- 15 · why they ask -->
@@ -328,9 +334,9 @@ h2{font-family:var(--serif); font-weight:600; font-size:52px; line-height:1.08; 
 <!-- 16 · take away -->
 <section class="slide">
   <div class="eyebrow">Take away</div>
-  <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel and continuous.</div></div>
-  <div class="frag mt24"><h2 style="font-size:40px">The addition.</h2><div class="sub" style="margin-top:4px">We make one class of controls machine-checkable.</div></div>
-  <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — we state both.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The shift.</h2><div class="sub" style="margin-top:4px">Attack-path discovery is automated, parallel and cheap. Detection shows what is happening; proof shows what cannot.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The addition.</h2><div class="sub" style="margin-top:4px">We don't replace testing, monitoring or the SOC. We make one class of controls machine-checkable.</div></div>
+  <div class="frag mt24"><h2 style="font-size:40px">The honesty.</h2><div class="sub" style="margin-top:4px">A proof is relative to a model and a spec — both stated. We produce the evidence; we don't certify.</div></div>
 </section>
 
 <!-- 17 · thank you -->
