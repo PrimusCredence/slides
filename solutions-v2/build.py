@@ -943,7 +943,7 @@ def s_demand(num=16):
 
     tiles = [
         ("Mandatory replaced voluntary",
-         "UAE cyber-resilience obligations now carry penalties of AED 100k–3m."),
+         "UAE PDPL is federal law; SAMA CSF and NCA ECC bind banks, government and CNI."),
         ("Assurance shifted to evidence",
          "Regulators increasingly ask for demonstrable control effectiveness, not attestation."),
         ("Third-party risk is now in scope",
