@@ -18,6 +18,7 @@ const path = require('path');
 
 function loadPuppeteer() {
   for (const p of ['puppeteer',
+                   path.resolve(__dirname, 'node_modules/puppeteer'),
                    path.resolve(__dirname, '../reports/node_modules/puppeteer')]) {
     try { return require(p); } catch (e) { /* try the next one */ }
   }

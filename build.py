@@ -34,9 +34,9 @@ GREEN    = "#2f7d4f"
 AMBER    = "#b06a00"
 
 FAM = {
-    "cyb":  dict(c="#1d5fa8", tint="#e9eff9", name="Cybersecurity Solutions"),
-    "ai":   dict(c="#0f766e", tint="#e3f1ef", name="AI Security Solutions"),
-    "cry":  dict(c="#b81f63", tint="#fbe8f0", name="Crypto Security Solutions"),
+    "cyb":  dict(c="#1d5fa8", tint="#e9eff9", name="Cybersecurity Services"),
+    "ai":   dict(c="#0f766e", tint="#e3f1ef", name="AI Security Services"),
+    "cry":  dict(c="#b81f63", tint="#fbe8f0", name=""),
     "gold": dict(c=GOLDINK, tint="#f6efdd", name=""),
 }
 
@@ -290,7 +290,7 @@ def page(body):
 
 def heading(title, fam="gold", y=112):
     f = FAM[fam]
-    return (t(M, y, title, fit(title, CW, 46, W_SERIF, 30), INK, SERIF, "600") +
+    return (t(M, y, title, fit(title, CW, 46, W_SERIF * 1.2, 30), INK, SERIF, "600") +
             f'<rect x="{M}" y="{y+16:.0f}" width="112" height="4" rx="2" fill="{f["c"]}"/>')
 
 
@@ -301,7 +301,21 @@ def s01():
     b.append(wordmark(M, 236, 88))
     b.append(f'<rect x="{M}" y="272" width="{mark_width(88):.0f}" height="4" rx="2" '
              f'fill="{GOLD}"/>')
-    b.append(t(M, 384, "Provable Security", 46, GOLDINK, SERIF, "600"))
+    b.append(t(M, 384, "Provable Security for Applications", 46, GOLDINK, SERIF, "600"))
+
+    b.append(t(M, 432, "Not where your system was tested — what cannot happen in it.",
+               25, INK2, SERIF, "400", style="italic"))
+    svc = [("1", "Access control", "who may do what"),
+           ("2", "Network isolation", "what can reach where"),
+           ("3", "Data residency", "where data can go")]
+    sw = (CW - 2 * 20) / 3
+    for i, (n, head, sub) in enumerate(svc):
+        x = M + i * (sw + 20)
+        b.append(glass(x, 478, sw, 84, 14, FAM["cyb"]["tint"], 0.35))
+        b.append(orb(x + 38, 520, 17, FAM["cyb"]["c"]))
+        b.append(t(x + 38, 528, n, 20, WHITE, MONO, "500", anchor="middle"))
+        b.append(t(x + 70, 514, head, 23, INK, SANS, "600"))
+        b.append(t(x + 70, 542, sub, 19, FAM["cyb"]["c"], SANS, "500"))
 
     # No name or email here: the founder is introduced on slide 2 and the
     # contact details are on the closing slide.
@@ -347,12 +361,15 @@ def s02(num=2):
 # ============================================================ AI industrialises the attacker
 def s03(num=7):
     b = [water("gold"), heading("AI Industrialises the Attacker")]
-    b.append(t(M, 184, "A sampling defence cannot answer an enumerating attack.",
+    b.append(t(M, 184, "Point-in-time testing cannot keep pace with an enumerating attack.",
                30, INK, SERIF, "600", style="italic"))
 
-    stats = [("4.5×", "revenue of AI-assisted scam operations versus non-AI equivalents"),
-             ("$3.52", "average compute cost per LLM-agent exploit attempt on a real CVE"),
-             ("87%", "of a 15-CVE sample exploited from the public description alone")]
+    stats = [("54M", "lines of code analysed by autonomous AI systems "
+                     "(DARPA AIxCC 2025)"),
+             ("$3.52", "compute cost per LLM-agent exploit attempt on a real CVE "
+                       "(Fang et al. 2024)"),
+             ("87%", "of 15 real CVEs exploited from the public advisory alone "
+                     "(Fang et al. 2024)")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(stats):
         x = M + i * (tw + 20)
@@ -375,22 +392,24 @@ def s03(num=7):
         b.append(t(M + 26, y + 88 + i * 30, l, 23, INK2))
         b.append(t(M + CW / 2 + 38, y + 88 + i * 30, r, 23, WHITE))
 
-    b.append(t(M, 654, "Proof is the one capability that answers exhaustive search in kind.",
+    b.append(t(M, 618, "Path counts are orders of magnitude, for illustration.", 17, MUTED,
+               SANS, style="italic"))
+    b.append(t(M, 662, "Proof is the one capability that answers exhaustive search in kind.",
                26, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
 
 # ============================================================ the method
-def s04(num=11):
+def s04(num=10):
     b = [water("gold"), heading("Automated Reasoning")]
     b.append(t(M, 184, "Proof establishes that bad things cannot happen.",
                30, INK, SERIF, "600", style="italic"))
 
     steps = [("1", "Formalise", "Your existing artefact becomes a logical model"),
              ("2", "State", "The bad state you fear becomes a formula"),
-             ("3", "Solve", "Z3, Batfish, IVy, TLA+ decide it; CBMC to a bound"),
-             ("4", "Report", "A proof, or a reproducible attack path")]
+             ("3", "Solve", "Z3, CVC5 and Batfish decide every case"),
+             ("4", "Report", "A proof, or a reproducible witness")]
     tw = (CW - 3 * 18) / 4
     for i, (n, head, body) in enumerate(steps):
         x = M + i * (tw + 18)
@@ -406,8 +425,8 @@ def s04(num=11):
 
     # every step above is AI-assisted
     b.append(solid(M, 408, CW, 46, "url(#goldbar)", 23))
-    b.append(t(W / 2, 439, "✦  AI-POWERED  ✦", 22, WHITE, MONO, "500",
-               anchor="middle", ls="4"))
+    b.append(t(W / 2, 439, "AI ASSISTS EVERY STEP  ·  THE EXPERT OWNS THE SPEC", 20, WHITE,
+               MONO, "500", anchor="middle", ls="2.6"))
 
     hw = CW / 2 - 12
     b.append(glass(M, 476, hw, 146, 16, "#e6f2ea", 0.7))
@@ -418,7 +437,7 @@ def s04(num=11):
     b.append(blk)
     b.append(t(M + 26, 614, "Not “none was found”.", 22, GREEN, SANS, "500"))
     b.append(t(M + CW / 2 + 38, 520, "SAT + witness", 29, AMBER, MONO, "500"))
-    blk, _ = block(M + CW / 2 + 38, 558, "The exact request, path or call ordering that "
+    blk, _ = block(M + CW / 2 + 38, 558, "The exact request, path or chain that "
                                          "breaks it — reproducible on your estate.",
                    hw - 52, 22, 28, INK2, 3)
     b.append(blk)
@@ -432,7 +451,7 @@ def s04(num=11):
 
 # ============================================================ the map
 def sol_card(x, y, w, h, fam, n, title, sub):
-    """One solution as a framed card: a number badge, a title, a one-line gloss."""
+    """One service as a framed card: a number badge, a title, a one-line gloss."""
     f = FAM[fam]
     out = [glass(x, y, w, h, 16, f["tint"], 0.4)]
     out.append(f'<rect x="{x}" y="{y}" width="6" height="{h}" rx="3" fill="{f["c"]}"/>')
@@ -445,21 +464,46 @@ def sol_card(x, y, w, h, fam, n, title, sub):
     return "".join(out)
 
 
-def s05(num=12):
-    b = [water("gold"), heading("Solutions")]
+def s05(num=11):
+    b = [water("gold"), heading("Services")]
+    b.append(t(M, 176, "One method — three services: access control, network isolation, "
+                       "data residency.", 26, INK, SERIF, "600", style="italic"))
 
-    # one unified set — five solutions, no family split. 3 on top, 2 below.
-    sols = [(1, "App entitlement proofs", "Who can reach what?"),
-            (2, "Network segmentation", "Any path across zones?"),
-            (3, "App & API conformance", "SDKs used correctly?"),
-            (4, "Post-quantum migration", "Bound on a PQC base?"),
-            (5, "Agentic guardrail verification", "What an agent may do?")]
-    cw3 = (CW - 2 * 20) / 3
-    for i, (n, title, sub) in enumerate(sols[:3]):
-        b.append(sol_card(M + i * (cw3 + 20), 236, cw3, 190, "cyb", n, title, sub))
-    cw2 = (CW - 20) / 2
-    for i, (n, title, sub) in enumerate(sols[3:]):
-        b.append(sol_card(M + i * (cw2 + 20), 452, cw2, 190, "cyb", n, title, sub))
+    # three cyber services, no family split — one row of three tall cards.
+    sols = [(1, "Access control", "App entitlement proofs",
+             "Every app role, token, plugin route and public user — decided over all requests.",
+             "Who may do what"),
+            (2, "Network isolation", "Network segmentation",
+             "Routes, security groups, firewall and Kubernetes rules — every path between zones.",
+             "What traffic can reach where"),
+            (3, "Data residency", "Residency proofs",
+             "Backups, replicas, keys, caches — not where data is, but where it can go.",
+             "Where regulated data can go")]
+    f = FAM["cyb"]
+    cw3, y, h = (CW - 2 * 20) / 3, 224, 344
+    # one title size for all three cards, so no card looks louder than another
+    tsize = min(fit(title, cw3 - 60, 28, 0.52, 20) for _, _, title, _, _ in sols)
+    ssize = min(fit(sub, cw3 - 60, 23, W_SANS, 18) for _, _, _, _, sub in sols)
+    for i, (n, area, title, body, sub) in enumerate(sols):
+        x = M + i * (cw3 + 20)
+        b.append(glass(x, y, cw3, h, 16, f["tint"], 0.4))
+        b.append(f'<rect x="{x:.0f}" y="{y}" width="6" height="{h}" rx="3" fill="{f["c"]}"/>')
+        # number and area on one row, so the card carries no dead band
+        b.append(orb(x + 50, y + 48, 22, f["c"]))
+        b.append(t(x + 50, y + 57, str(n), 24, WHITE, MONO, "500", anchor="middle"))
+        b.append(eyebrow(x + 86, y + 55, area, f["c"], 18, 2.4, maxw=cw3 - 106))
+        b.append(t(x + 30, y + 120, title, tsize, INK, SERIF, "600"))
+        blk, _ = block(x + 30, y + 162, body, cw3 - 60, 22, 29, INK2, 4)
+        b.append(blk)
+        b.append(hline(x + 30, y + h - 62, cw3 - 60))
+        b.append(t(x + 30, y + h - 26, sub, ssize, f["c"],
+                   SANS, "600"))
+
+    # what every service hands back — the same two outcomes, whichever layer
+    b.append(glass(M, 596, CW, 60, 16, FAM["gold"]["tint"], 0.5))
+    b.append(t(M + 30, 633, "EVERY SERVICE ENDS", 18, GOLDINK, MONO, "500", ls="2.4"))
+    b.append(t(M + 276, 633, "in a proof — or the exact request, path or chain that breaks it.",
+               23, INK, SANS, "500"))
 
     b.append(chrome(num))
     return page("".join(b))
@@ -483,69 +527,98 @@ def section(num, fam, title, items):
     return page("".join(b))
 
 
-# ========================================================== solution template
-def solution(num, fam, n, title, question, problem, build, output, precedent,
-             buyers, note=None):
-    f = FAM[fam]
-    b = [water(fam), heading(f"{n}. {title}", fam, y=110)]
+# ========================================================== service template
+VERDICT_C = {"PROVED": GREEN,         # every other verdict is a finding: amber,
+             "OUTSIDE MODEL": MUTED}  # as SAT + witness on the method slide
 
-    # the question it settles
+
+def verdict_chip(x, y, label, size=18):
+    """A verdict as the tools print it: mono capitals on a solid pill. y is the
+    text baseline of the line the chip sits on."""
+    c = VERDICT_C.get(label, AMBER)
+    w = len(label) * size * W_MONO + 22
+    return (rrect(x, y - 20, w, 27, c, 13.5) +
+            t(x + 11, y - 1, label, size, WHITE, MONO, "500"), w)
+
+
+def solution(num, fam, n, title, summary, question, problem, demo, close, output,
+             engine, precedent, buyers, note=None):
+    f = FAM[fam]
+    b = [water(fam), eyebrow(M, 60, f"Service {n} — {summary}", f["c"], 19, 2.6,
+                             maxw=CW),
+         heading(f"{n}. {title}", fam, y=110)]
+
+    # the question it settles — wrapped with slack, because italic semibold
+    # runs wider than W_SERIF measures
     b.append(glass(M, 152, CW, 86, 16, f["tint"], 0.55))
     b.append(f'<rect x="{M+2}" y="164" width="5" height="62" rx="2.5" fill="{f["c"]}"/>')
-    one_line = fit(question, CW - 80, 28, 0.50, 20)
-    if one_line >= 24:
-        b.append(t(M + 34, 204, question, one_line, INK, SERIF, "600", style="italic"))
-    else:
-        for i, ln in enumerate(wrap(question, CW - 80, 28, W_SERIF)[:2]):
-            b.append(t(M + 34, 192 + i * 34, ln, 28, INK, SERIF, "600", style="italic"))
+    qlines = wrap(question, CW - 90, 27, 0.52)[:2]
+    for i, ln in enumerate(qlines):
+        b.append(t(M + 34, (206 if len(qlines) == 1 else 190) + i * 34, ln, 27, INK,
+                   SERIF, "600", style="italic"))
 
-    lw, rx, rw = 500, M + 534, CW - 534
+    lw, rx, rw = 492, M + 520, CW - 520
 
-    # left — the problem, the line worth repeating, then precedent and buyers
-    b.append(eyebrow(M, 292, "The problem", f["c"], maxw=lw))
-    blk, _ = block(M, 330, problem, lw, 25, 32, INK2, 5)
+    # left — the problem, the line worth repeating, then engine, precedent, buyers
+    b.append(eyebrow(M, 290, "The problem", f["c"], maxw=lw))
+    blk, _ = block(M, 328, problem, lw, 24, 31, INK2, 4)
     b.append(blk)
+    b.append(hline(M, 450, lw))
     if note:
-        b.append(hline(M, 472, lw))
-        blk, _ = block(M, 500, note, lw, 24, 30, GOLDINK, 2, style="italic")
+        blk, _ = block(M, 480, note, lw, 22, 28, GOLDINK, 2, style="italic")
         b.append(blk)
-        ly = 566
-    else:
-        b.append(hline(M, 492, lw))
-        ly = 532
-    b.append(t(M, ly, "PRECEDENT", 19, MUTED, MONO, "500", ls="2.4"))
-    b.append(t(M + 140, ly, precedent, fit(precedent, lw - 140, 21, W_SANS, 16), INK2))
-    b.append(t(M, ly + 30, "BUYERS", 19, MUTED, MONO, "500", ls="2.4"))
-    b.append(t(M + 140, ly + 30, buyers, fit(buyers, lw - 140, 21, W_SANS, 16), INK2))
+    for i, (lab, val) in enumerate((("ENGINE", engine), ("PRECEDENT", precedent),
+                                    ("BUYERS", buyers))):
+        ly = 552 + i * 28
+        b.append(t(M, ly, lab, 18, MUTED, MONO, "500", ls="2.2"))
+        b.append(t(M + 136, ly, val, fit(val, lw - 140, 20, W_SANS, 17), INK2))
 
-    # right — what we build
-    b.append(glass(rx, 262, rw, 314, 18))
-    b.append(eyebrow(rx + 26, 304, "What we build", f["c"], maxw=rw - 52))
-    bl, _ = bullets(rx + 26, 348, build, rw - 52, 24, 30, 18, INK2, f["c"])
-    b.append(bl)
+    # right — what the live demo shows: each finding as the verifier prints it
+    top, bot = 256, 608
+    b.append(glass(rx, top, rw, bot - top, 18))
+    b.append(eyebrow(rx + 26, top + 36, "In the demo", f["c"], 20, 2.6, maxw=rw - 52))
+    b.append(t(rx + rw - 26, top + 36, "tools run first; none decides these", 18, MUTED, SANS,
+               "400", anchor="end", style="italic"))
+    y = top + 72
+    for verdict, head, witness in demo:
+        chip, cw_ = verdict_chip(rx + 26, y, verdict)
+        b.append(chip)
+        b.append(t(rx + 26 + cw_ + 12, y, head, fit(head, rw - 64 - cw_, 21, W_SANS, 18),
+                   INK, SANS, "600"))
+        blk, y2 = block(rx + 26, y + 27, witness, rw - 52, 19, 24, INK2, 2)
+        b.append(blk)
+        y = y2 + 15
+    b.append(hline(rx + 26, y - 10, rw - 52))
+    chip, cw_ = verdict_chip(rx + 26, y + 22, "PROVED")
+    b.append(chip)
+    b.append(t(rx + 26 + cw_ + 12, y + 22, close, fit(close, rw - 64 - cw_, 20, W_SANS, 16),
+               GREEN, SANS, "600"))
+    if y + 22 > bot - 22:
+        print(f"warning: slide {num} demo card overflows ({y + 22:.0f} > {bot - 16})")
 
     # bottom — the output
-    b.append(glass(M, 612, CW, 74, 16, f["tint"], 0.55))
-    b.append(t(M + 32, 658, "OUTPUT", 20, f["c"], MONO, "500", ls="2.6"))
-    blk, _ = block(M + 168, 644, output, CW - 200, 22, 28, INK2, 2)
-    b.append(blk)
+    b.append(glass(M, 626, CW, 62, 16, f["tint"], 0.55))
+    b.append(t(M + 32, 663, "OUTPUT", 20, f["c"], MONO, "500", ls="2.6"))
+    ol = wrap(output, CW - 200, 21, W_SANS)[:2]
+    for i, ln in enumerate(ol):
+        b.append(t(M + 168, (663 if len(ol) == 1 else 650) + i * 26, ln, 21, INK2))
 
     b.append(chrome(num))
     return page("".join(b))
 
 
 # ============================================================ 18 · take away
-def s18(num=23):
+def s18(num=19):
     b = [water("gold"), heading("Take Away")]
 
     b.append(solid(M, 174, CW, 106, INK, 18, sheen=False, gloss=0, edge=0.16))
-    b.append(t(W / 2, 222, "Mathematical rigour to security —", 33, WHITE, SERIF,
+    b.append(t(W / 2, 222, "Bringing mathematical rigour to security —", 33, WHITE, SERIF,
                "600", anchor="middle"))
-    b.append(t(W / 2, 264, "proof alongside testing, across apps and AI.",
+    b.append(t(W / 2, 264, "proof alongside testing, from the app to the cloud.",
                33, GOLD, SERIF, "600", anchor="middle"))
 
     cols = [("The shift", "Attack path discovery is automated, parallel and cheap. "
-                          "A defence that only samples cannot answer one that enumerates."),
+                          "Detection shows what is happening; proof shows what cannot happen."),
             ("The addition", "We do not replace testing, monitoring or the SOC. "
                              "We make one class of controls machine checkable."),
             ("The honesty", "A proof is relative to a model and a specification — both stated. "
@@ -561,7 +634,7 @@ def s18(num=23):
 
     b.append(glass(M, 566, CW, 112, 18, FAM["gold"]["tint"], 0.5))
     b.append(f'<rect x="{M+2}" y="580" width="5" height="84" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(M + 34, 606, "Start here — Micro Assessment of Solution 1",
+    b.append(eyebrow(M + 34, 606, "Start here — Micro Assessment of Service 1",
                      GOLDINK, 20, 2.4, maxw=CW - 80))
     b.append(t(M + 34, 640, "One narrow, high-risk slice. Read-only access, no agent deployed,",
                23, INK2))
@@ -642,7 +715,7 @@ def s19():
     b.append(f'<rect x="{M}" y="300" width="200" height="4" rx="2" fill="{GOLD}"/>')
     qx = W - M - 158
     b.append(qr(qx, 300, 158))
-    b.append(t(qx + 79, 484, "primuscredence.com", 21, INK2, MONO, anchor="middle"))
+    b.append(t(W - M, 484, "primuscredence.com", 19, INK2, MONO, anchor="end"))
 
     b.append(hline(M, 500, CW))
     b.append(t(M, 552, "Dr. Raghavendra Ramesh", 33, INK, SERIF, "600"))
@@ -652,113 +725,101 @@ def s19():
                "500", anchor="end"))
     b.append(t(W - M, 590, "+971 58 189 2803", 24, INK2, MONO, anchor="end"))
     b.append(t(W - M, 622, "UAE", 24, INK2, MONO, anchor="end"))
-    b.append(t(M, 676, "Provable Security for Apps & AI Agents", 22, GOLDINK, MONO,
-               "500", ls="1.6"))
+    b.append(t(M, 676, "Provable Security for Applications", 22, GOLDINK, MONO,
+               "500", ls="1.8"))
     return page("".join(b))
 
 
 # ==================================================================== content
 SOLUTIONS = [
-    dict(num=13, fam="cyb", n=1,
+    dict(num=12, fam="cyb", n=1,
          title="Application Access-Policy & Entitlement Verification",
-         question="What can each app role, API token and public user do inside the app — "
-                  "and can any of them reach what they should not?",
-         problem="An app's authorisation lives in its own database and admin panel — which "
-                 "role reads which type, what the Public role exposes. No SAST, CSPM or "
-                 "CNAPP reads it; DAST only samples.",
-         build=["The app's roles, API tokens and public users, into Cedar",
-                "SymCC decides over all requests — BOLA, BFLA, BOPLA",
-                "CheckNoNewAccess gates every role change in CI"],
-         output="Proof that no role, token or public user reaches what it must not — over all "
-                "requests — or the exact request that breaks it.",
-         precedent="Cedar + SymCC → Cedar Analysis",
+         summary="Who may do what",
+         question="Can any app role, API token, plugin route or public user reach data it "
+                  "must not — through the app or its cloud role?",
+         problem="Authorisation lives in the app's admin panel, its plugins and its one "
+                 "cloud role. Each layer passes its own review. Nobody checks them together.",
+         demo=[("VIOLATED", "Two admin changes, each fine",
+                "Together, an Auditor at one hospital exports another hospital's "
+                "restricted records. HTTP 200."),
+               ("VIOLATED", "The GraphQL plugin side door",
+                "No login, any document. REST still says 403."),
+               ("VIOLATED", "The app ↔ cloud seam",
+                "One cloud role for all users: files cross tenants.")],
+         close="after each fix — every user, every request",
+         output="A proof that no role, token, plugin route or public user reaches what it "
+                "must not — or the exact request that breaks it.",
+         engine="Cedar + SymCC (CVC5), from the live app",
+         precedent="AWS Cedar Analysis",
          buyers="Platform & AppSec teams · ISVs",
-         note="Portable: it reads the app's own config, so it holds on-prem, not only in cloud."),
+         note="Checked at the moment an admin clicks Save — before anyone can use "
+              "the change."),
 
-    dict(num=14, fam="cyb", n=2,
+    dict(num=13, fam="cyb", n=2,
          title="Network Reachability & Segmentation Proofs",
-         question="Does any path exist from an untrusted zone to this subnet — and does "
+         summary="What traffic can reach where",
+         question="Does any path exist from an untrusted zone to this one — and does "
                   "east-west segmentation actually hold?",
-         problem="Probing tests the paths you thought of, when you ran it. Reachability is a "
-                 "property of the configuration — routes, security groups, firewall rules — "
-                 "not of the packets you send.",
-         build=["Hybrid and on-prem estate modelled with Batfish",
-                "Soufflé and Z3 over the cloud topology, statically",
-                "Microsegmentation checked against the declared policy"],
+         problem="Probing tests the paths you thought of. Reachability is a property of "
+                 "the configuration — routes, firewall rules, NAT — across every segment "
+                 "at once.",
+         demo=[("VIOLATED", "One policy, every zone pair",
+                "FortiGate/OT and AWS. AWS → historian → SCADA, "
+                "hop by hop, with the rule and its owner."),
+               ("WOULD VIOLATE", "A change, before the CAB",
+                "A pending firewall rule opens 2 new paths into OT."),
+               ("VIOLATED", "One dash in a NetworkPolicy (optional)",
+                "Any namespace reaches tenant B's database on 5432.")],
+         close="every row, after the fix — no packet sent",
          output="A proof that no path exists — or the path, hop by hop, with the rule that "
                 "permits it and the owner of that rule.",
+         engine="Batfish + Z3, from config files",
          precedent="AWS Tiros → VPC Reachability Analyzer",
-         buyers="Regulated finance · OT & critical infra · sovereign cloud",
-         note="No scanning window, no production traffic — it re-runs on every change."),
+         buyers="Finance · OT & CNI · sovereign cloud",
+         note="No scanning window, no production traffic — safe on OT, and re-run on "
+              "every change."),
 
-    dict(num=15, fam="cyb", n=3,
-         title="Application and API-Usage Conformance",
-         question="Does our own code use the APIs it is built on — cloud, credential and crypto "
-                  "SDKs, and its own data-access calls — the way their contracts require?",
-         problem="Cloud and app APIs are protocols, not calls. Undrained pagination, a logged "
-                 "credential, an object fetched by request ID without an ownership check — all "
-                 "compile and pass review. Same risk on-prem or in cloud.",
-         build=["Object-ownership (BOLA/IDOR) and auth-routing patterns",
-                "A conformance gate for library publishers",
-                "PR-gate CI on Soot, CodeQL and Infer"],
-         output="The call site, the taint trace, the pattern violated and the corrected call "
-                "sequence — plus which patterns were checked.",
-         precedent="AWS RAPID → CodeGuru · 76% accepted",
-         buyers="Platform and AppSec teams · ISVs",
-         note="A correct policy invoked through a misused SDK still leaks. Bounded by the library."),
-
-    dict(num=16, fam="cyb", n=4,
-         title="Post-Quantum Cryptography Migration",
-         question="On an already quantum-safe cloud, does the app's integration still "
-                  "authenticate the right party in every session?",
-         problem="The cloud's PQC transport can be formally proven and the app on top still "
-                 "relayed or downgraded. Hybrid migration adds identity-binding and combiner "
-                 "failures that code review ships past.",
-         build=["Discovery and a versioned CBOM, gaps listed",
-                "The app-to-cloud integration protocol, transport proof discharged",
-                "Identity, channel and downgrade binding, over all sessions"],
-         output="The CBOM and a sequenced plan; then a proof the app's integration preserves "
-                "authentication and secrecy on the verified base — or the relay that breaks it.",
-         precedent="PQ-SSH counterexample, then proved (2024)",
-         buyers="Gov ID · PKI · banks · healthcare · defence",
-         note="Verified app crypto on an already-verified cloud — proof end to end."),
-
-    dict(num=18, fam="ai", n=5,
-         title="Agentic AI Guardrail Verification",
-         question="Not “how often does the agent fail?” but “can it do this at all?”",
-         problem="An agent is a non-human identity with delegated privilege and an instruction "
-                 "channel the adversary can write to. A guard model judging a model is "
-                 "detective, not preventive.",
-         build=["Tool-call constraints over identity and arguments",
-                "Data-access boundaries in the Solution 1 logic",
-                "Composition safety across call sequences"],
-         output="A result about the mediation layer, not the model: nothing permitted escapes "
-                "the envelope, and no path bypasses it.",
-         precedent="Bedrock Automated Reasoning",
-         buyers="Banks · sovereign AI · OT · healthcare",
-         note="Provable: no rows outside the caller's ACL. Not provable: no PII ever reaches the user."),
+    dict(num=14, fam="cyb", n=3,
+         title="Data Residency & Sovereignty Proofs",
+         summary="Where regulated data can go",
+         question="Can regulated data leave the country or the organisation — or could anyone "
+                  "make it leave?",
+         problem="Residency is asserted by configuration review. Backups, replicas, caches "
+                 "and keys are each reviewed alone. DSPM shows where data is, not where it "
+                 "can go.",
+         demo=[("AT RISK (can)", "Nothing has left — yet",
+                "An ops role can replicate the data to a “-replica” bucket outside the "
+                "organisation. Replayed live."),
+               ("VIOLATED (is)", "A DR copy and a CDN",
+                "A backup in Frankfurt; edge caches outside the UAE."),
+               ("OUTSIDE MODEL", "Application egress",
+                "Shown, not hidden: the app can reach the internet.")],
+         close="for storage, keys and edge after the fix",
+         output="A proof that no channel moves the data outside the approved jurisdiction or "
+                "organisation — or the chain: store, mechanism, role, policy line, destination.",
+         engine="SMT over IAM, SCPs and key policies",
+         precedent="AWS Zelkova → IAM Access Analyzer",
+         buyers="Sovereign cloud · government · banks",
+         note="Not where your data is — where it can go. Today, and whatever anyone "
+              "could set up."),
 
 ]
 
 TITLES = [
-    "PrimusCredence — Provable Security for Apps & AI Agents",
+    "PrimusCredence — Provable Security for Applications",
     "Dr. Raghavendra Ramesh",
     "Where the Risk Actually Lives",
     "OWASP 2025 — Access Control & Misconfiguration",
-    "Apps Misuse the APIs They Run On",
-    "The Base Went Post-Quantum. Are the Apps Ready?",
-    "AI Industrialises the Attacker",
     "Segmentation Is Asserted, Not Proven",
-    "Why Today's Security Stack Isn't Enough",
+    "Residency Is Reviewed, Not Proven",
+    "AI Industrialises the Attacker",
+    "What Today's Security Stack Leaves Open",
     "Proof — Now Feasible",
     "Automated Reasoning",
-    "Solutions",
+    "Services",
     "1. Application Access-Policy & Entitlement Verification",
     "2. Network Reachability & Segmentation Proofs",
-    "3. Application & API-Usage Conformance",
-    "4. Post-Quantum Cryptography Migration",
-    "AI Agents Are Multiplying Faster Than the Rules",
-    "5. Agentic AI Guardrail Verification",
+    "3. Data Residency & Sovereignty Proofs",
     "Our Approach",
     "Why the Provider's Clients Will Ask",
     "What a Provider Can Resell",
@@ -774,13 +835,12 @@ def build():
         1: s01(),
         2: s02(2),
         3: s_layers(3),
-        4: s_owasp(4), 5: s_api(5), 6: s_pqc(6), 7: s03(7),
-        8: s_network(8),
-        9: s_landscape(9), 10: s_feasible(10), 11: s04(11), 12: s05(12),
-        17: s_ai_motivation(17),
-        19: s_shortterm(19), 20: s_demand(20),
-        21: s_resell(21), 22: s_registers(22),
-        23: s18(23), 24: s19(),
+        4: s_owasp(4), 5: s_network(5),
+        6: s_residency(6), 7: s03(7),
+        8: s_landscape(8), 9: s_feasible(9), 10: s04(10), 11: s05(11),
+        15: s_shortterm(15), 16: s_demand(16),
+        17: s_resell(17), 18: s_registers(18),
+        19: s18(19), 20: s19(),
     }
     for sol in SOLUTIONS:
         pages[sol["num"]] = solution(**sol)
@@ -795,12 +855,19 @@ def build():
 # will ask, what they can resell, and what one result is worth.
 # ==========================================================================
 
+def text_w(s, size):
+    """Width estimate for IBM Plex Sans: capitals and digits run wider than
+    the lowercase average that W_SANS measures."""
+    wide = sum(1 for c in s if c.isupper() or c.isdigit())
+    return ((len(s) - wide) * W_SANS + wide * 0.62) * size
+
+
 def chips(x, y, items, maxw, size=21, gap=12, h=40, fill="#ffffff",
           textfill=INK2, edge=LINE, rows_lead=52):
     """Pills laid out left to right, wrapping within maxw."""
     out, cx, cy = [], x, y
     for it in items:
-        w = len(it) * size * W_SANS + 36
+        w = text_w(it, size) + 36
         if cx + w > x + maxw and cx > x:
             cx, cy = x, cy + rows_lead
         out.append(f'<g filter="url(#liftsm)">{rrect(cx, cy, w, h, fill, h / 2)}'
@@ -816,7 +883,7 @@ def chip_rows(cx, y, rows, size=21, gap=12, h=40, lead=52, fill="#ffffff",
     """Rows of pills, each row centred on cx."""
     out = []
     for ri, row in enumerate(rows):
-        widths = [len(it) * size * W_SANS + 36 for it in row]
+        widths = [text_w(it, size) + 36 for it in row]
         total = sum(widths) + gap * (len(row) - 1)
         x, ry = cx - total / 2, y + ri * lead
         for it, w in zip(row, widths):
@@ -867,7 +934,7 @@ def s_stack(num=5):
     return page("".join(b))
 
 
-def s_demand(num=20):
+def s_demand(num=16):
     """The demand signal: why a provider's existing clients will ask for this."""
     b = [water("gold"),
          heading("Why the Provider's Clients Will Ask")]
@@ -876,34 +943,37 @@ def s_demand(num=20):
 
     tiles = [
         ("Mandatory replaced voluntary",
-         "UAE cyber-resilience obligations now carry penalties of AED 100k–3m."),
+         "UAE PDPL is federal law; SAMA CSF and NCA ECC bind banks, government and CNI."),
         ("Assurance shifted to evidence",
          "Regulators increasingly ask for demonstrable control effectiveness, not attestation."),
-        ("AI rules arrived before AI assurance",
-         "Risk-tiered obligations demand evidence the market cannot yet produce."),
-        ("Sovereignty is a reachability question",
-         "Localisation asks whether regulated data can leave — our reachability proofs settle it."),
+        ("Third-party risk is now in scope",
+         "Rules increasingly require evidence that integrations and components are controlled."),
+        ("Sovereignty must be demonstrable",
+         "Localisation asks whether regulated data can leave — our residency proofs settle it."),
     ]
-    tw, th = (CW - 20) / 2, 106
+    tw, th = (CW - 20) / 2, 114
     for i, (head, body) in enumerate(tiles):
         x = M + (i % 2) * (tw + 20)
-        y = 214 + (i // 2) * (th + 16)
+        y = 212 + (i // 2) * (th + 14)
         b.append(glass(x, y, tw, th, 16, FAM["gold"]["tint"], 0.42))
-        b.append(t(x + 26, y + 42, head, fit(head, tw - 52, 25, W_SANS, 20), INK, SANS, "600"))
-        blk, _ = block(x + 26, y + 76, body, tw - 52, 21, 26, INK2, 2)
+        b.append(t(x + 26, y + 44, head, fit(head, tw - 52, 25, W_SANS, 20), INK, SANS, "600"))
+        blk, _ = block(x + 26, y + 78, body, tw - 52, 21, 26, INK2, 2)
         b.append(blk)
 
     b.append(glass(M, 470, CW, 172, 18))
     b.append(eyebrow(M + 30, 508, "Where a finding also lands", INK2, 20, 2.6))
-    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2"), ("UAE PDPL", "2 3 5"),
-              ("SAMA CSF", "1 2 3 5"), ("NCA ECC", "1 2 3"), ("UAE AI Act", "5"),
-              ("ISO 27001", "1 2 3 4"), ("ISO 42001", "5"), ("NIST CSF 2.0", "1–5")]
+    frames = [("DESC ISR", "1 2 3"), ("NESA / UAE IAS", "2 3"), ("UAE PDPL", "2 3"),
+              ("SAMA CSF", "1 2 3"), ("NCA ECC", "1 2 3"), ("PCI DSS 4.0", "1 2"),
+              ("ISO 27001", "1 2 3"), ("CIS Controls", "1 2 3"), ("NIST CSF 2.0", "1 2 3")]
     colw = (CW - 60) / 3
     for i, (name, nums) in enumerate(frames):
         x = M + 30 + (i % 3) * colw
         y = 550 + (i // 3) * 34
         b.append(t(x, y, name, fit(name, colw - 110, 21, W_SANS, 18), INK2))
-        b.append(t(x + colw - 44, y, nums, 20, GOLDINK, MONO, "500", anchor="end"))
+        # each service number in its own fixed slot, so the columns line up
+        for k in nums.split():
+            b.append(t(x + colw - 44 - (3 - int(k)) * 24, y, k, 20, GOLDINK, MONO, "500",
+                       anchor="end"))
 
     b.append(t(M, 680, "Regulation routes the finding to a second reader. It is not the "
                        "reason to commission it.", 22, MUTED, SANS, "400", style="italic"))
@@ -920,7 +990,7 @@ def arrow_r(x1, x2, y, color=GOLD, sw=2.6):
             f'stroke-linejoin="round"/>')
 
 
-def s_vision(num=18):
+def s_vision(num=16):
     """The long-term vision: PrimusCredence as the assurance hub — it takes the
     mandate from clients and awards the build to cybersecurity vendors."""
     b = [water("gold"), heading("The Long-Term Vision — the Assurance Hub")]
@@ -987,7 +1057,7 @@ def s_vision(num=18):
     return page("".join(b))
 
 
-def s_shortterm(num=19):
+def s_shortterm(num=15):
     """Our approach: we partner with cybersecurity solutions providers, adding
     provable control effectiveness to their bids and reaching their clients."""
     b = [water("gold"), heading("Our Approach")]
@@ -1015,11 +1085,11 @@ def s_shortterm(num=19):
     b.append(eyebrow(M + 30, by + 36, "Whom we reach through them — the GCC client base",
                      INK2, 20, 2.6, maxw=CW - 60))
     sectors = [
-        ("Government & sovereign", ["UAE Digital Govt", "Smart Dubai", "Abu Dhabi Govt"]),
-        ("Aviation & CNI", ["dans · air navigation", "DEWA", "Regional utilities"]),
-        ("Energy, oil & gas", ["ADNOC", "Aramco", "OT operators"]),
-        ("Banking & finance", ["Regional banks", "Sovereign wealth funds", "FinTechs"]),
-        ("Telecom & cloud", ["e& · Etisalat", "Core42 · G42", "STC Cloud"]),
+        ("Government & sovereign", ["Federal & emirate entities", "Digital-government programmes"]),
+        ("Aviation & CNI", ["Air navigation", "Airports", "Utilities"]),
+        ("Energy, oil & gas", ["National energy companies", "OT operators"]),
+        ("Banking & finance", ["Regional banks", "Sovereign funds", "FinTechs"]),
+        ("Telecom & cloud", ["Telecom operators", "Sovereign-cloud providers"]),
     ]
     ry = by + 78
     for label, names in sectors:
@@ -1033,49 +1103,51 @@ def s_shortterm(num=19):
     return page("".join(b))
 
 
-def s_resell(num=21):
+def s_resell(num=17):
     """The channel case: what a provider can sell, and why it deploys easily."""
     b = [water("gold"), heading("What a Provider Can Resell")]
     b.append(t(M, 184, "We do not certify — so an audit firm or an MSSP is a channel, "
                        "not a rival.", 27, INK, SERIF, "600", style="italic"))
 
     b.append(glass(M, 214, CW, 82, 16))
-    left_txt = "Scanning · posture reporting · monitoring"
+    left_txt = "Detection · response · posture reporting"
     right_txt = "Provable control effectiveness"
     b.append(t(M + 30, 262, left_txt, fit(left_txt, 420, 25, W_SANS, 20), MUTED, SANS))
-    b.append(f'<path d="M{M+476},254 l34,0 M{M+502},246 l8,8 -8,8" stroke="{GOLD}" '
-             f'stroke-width="2.5" fill="none"/>')
+    b.append(f'<path d="M{M+493},244 l0,20 M{M+483},254 l20,0" stroke="{GOLD}" '
+             f'stroke-width="3" fill="none"/>')
     b.append(t(M + CW - 30, 262, right_txt,
                fit(right_txt, CW - 30 - 546, 25, W_SANS, 19), GOLDINK, SANS, "600",
                anchor="end"))
 
     lw, rx, rw = 470, M + 504, CW - 504
     b.append(eyebrow(M, 356, "The commercial move", GOLDINK, maxw=lw))
-    bl, _ = bullets(M, 406, [
-        "Specialist capability inside bids you already win",
-        "You keep the client relationship and the contract",
-    ], lw, 25, 33, 26, INK2, GOLD)
+    bl, _ = bullets(M, 410, [
+        "Proof inside bids you already win",
+        "Recurring: re-proven on every change",
+        "You keep the client and the contract",
+    ], lw, 24, 30, 26, INK2, GOLD, maxlines=1)
     b.append(bl)
 
-    b.append(glass(rx, 330, rw, 214, 18, FAM["gold"]["tint"], 0.4))
+    b.append(glass(rx, 330, rw, 240, 18, FAM["gold"]["tint"], 0.4))
     b.append(eyebrow(rx + 26, 374, "Why it deploys easily", GOLDINK, maxw=rw - 52))
-    bl, _ = bullets(rx + 26, 416, [
+    bl, _ = bullets(rx + 26, 420, [
         "Read-only access, no agent on any host",
         "No scanning window, no production traffic",
-    ], rw - 52, 24, 31, 26, INK2, GOLD)
+        "Verdicts can land in your SIEM and tickets",
+    ], rw - 52, 23, 30, 26, INK2, GOLD, maxlines=1)
     b.append(bl)
 
-    b.append(t(M, 622, "Read-only and agentless, so it clears change advisory in one pass.",
-               22, GOLDINK, SANS, "500"))
-    b.append(t(M, 656, "We produce the technical evidence. Your assessor keeps the opinion.",
-               22, GOLDINK, SANS, "500"))
+    b.append(t(M, 642, "We produce the technical evidence. Your assessor keeps the opinion.",
+               24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
 
-def s_registers(num=22):
+def s_registers(num=18):
     """One analysis, three deliverables — the evidence multiplier."""
     b = [water("gold"), heading("One Result, Three Registers")]
+    b.append(t(M, 176, "One analysis, read by engineering, risk and audit — each in its own "
+                       "terms.", 26, INK, SERIF, "600", style="italic"))
 
     cols = [("First line", "Engineering and security operations",
              "The property, its model and assumptions, and either the proof or a "
@@ -1089,12 +1161,12 @@ def s_registers(num=22):
     cw = (CW - 2 * 20) / 3
     for i, (head, sub, body) in enumerate(cols):
         x = M + i * (cw + 20)
-        b.append(glass(x, 186, cw, 324, 18))
-        b.append(f'<rect x="{x+26}" y="218" width="46" height="4" rx="2" fill="{GOLD}"/>')
-        b.append(t(x + 26, 264, head, 29, INK, SERIF, "600"))
-        blk, _ = block(x + 26, 296, sub, cw - 52, 20, 25, GOLDINK, 2)
+        b.append(glass(x, 208, cw, 310, 18))
+        b.append(f'<rect x="{x+26}" y="236" width="46" height="4" rx="2" fill="{GOLD}"/>')
+        b.append(t(x + 26, 280, head, 29, INK, SERIF, "600"))
+        blk, _ = block(x + 26, 312, sub, cw - 52, 20, 25, GOLDINK, 2)
         b.append(blk)
-        blk, _ = block(x + 26, 360, body, cw - 52, 22, 28, INK2, 5)
+        blk, _ = block(x + 26, 376, body, cw - 52, 22, 28, INK2, 5)
         b.append(blk)
 
     b.append(glass(M, 546, CW, 88, 16, FAM["gold"]["tint"], 0.5))
@@ -1109,7 +1181,7 @@ def s_registers(num=22):
     return page("".join(b))
 
 
-def s_invest(num=23):
+def s_invest(num=21):
     """Early-stage raise: what the money buys — feasibility studies and pilots."""
     b = [water("gold"), heading("Investment")]
     b.append(t(M, 184, "Early-stage — we raise to prove the method, not to scale ahead "
@@ -1118,9 +1190,9 @@ def s_invest(num=23):
     tw = (CW - 24) / 2
     cards = [
         ("Feasibility studies",
-         "Validate each solution on real client artefacts — a claim becomes a proof, "
+         "Validate each service on real client artefacts — a claim becomes a proof, "
          "or a counter-example, on systems that matter.",
-         ["De-risk five solutions on live estates",
+         ["De-risk three services on live estates",
           "Turn research into productised checks",
           "Reference results to show the next buyer"]),
         ("Pilot projects",
@@ -1154,7 +1226,7 @@ def s_invest(num=23):
 
 # ==========================================================================
 # Motivation slides: why the problem is everywhere (access control and
-# misconfiguration, apps and APIs, post-quantum, AI), why the current stack
+# misconfiguration, apps and APIs, AI, network segmentation), why the current stack
 # is not enough, why proof is now feasible, and why AI agents need it.
 # ==========================================================================
 
@@ -1173,15 +1245,15 @@ def stat_tile(x, y, w, h, big, sub, tint="gold", accent=None):
 def s_layers(num=3):
     """The anchor diagram for the whole talk: the application stack. Plugins run
     inside the app; the app sits on a proven cloud base; and between them lies the
-    seam — APIs, third-party libraries, and the PQC app-to-cloud binding — where
-    access control and misconfiguration actually fail. The cloud base (IAM,
-    network, PQC transport) is already formally proven; the app and the seam are
-    not, and that is the layer we prove."""
+    seam — APIs, the paths data takes and is copied along, and the network paths between zones —
+    where access control and misconfiguration actually fail. The cloud base (IAM,
+    network) is already formally proven; the app and the seam are not, and that
+    is the layer we prove."""
     b = [water("gold"), heading("Where the Risk Actually Lives")]
     b.append(t(M, 176, "The cloud base is proven. The app above it — and the seams between — "
                        "are not.", 25, INK, SERIF, "600", style="italic"))
 
-    cyb, cry = FAM["cyb"], FAM["cry"]
+    cyb = FAM["cyb"]
     sx, sw = M, 716                 # stack column: 68 .. 784
     vx = 808
     vw = M + CW - vx                # verdict column: 808 .. 1119
@@ -1191,12 +1263,16 @@ def s_layers(num=3):
     b.append(glass(sx, y1, sw, h1, 14, FAM["gold"]["tint"], 0.45))
     b.append(t(sx + 26, y1 + 26, "Third-party plugins & extensions", 22, INK, SANS, "600"))
     b.append(t(sx + 26, y1 + 48, "Run inside the app — and inherit its privilege", 19, INK2))
+    b.append(orb(sx + sw - 34, y1 + 29, 13, cyb["c"]))
+    b.append(t(sx + sw - 34, y1 + 35, "1", 15, WHITE, MONO, "500", anchor="middle"))
 
     # ---- layer 2 — the application (the hero) --------------------------------
     y2, h2 = 274, 150
     b.append(glass(sx, y2, sw, h2, 16, cyb["tint"], 0.5))
     b.append(f'<rect x="{sx}" y="{y2}" width="6" height="{h2}" rx="3" fill="{cyb["c"]}"/>')
     b.append(t(sx + 30, y2 + 48, "APPLICATION", 30, INK, SERIF, "600"))
+    b.append(orb(sx + sw - 34, y2 + 38, 15, cyb["c"]))
+    b.append(t(sx + sw - 34, y2 + 45, "1", 17, WHITE, MONO, "500", anchor="middle"))
     b.append(t(sx + 30, y2 + 82, "Its own roles, API tokens and public users — the authorisation",
                22, INK2))
     b.append(t(sx + 30, y2 + 110, "logic and configuration in its database and admin panel",
@@ -1210,14 +1286,16 @@ def s_layers(num=3):
     y3, h3 = 436, 96
     b.append(glass(sx, y3, sw, h3, 14, FAM["gold"]["tint"], 0.4))
     b.append(f'<rect x="{sx+2}" y="{y3+12}" width="5" height="{h3-24}" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(sx + 26, y3 + 30, "The app ↔ cloud & library seam", GOLDINK, 19, 2.2,
+    b.append(eyebrow(sx + 26, y3 + 30, "The app ↔ cloud & data seam", GOLDINK, 19, 2.2,
                      maxw=sw - 52))
-    seam = [("Access control via APIs", cyb["c"]), ("SDK & library usage", cyb["c"]),
-            ("PQC app↔cloud binding", cry["c"])]
-    seamx = [sx + 28, sx + 272, sx + 480]
-    for (lab, col), xx in zip(seam, seamx):
-        b.append(f'<circle cx="{xx}" cy="{y3+66}" r="4.5" fill="{col}"/>')
-        b.append(t(xx + 16, y3 + 72, lab, 19, INK2, SANS, "500"))
+    # each seam item carries the number of the service that proves it
+    seam = [("1", "Access via APIs"), ("2", "Network paths & zones"),
+            ("3", "Data paths & copies")]
+    seamx = [sx + 36, sx + 222, sx + 486]
+    for (n, lab), xx in zip(seam, seamx):
+        b.append(orb(xx, y3 + 65, 11, cyb["c"]))
+        b.append(t(xx, y3 + 70, n, 13, WHITE, MONO, "500", anchor="middle"))
+        b.append(t(xx + 18, y3 + 72, lab, 19, INK2, SANS, "500"))
 
     # ---- layer 4 — the cloud / infrastructure base (proven) -----------------
     y4, h4 = 548, 128
@@ -1227,9 +1305,8 @@ def s_layers(num=3):
     b.append(t(sx + 30, y4 + 74, "VMs · containers · databases · queues · object storage · IAM "
                                  "· network", fit("VMs · containers · databases · queues · object "
               "storage · IAM · network", sw - 60, 20, W_SANS, 16), INK2))
-    b.append(t(sx + 30, y4 + 106, "Access control, network & PQC transport — proven: Zelkova, "
-                                  "Tiros, ML-KEM",
-               fit("Access control, network & PQC transport — proven: Zelkova, Tiros, ML-KEM",
+    b.append(t(sx + 30, y4 + 106, "Access control & network — proven: Zelkova, Tiros",
+               fit("Access control & network — proven: Zelkova, Tiros",
                    sw - 60, 20, W_SANS, 16), GREEN, SANS, "600"))
 
     # ---- braces tying each group to its verdict card ------------------------
@@ -1242,17 +1319,16 @@ def s_layers(num=3):
     b.append(eyebrow(vx + 26, 250, "Unproven today", GOLDINK, 19, 2.2, maxw=vw - 52))
     b.append(t(vx + 26, 290, "Where the", 27, INK, SERIF, "600"))
     b.append(t(vx + 26, 322, "breaches are", 27, INK, SERIF, "600"))
-    blk, _ = block(vx + 26, 362, "The app's own access control, its plugins, and the API, "
-                                 "library and PQC seams beneath it.", vw - 52, 21, 27, INK2, 5)
+    blk, _ = block(vx + 26, 362, "The app's own access control, its plugins, and the access, "
+                                 "data and network seams beneath it.", vw - 52, 21, 27, INK2, 5)
     b.append(blk)
-    b.append(t(vx + 26, 510, "→ This is what we prove.", 21, GOLDINK, SANS, "600"))
+    b.append(t(vx + 26, 510, "→ Services 1 · 2 · 3 prove it.", 21, GOLDINK, SANS, "600"))
 
     # ---- verdict card 2 — proven base (cloud) -------------------------------
     b.append(glass(vx, 548, vw, 128, 16, "#e6f2ea", 0.6))
     b.append(f'<rect x="{vx+2}" y="562" width="5" height="100" rx="2.5" fill="{GREEN}"/>')
     b.append(eyebrow(vx + 26, 582, "Proven base", GREEN, 19, 2.2, maxw=vw - 52))
-    blk, _ = block(vx + 26, 614, "Cloud IAM, network & PQC transport — already formally "
-                                 "verified.", vw - 52, 19, 24, INK2, 3)
+    blk, _ = block(vx + 26, 614, "Cloud IAM & network — already formally verified.", vw - 52, 19, 24, INK2, 3)
     b.append(blk)
 
     b.append(chrome(num))
@@ -1260,16 +1336,18 @@ def s_layers(num=3):
 
 
 # ================================================= network reachability
-def s_network(num=8):
+def s_network(num=5):
     """Motivation: network reachability & segmentation. Once inside, lateral
     movement is fast, and segmentation is asserted far more than it is proven."""
     b = [water("gold"), heading("Segmentation Is Asserted, Not Proven")]
-    b.append(t(M, 184, "Once inside, lateral movement is the phase that turns an incident "
-                       "into a breach.", 27, INK, SERIF, "600", style="italic"))
+    b.append(t(M, 184, "Once inside, lateral movement turns an incident into a breach.",
+               27, INK, SERIF, "600", style="italic"))
 
-    stats = [("29 min", "average breakout to the first lateral move (2025)"),
+    # all three: CrowdStrike 2026 Global Threat Report (2025 data, eCrime)
+    stats = [("29 min", "average eCrime breakout in 2025: initial access to lateral "
+                        "movement"),
              ("27 sec", "the fastest breakout ever observed"),
-             ("82%", "of intrusions were malware-free — valid access, not code")]
+             ("82%", "of detections in 2025 were malware-free")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(stats):
         x = M + i * (tw + 20)
@@ -1277,8 +1355,10 @@ def s_network(num=8):
         b.append(t(x + 24, 280, big, 48, GOLDINK, SERIF, "600"))
         blk, _ = block(x + 24, 312, sub, tw - 48, 20, 25, INK2, 3)
         b.append(blk)
+    b.append(t(M + CW, 398, "Source: CrowdStrike 2026 Global Threat Report (2025 data)",
+               16, MUTED, SANS, anchor="end", style="italic"))
 
-    y, hw = 404, CW / 2 - 12
+    y, hw = 414, CW / 2 - 12
     b.append(glass(M, y, hw, 188, 16))
     b.append(eyebrow(M + 26, y + 40, "Why probing can't answer it", FAM["cyb"]["c"],
                      maxw=hw - 52))
@@ -1299,8 +1379,8 @@ def s_network(num=8):
     ], hw - 52, 22, 30, 14, INK2, GOLDINK, maxlines=1)
     b.append(bl)
 
-    b.append(t(M, 654, "On an OT network probing is forbidden — the IT/OT boundary must be "
-                       "proven, not tested.", 24, GOLDINK, SANS, "500"))
+    b.append(t(M, 654, "On OT networks active probing is often off-limits — the IT/OT "
+                       "boundary must be proven.", 24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
@@ -1348,123 +1428,98 @@ def s_owasp(num=4):
         b.append(t(M + 274, cy, cause, fit(cause, CW - 274 - 30, 22, W_SANS, 17), INK2))
         cy += 27
 
-    b.append(t(M, 680, "Every one was a well-formed, authenticated request a monitor read as "
-                       "normal.", 24, GOLDINK, SANS, "500"))
+    b.append(t(M, 680, "Each system did exactly what its access rules allowed — "
+                       "the rules were wrong.", 24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
 
-# ============================================================ 3 · apps & APIs
-def s_api(num=5):
-    b = [water("gold"), heading("Apps Misuse the APIs They Run On")]
-    b.append(t(M, 176, "Cloud and app APIs are protocols, not calls — misuse still "
-                       "compiles.", 26, INK, SERIF, "600", style="italic"))
+# ============================================================ 3 · data residency
+def s_residency(num=6):
+    """Motivation: data residency. Each change is reviewed alone; nobody re-checks
+    where the data can now go, and the standard tools stay green."""
+    b = [water("gold"), heading("Residency Is Reviewed, Not Proven")]
+    b.append(t(M, 176, "Every change is reviewed alone — nobody re-checks where the data "
+                       "can now go.", 26, INK, SERIF, "600", style="italic"))
 
     lw, rx, rw = 500, M + 534, CW - 534
-    b.append(glass(M, 206, lw, 270, 18))
-    b.append(eyebrow(M + 26, 246, "The pattern", FAM["cyb"]["c"], maxw=lw - 52))
-    bl, _ = bullets(M + 26, 288, [
-        "An object fetched by request ID with no ownership check — BOLA / IDOR",
-        "A credential written to a log; pagination left undrained",
-        "Authorisation in middleware a scanner can't see",
-    ], lw - 52, 23, 27, 16, INK2, FAM["cyb"]["c"])
+    cyb, cry = FAM["cyb"]["c"], FAM["cry"]["c"]
+
+    # ---- left: the diagram — one regulated store, four quiet ways out -------
+    b.append(glass(M, 206, lw, 262, 18))
+    b.append(eyebrow(M + 26, 246, "Four quiet ways out", cyb, maxw=lw - 52))
+    bx, by, bw, bh = M + 22, 270, 168, 186
+    b.append(rrect(bx, by, bw, bh, "#e6f2ea", 14, opacity=0.7))
+    b.append(f'<rect x="{bx}" y="{by}" width="{bw}" height="{bh}" rx="14" fill="none" '
+             f'stroke="{GREEN}" stroke-width="2" stroke-dasharray="7 6"/>')
+    b.append(t(bx + bw / 2, by + 26, "UAE · YOUR ORG", 14, GREEN, MONO, "500",
+               anchor="middle", ls="1.4"))
+    b.append(orb(bx + bw / 2, by + 88, 24, cyb))
+    b.append(t(bx + bw / 2, by + 140, "Regulated", 20, INK, SANS, "600", anchor="middle"))
+    b.append(t(bx + bw / 2, by + 164, "data", 20, INK, SANS, "600", anchor="middle"))
+    outs = [("DR backup copy", "to a Frankfurt vault"),
+            ("Replica rule", "to any “-replica” bucket"),
+            ("CDN in front", "to edge caches worldwide"),
+            ("Multi-region key", "decryptable abroad")]
+    ox = bx + bw + 64
+    for i, (head, dest) in enumerate(outs):
+        yy = by + 6 + i * 46
+        b.append(f'<path d="M{bx+bw},{by+bh/2:.0f} C{bx+bw+30},{by+bh/2:.0f} '
+                 f'{ox-34},{yy+14} {ox-8},{yy+14}" stroke="{cry}" stroke-width="1.8" '
+                 f'fill="none" opacity="0.8"/>')
+        b.append(f'<circle cx="{ox-6}" cy="{yy+14}" r="3.5" fill="{cry}"/>')
+        b.append(t(ox + 4, yy + 12, head, 19, cry, SANS, "600"))
+        b.append(t(ox + 4, yy + 34, dest, 17, INK2))
+
+    b.append(glass(rx, 206, rw, 262, 18, FAM["cry"]["tint"], 0.42))
+    b.append(eyebrow(rx + 26, 246, "Why the tools stay green", FAM["cry"]["c"], maxw=rw - 52))
+    bl, _ = bullets(rx + 26, 288, [
+        "Region locks govern where, not whose",
+        "DSPM shows where data is, not where it can go",
+        "CSPM checks one resource at a time — and rewards cross-region backups",
+    ], rw - 52, 23, 27, 16, INK2, FAM["cry"]["c"])
     b.append(bl)
 
-    b.append(glass(rx, 206, rw, 270, 18, FAM["cry"]["tint"], 0.42))
-    b.append(eyebrow(rx + 26, 246, "The trend is not reversing", FAM["cry"]["c"], maxw=rw - 52))
-    trends = [("+29%", "IDOR reports year on year (HackerOne 2025)"),
-              ("+36%", "access-control criticals — now #1 (Bugcrowd 2025)"),
-              ("~95%", "of API attacks carry a valid token — authentic, not authorised")]
-    ty = 302
-    for big, sub in trends:
-        b.append(t(rx + 26, ty, big, 32, FAM["cry"]["c"], SERIF, "600"))
-        blk, _ = block(rx + 132, ty - 20, sub, rw - 132 - 26, 20, 25, INK2, 2)
-        b.append(blk)
-        ty += 58
-
-    tiles = [("$4.4M", "average cost of a data breach (IBM 2025)"),
-             ("241 days", "mean time to identify and contain (IBM 2025)"),
-             ("258 / day", "API attacks per enterprise — 2× 2024 (Akamai 2025)")]
+    # GDPR fines for where personal data went — each a regulator's final decision
+    tiles = [("€1.2B", "Meta, 2023: EU users' data sent to the US (Irish DPC)"),
+             ("€530M", "TikTok, 2025: EEA users' data remotely accessed from China "
+                       "(Irish DPC)"),
+             ("€290M", "Uber, 2024: EU drivers' data sent to the US (Dutch DPA)")]
     tw = (CW - 2 * 20) / 3
     for i, (big, sub) in enumerate(tiles):
-        b.append(stat_tile(M + i * (tw + 20), 478, tw, 138, big, sub, "gold"))
+        b.append(stat_tile(M + i * (tw + 20), 482, tw, 154, big, sub, "gold"))
 
-    b.append(t(M, 668, "A correct policy invoked through a misused SDK still leaks.",
+    b.append(t(M, 680, "A region lock answers where. Sovereignty also asks whose.",
                24, GOLDINK, SANS, "500"))
     b.append(chrome(num))
     return page("".join(b))
 
 
-# ============================================================ 4 · post-quantum
-def s_pqc(num=6):
-    b = [water("gold"), heading("The Base Went Post-Quantum. Are the Apps Ready?")]
-    b.append(t(M, 176, "The internet and cloud layer are shifting to hybrid PQC — and it is "
-                       "proven.", 26, INK, SERIF, "600", style="italic"))
-
-    hw = CW / 2 - 12
-    b.append(glass(M, 206, hw, 300, 18, "#e6f2ea", 0.6))
-    b.append(eyebrow(M + 26, 246, "Already shifting, already proven", GREEN, maxw=hw - 52))
-    bl, _ = bullets(M + 26, 296, [
-        "NIST FIPS 203 / 204 / 205 (Aug 2024)",
-        "Hybrid ML-KEM default in browsers",
-        "Live at Cloudflare, AWS, Google, Apple",
-        "ML-KEM itself machine-checked (2024)",
-    ], hw - 52, 23, 28, 22, INK2, GREEN, maxlines=1)
-    b.append(bl)
-
-    b.append(glass(M + hw + 24, 206, hw, 300, 18, FAM["cry"]["tint"], 0.45))
-    b.append(eyebrow(M + hw + 50, 246, "The app on top is not", FAM["cry"]["c"], maxw=hw - 52))
-    bl, _ = bullets(M + hw + 50, 296, [
-        "No identity binding → impersonation",
-        "Downgrade to legacy → decrypt later",
-        "KEM key reuse → forward secrecy lost",
-        "Token not channel-bound → replayed",
-    ], hw - 52, 23, 28, 22, INK2, FAM["cry"]["c"], maxlines=1)
-    b.append(bl)
-
-    b.append(glass(M, 526, CW, 118, 18, FAM["gold"]["tint"], 0.5))
-    b.append(f'<rect x="{M+2}" y="540" width="5" height="90" rx="2.5" fill="{GOLD}"/>')
-    b.append(eyebrow(M + 34, 566, "Long-secret verticals bite hardest", GOLDINK, 20, 2.4,
-                     maxw=CW - 80))
-    b.append(t(M + 34, 600, "Gov ID (10+ yr) · PKI · healthcare · defence (25–50 yr).",
-               23, INK2))
-    b.append(t(M + 34, 628, "A mis-bound 10-year credential is a decade-long liability.",
-               23, INK2))
-
-    b.append(t(M, 680, "A proof at the transport layer says nothing about the app on top of "
-                       "it.", 24, GOLDINK, SANS, "500"))
-    b.append(chrome(num))
-    return page("".join(b))
-
-
 # ============================================================ 6 · the landscape
-def s_landscape(num=9):
-    b = [water("gold"), heading("Why Today's Security Stack Isn't Enough")]
-    b.append(t(M, 176, "The collective wisdom of years of breaches — yet each only samples.",
+def s_landscape(num=8):
+    b = [water("gold"), heading("What Today's Security Stack Leaves Open")]
+    b.append(t(M, 176, "Each tool answers its own question well. One question stays open.",
                26, INK, SERIF, "600", style="italic"))
 
-    ch, cy = chip_rows(W / 2, 224,
-                       [["SAST / DAST / IAST", "SCA / supply chain", "ASPM",
-                         "WAF / API security"],
-                        ["CSPM · CIEM · CNAPP", "Pen test & red team", "SOC · EDR · SIEM",
-                         "Policy-as-code"]])
-    b.append(ch)
-
-    b.append(glass(M, 342, CW, 258, 18))
+    b.append(glass(M, 210, CW, 396, 18))
     rows = [
         ("SAST", "Knows code patterns, not intent. A check present but wrong still passes."),
-        ("DAST", "Only crawled endpoints and seeded data; even multi-persona only samples."),
+        ("DAST", "Tests the endpoints and personas it is given — not every user × object."),
         ("IAST / RASP", "Same-code-path BOLA is invisible — was the call even permitted?"),
-        ("SCA / ASPM", "Known CVEs and risk diffs; never whether a grant is actually correct."),
+        ("DSPM", "Finds where regulated data is — never where it can go."),
         ("CNAPP / CSPM", "Stops at the cloud IAM role; never reads the app's own roles."),
-        ("WAF / API sec", "A permitted request and a legitimate one look identical on the wire."),
+        ("WAF / API sec", "Judges traffic, not grants: whether it should be permitted is upstream."),
+        ("Pen test", "Shows a way in, or that none was found — not that none exists."),
+        ("SOC · SIEM", "Sees what happens — not what the rules would allow next."),
     ]
-    ry = 384
-    for name, lim in rows:
+    ry = 256
+    for i, (name, lim) in enumerate(rows):
+        if i:
+            b.append(hline(M + 30, ry - 31, CW - 60))
         b.append(f'<circle cx="{M+34}" cy="{ry-8}" r="4" fill="{GOLD}"/>')
-        b.append(t(M + 56, ry, name, 23, INK, SANS, "600"))
+        b.append(t(M + 56, ry, name, 24, INK, SANS, "600"))
         b.append(t(M + 262, ry, lim, fit(lim, CW - 262 - 30, 23, W_SANS, 18), INK2))
-        ry += 36
+        ry += 46
 
     b.append(t(M, 648, "They all share one gap: no statement of what is allowed, decided over "
                        "every request.", 24, INK, SANS, "500"))
@@ -1475,7 +1530,7 @@ def s_landscape(num=9):
 
 
 # ============================================================ 7 · proof, feasible
-def s_feasible(num=10):
+def s_feasible(num=9):
     b = [water("gold"), heading("Proof — Now Feasible")]
     b.append(t(M, 176, "Formal verification used to take expert teams years. AI brings it "
                        "into range.", 26, INK, SERIF, "600", style="italic"))
@@ -1495,7 +1550,7 @@ def s_feasible(num=10):
     bl, _ = bullets(M + hw + 50, 292, [
         "AI assists modelling & proof search",
         "Expert owns & ratifies the spec",
-        "AWS runs ~1B SMT queries a day",
+        "AWS: ~1B SMT queries a day (CAV 2022)",
     ], hw - 52, 22, 28, 20, INK2, GOLDINK, maxlines=1)
     b.append(bl)
 
@@ -1506,7 +1561,7 @@ def s_feasible(num=10):
     b.append(t(M + 210, 492, "We add to your stack; we don’t replace it. Proof alone isn’t "
                              "enough.", 23, GOLD))
 
-    b.append(eyebrow(M, 562, "What stays with you — all of it needed", INK2, 20, 2.4,
+    b.append(eyebrow(M, 556, "What stays with you — all of it needed", INK2, 20, 2.4,
                      maxw=CW))
     keeps = ["Configuration drift, shadow assets and anything outside the model",
              "Insider misuse, and valid credentials used exactly as intended",
@@ -1514,7 +1569,8 @@ def s_feasible(num=10):
     cw = (CW - 2 * 20) / 3
     for i, k in enumerate(keeps):
         x = M + i * (cw + 20)
-        blk, _ = block(x, 586, k, cw, 21, 26, INK2, 3)
+        b.append(f'<rect x="{x:.0f}" y="584" width="30" height="3" rx="1.5" fill="{MUTED}"/>')
+        blk, _ = block(x, 616, k, cw, 21, 26, INK2, 3)
         b.append(blk)
 
     b.append(chrome(num))
@@ -1522,7 +1578,7 @@ def s_feasible(num=10):
 
 
 # ============================================================ 15 · AI agents
-def s_ai_motivation(num=17):
+def s_ai_motivation(num=16):
     fam = "ai"
     f = FAM[fam]
     b = [water(fam), heading("AI Agents Multiply Faster Than the Rules", fam)]
@@ -1563,7 +1619,7 @@ def s_ai_motivation(num=17):
         my += 58
 
     b.append(solid(M, 558, CW, 74, f["c"], 16, sheen=False, gloss=0.14, edge=0.22))
-    b.append(t(W / 2, 603, "Our AI-agentic guardrail solution proves the mediation layer, not "
+    b.append(t(W / 2, 603, "Our AI-agentic guardrail service proves the mediation layer, not "
                            "the model  →", 26, WHITE, SERIF, "600", anchor="middle"))
 
     b.append(chrome(num))
